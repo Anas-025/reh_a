@@ -73,7 +73,6 @@ export default function BlogEditor(props: {
     src?: File | string;
     content?: string;
   }) => {
-    console.log(blog);
     if (blog.title === "Image") {
       // if image is not updated (because if string imageUrl already exists if not new file is there)
       if (typeof blog.src === "string") return blog;
