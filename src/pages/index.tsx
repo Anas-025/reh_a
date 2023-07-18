@@ -19,3 +19,12 @@ export default function Home({random}: {random: number}) {
     </>
   );
 }
+
+export const getServerSideProps = async () => {
+  const random = Math.random();
+  return {
+    props: {
+      random
+    }
+  }
+}
