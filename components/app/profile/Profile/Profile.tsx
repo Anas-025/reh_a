@@ -148,10 +148,7 @@ const Profile = () => {
   const updateProfileImage = async () => {
     if (profileImageFile) {
       setIsImageUploading(true);
-      const profile = await uploadFileToFirebaseAndGetUrl(
-        profileImageFile,
-        "UserProfiles"
-      );
+      const profile = await uploadFileToFirebaseAndGetUrl(profileImageFile);
       setFormData((prev) => ({
         ...prev,
         profileImageUrl: profile.uploadedToUrl,

@@ -1,20 +1,17 @@
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import CloseIcon from "@mui/icons-material/Close";
-import SaveIcon from "@mui/icons-material/Save";
-import { Button, Typography } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
+import SaveIcon from '@mui/icons-material/Save';
+import { Backdrop, Button, CircularProgress, Typography } from "@mui/material";
 import { db } from "components/general/firebase-config";
 import { collection, doc, writeBatch } from "firebase/firestore";
-import Image from "next/image";
+import Image from 'next/image';
 import { useEffect, useRef, useState } from "react";
-import { BlogData, BlogEditData, MetaBlog } from "types/blogs";
-import { uploadFileToFirebaseAndGetUrl } from "utils/ExtendedUtils";
-import emptyHere from "../../../public/emptyHere.jpg";
-import GPBackdrop from "../../general/GeneralPurpose/GPBackdrop";
+import emptyHere from '../../../public/emptyHere.jpg';
 import BlogImage from "../BlogComponents/BlogImage/BlogImage";
-import BlogPartition from "../BlogComponents/BlogPartition/BlogPartition";
+import BlogPartition from '../BlogComponents/BlogPartition/BlogPartition';
 import HeadTitle from "../BlogComponents/HeadTitle/HeadTitle";
 import HeroImage from "../BlogComponents/HeroImage/HeroImage";
-import style from "../BlogCreator/BlogCreator.module.css";
+import style from "../BlogCreator/VisitBlog.module.css";
 
 export default function BlogEditor(props: {
   metaBlogData: MetaBlog;
@@ -25,23 +22,21 @@ export default function BlogEditor(props: {
   const container = useRef(null);
   const blogImageInput = useRef<HTMLInputElement>(null);
   const [headTitle, setHeadTitle] = useState(props.metaBlogData.headTitle);
-  const [blogData, setBlogData] = useState<BlogEditData[]>(props.blogData);
+  const [heroImageSrc, setHeroImageSrc] = useState(
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMaJKOnh70m9VVMzrgdZY0jTGUfLSXFI01IQ&usqp=CAU"
+  );
+  const [blogData, setBlogData] = useState(props.blogData);
   const date = props.metaBlogData.date;
   const [loading, setLoading] = useState(false);
   const blogID = props.blogID;
   const displayName = props.metaBlogData.displayName;
   const [uid, setUid] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
-  const [blogCoverImage, setBlogCoverImage] = useState<string>(
-    props.metaBlogData?.heroImageSrc || ""
-  );
-  const [blogCoverImageFile, setBlogCoverImageFile] = useState<File | null>(
-    null
-  );
 
-  useEffect(() => {
-    setUid(localStorage.getItem("uid"));
-  }, []);
+
+  useEffect(()=>{
+    setUid(localStorage.getItem('uid'));
+  }, [])
 
   // const getTitle = (anchorId) => {
   //   const title = document.getElementById(`${anchorId}`);
@@ -56,11 +51,13 @@ export default function BlogEditor(props: {
   };
 
   const handleAddImageClick = () => {
-    if (blogImageInput.current?.files) {
-      const file = blogImageInput.current.files[0];
+    const file = blogImageInput.current.files[0];
+    const src = URL.createObjectURL(file);
 
-      setBlogData((current) => [...current, { title: "Image", src: file }]);
-    }
+    setBlogData((current) => [
+      ...current,
+      { title: "Image", src: src },
+    ]);
   };
 
   const uploadImageToFirebase = async (file: File, path: string) => {
@@ -86,64 +83,40 @@ export default function BlogEditor(props: {
   };
 
   const handleSaveClick = async () => {
-    if (!blogCoverImage) {
-      alert("Please add a cover image");
-      return;
-    }
+    const blog = {
+      blogData: blogData,
+      uid: uid,
+    };
 
+    const metaBlog = {
+      displayName: displayName,
+      date: date,
+      headTitle: headTitle,
+      heroImageSrc: heroImageSrc,
+      uid: uid,
+    }
+    
+    
+    // write blog to firestore in batch
+    const batch = writeBatch(db);
+
+    const blogRef = doc(collection(db, "blogs"), blogID);
+    const metaBlogRef = doc(collection(db, "metaBlogs"), blogID);
+
+    batch.update(blogRef, blog);
+    batch.update(metaBlogRef, metaBlog);
     setLoading(true);
-    try {
-      // set the src to the src from firebase for the changed images
-      const updatedBlogData = await Promise.all(
-        blogData.map(async (blog) => {
-          return await handleBlogImageUpload(blog);
-        })
-      );
-
-      console.log(updatedBlogData);
-
-      const blog = {
-        blogData: updatedBlogData,
-        uid: uid,
-      };
-
-      // if cover image changed then upload
-      let heroImageSrc = blogCoverImage;
-      if (blogCoverImage !== props.metaBlogData.heroImageSrc) {
-        const blogCoverImageUrl = await uploadFileToFirebaseAndGetUrl(
-          blogCoverImageFile,
-          "BlogImages"
-        );
-        heroImageSrc = blogCoverImageUrl.uploadedToUrl;
-      }
-
-      const metaBlog = {
-        displayName: displayName,
-        date: date,
-        headTitle: headTitle,
-        heroImageSrc: heroImageSrc,
-        uid: uid,
-      };
-
-      // write blog to firestore in batch
-      const batch = writeBatch(db);
-
-      const blogRef = doc(collection(db, "blogs"), blogID);
-      const metaBlogRef = doc(collection(db, "metaBlogs"), blogID);
-
-      batch.update(blogRef, blog);
-      batch.update(metaBlogRef, metaBlog);
-      await batch.commit();
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    await batch.commit();
+    setLoading(false);
+  }
+  
 
   return (
     <>
-      <GPBackdrop loading={loading} message="Saving..." />
+      <Backdrop open={loading} sx={{zIndex: 100, flexDirection: 'column', gap: 4, color: 'white'}}>
+        <Typography fontSize={24}> Saving... </Typography>
+        <CircularProgress  sx={{color: 'white'}} />
+      </Backdrop>
 
       <HeadTitle
         displayName={displayName}
@@ -152,10 +125,8 @@ export default function BlogEditor(props: {
         setHeadTitle={setHeadTitle}
       />
       <HeroImage
-        blogCoverImage={blogCoverImage}
-        setBlogCoverImage={setBlogCoverImage}
-        blogCoverImageFile={blogCoverImageFile}
-        setBlogCoverImageFile={setBlogCoverImageFile}
+        heroImageSrc={heroImageSrc}
+        setHeroImageSrc={setHeroImageSrc}
       />
 
       <div className={style.container}>
@@ -169,15 +140,12 @@ export default function BlogEditor(props: {
             );
           })} */}
         </ul>
-        <ul
-          className={`${style.contact} ${
-            open === true ? style.contactMobile : ""
-          }`}
-        >
+        <ul className={`${style.contact} ${open === true ? style.contactMobile : ''}`}>
+          
           <li className={style.fb} onClick={handleParaClick}>
             <Button className={style.addPara}>P</Button>
           </li>
-
+          
           <li className={style.fb}>
             <Button sx={{ padding: "0" }}>
               <label htmlFor="addImage" className={style.addImage}>
@@ -202,66 +170,36 @@ export default function BlogEditor(props: {
           </li>
 
           <li className={`${style.fb} ${style.openBtn}`}>
-            <Button onClick={() => setOpen(!open)} className={style.addPara}>
-              <CloseIcon
-                sx={{
-                  transform: open === false ? "rotate(45deg)" : "",
-                  transition: "transform 250ms ease-in-out",
-                }}
-              />
+            <Button onClick={()=>setOpen(!open)} className={style.addPara}>
+              
+                <CloseIcon sx={{transform: open === false ? "rotate(45deg)" : "", transition: "transform 250ms ease-in-out"}}/> 
+              
             </Button>
           </li>
 
-          <li
-            onClick={() => setOpen(false)}
-            className={`${style.fb} ${style.backdrop}`}
-            style={{ scale: open === true ? "100" : "1" }}
-          ></li>
+          <li onClick={()=>setOpen(false)} className={`${style.fb} ${style.backdrop}`} style={{scale: open === true ? '100': '1'}}>
+          </li>
+
         </ul>
 
         <div className={style.content} ref={container}>
-          {blogData.length > 0 ? (
+          {
+            blogData.length > 0 ?
+
             blogData.map((item, index) => {
-              if (item.title === "Image")
-                return (
-                  <BlogImage
-                    key={index}
-                    data={item}
-                    index={index}
-                    length={blogData.length}
-                    setBlogData={setBlogData}
-                  />
-                );
+              if(item.title === 'Image') return <BlogImage key={index} data={item} index={index} length={blogData.length} setBlogData={setBlogData}/>
               else
                 return (
-                  <BlogPartition
-                    key={index}
-                    data={{ title: item.title, content: item.content }}
-                    index={index}
-                    anchorId={index}
-                    length={blogData.length}
-                    setBlogData={setBlogData}
-                  />
+                  <BlogPartition key={index} data={item} index={index} length={blogData.length} setBlogData={setBlogData}/>
                 );
             })
-          ) : (
+            :
             <>
-              <Image
-                style={{
-                  display: "block",
-                  marginInline: "auto",
-                  marginTop: "9rem",
-                  opacity: "0.7",
-                  width: "40%",
-                }}
-                src={emptyHere}
-                alt="NO content added, Please add content by clicking the P button"
-              />
-              <Typography sx={{ textAlign: "center", marginTop: "2rem" }}>
-                Please Enter content by clicking add buttons
-              </Typography>
+              <Image style={{display: 'block',marginInline: 'auto', marginTop: '9rem', opacity: '0.7', width: '40%'}} src={emptyHere} alt="NO content added, Please add content by clicking the P button" />
+              <Typography sx={{textAlign: "center", marginTop: "2rem"}}>Please Enter content by clicking add buttons</Typography>
             </>
-          )}
+          }
+
         </div>
       </div>
     </>

@@ -19,7 +19,7 @@ export function validFileType(file: File): boolean{
   return fileTypes.includes(file.type);
 }
 
-export const uploadFileToFirebaseAndGetUrl = async (file: File | null, path: string) => {
+export const uploadFileToFirebaseAndGetUrl = async (file: File | null) => {
   if (!file) {
     return { uploadedToUrl: "", path: "" };
   }
@@ -31,8 +31,8 @@ export const uploadFileToFirebaseAndGetUrl = async (file: File | null, path: str
   if (!type) {
     type = "other";
   }
-  const storagePath = path ? `${path}/${type}/${newFile.name}` : `${type}/${newFile.name}`;
-  const storageRef = ref(fbStorage, storagePath);
+  const path = `UserProfiles/${type}/${newFile.name}`;
+  const storageRef = ref(fbStorage, path);
 
   const uploadedToUrl = await uploadBytes(storageRef, newFile).then(
     async (snapshot) => {
