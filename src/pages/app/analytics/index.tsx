@@ -1,9 +1,7 @@
 import { Grid, Paper, styled } from "@mui/material";
-import { Chart, ChartTypeRegistry } from "chart.js/auto";
-import React, { use, useEffect } from "react";
-import style from "./more.module.css";
-import { _DeepPartialArray } from "chart.js/dist/types/utils";
+import { useEffect } from "react";
 import { chartMaker } from "utils/ExtendedUtils";
+import style from "./more.module.css";
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
