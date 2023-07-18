@@ -35,7 +35,8 @@ function HeadTitle({ displayName, headTitle, date }: HeadTitleProps) {
         ></Avatar>
 
         <Typography variant="body1" sx={{ fontWeight: "bold" }}>
-          Written By {displayName} &#160;
+          Written By {displayName}
+          {"  "}
         </Typography>
 
         <Typography variant="body1">

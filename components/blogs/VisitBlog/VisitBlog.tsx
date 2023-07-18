@@ -1,11 +1,11 @@
 import { AiOutlineInstagram, AiOutlineTwitter } from "react-icons/ai";
 import { CgFacebook } from "react-icons/cg";
 import { MdOutlineEmail } from "react-icons/md";
+import { Blog } from "types/blogs";
 import BlogPartition from "./BlogPartition/BlogPartition";
 import HeadTitle from "./HeadTitle/HeadTitle";
 import HeroImage from "./HeroImage/HeroImage";
 import visblog from "./VisitBlog.module.css";
-import { Blog } from "types/blogs"
 
 export default function VisitBlog({ data }: { data: Blog }) {
   return (
@@ -52,7 +52,7 @@ export default function VisitBlog({ data }: { data: Blog }) {
                 key={`title${index}`}
                 index={index}
                 title={content.title}
-                text={content.content}
+                text={content.content as string}
                 imageUrl={content.src}
               />
             );

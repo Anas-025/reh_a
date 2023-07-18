@@ -20,14 +20,14 @@ export interface Blog {
 
 export interface BlogData{
   title: string,      // main blog title
-  content: string,    // blog content
+  content?: string,    // blog content
   src?: string        // blog image (may not contain additional image)
 }
 
 export interface BlogCreateData {
   title: string
   content?: string
-  src?: File          // file is uploaded while creating blog
+  src?: File       // file is uploaded while creating blog
 }
 
 export interface BlogEditData {
