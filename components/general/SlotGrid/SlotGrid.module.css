@@ -1,0 +1,61 @@
+.table_container{
+    position: relative;
+    width: max-content;
+    overflow: hidden;
+    border-radius: 5px;
+    margin-top: 1rem;
+}
+
+.table > tbody::-webkit-scrollbar{
+    width: 8px;
+}
+.table > tbody::-webkit-scrollbar-thumb{
+    background-color: #a4a4a4;
+    border-radius: 10px;
+}
+
+.table > tbody::-webkit-scrollbar-thumb:hover{
+    background-color: #000000;
+}
+
+.table{
+    margin-top: 3.5rem;
+}
+
+.table tr td, .table tr th{
+    border: 1px solid black;
+    padding-block: 1rem;
+    min-width: 8rem;
+    text-align: center;
+    table-layout: fixed;
+}
+
+.table thead{
+    background-color: black;
+    color: white;
+    margin-right: 6rem;
+}
+
+.table thead {
+    position: absolute;
+    top: 0;
+}
+
+.table tbody {
+    display: block;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 500px;
+}
+
+.selected{
+    background-color: #848484;
+}
+
+.alreadySelected{
+    /* background-color: rgb(238, 58, 58); */
+    background-color: rgb(106, 227, 95);
+}
+.delete{
+    background-color: red;
+}

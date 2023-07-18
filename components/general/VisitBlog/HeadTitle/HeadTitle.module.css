@@ -1,0 +1,48 @@
+.head{
+    display: flex;
+    flex-direction: column;
+    max-width: 770px;
+    margin: auto;
+    align-items: center;
+    margin-top: 3rem;
+}
+.title{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 3rem!important;
+
+    color: rgb(48, 48, 48);
+    width: 100%;
+    margin-top: 50px;
+    text-align: center;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.author{
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+}
+.authorAvatar{
+    margin-right: 10px;
+}
+
+
+@media only screen and (max-width : 768px) {
+    .title{
+        font-size: 2.5rem!important;
+    }
+    .author{
+        flex-direction: column;
+        gap: 0.2rem;
+    }
+    .author>p{
+        font-size: 0.8rem!important;
+    }
+}
+
+@media only screen and (max-width : 500px) {
+    .title{
+        font-size: 2rem!important;
+    }
+}

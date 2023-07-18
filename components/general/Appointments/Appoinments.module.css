@@ -1,0 +1,27 @@
+.container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: max(300px, 30%);
+    height: min(70vh, 600px);
+    border-radius: 15px;
+}
+.title{
+    /* background-color: #e9ab02; */
+    font-size: 1.3rem;
+    text-align: center;
+    margin-top: 20px;
+}
+.name{
+    font-weight: 600;
+    font-size: 1.7rem;
+    /* margin-top: -60px; */
+}
+.qrcode{
+    margin-top: 40px;
+}
+.copyIcn:hover{
+    cursor: pointer;
+    color: rgb(69, 68, 68);
+}

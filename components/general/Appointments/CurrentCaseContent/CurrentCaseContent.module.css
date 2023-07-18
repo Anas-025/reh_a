@@ -1,0 +1,91 @@
+.container{
+    position: relative;
+    display: flex;
+    padding: 2rem;
+    height: 100%;
+}
+.cancelButton{
+    position: absolute!important;
+    top: 0.5rem;
+    right: 0.5rem;
+}
+
+.left{
+    flex-shrink: 0;
+
+    padding-right: 2rem;
+
+    overflow-y: auto;
+}
+
+.left::-webkit-scrollbar,
+.right::-webkit-scrollbar{
+    width: 4px;
+}
+.left::-webkit-scrollbar-thumb,
+.right::-webkit-scrollbar-thumb{
+    background-color: #B4B4B4;
+    border-radius: 10px;
+}
+
+
+
+.seperator{
+    height: 100%;
+    width: 1px;
+    margin-left: 1.2rem;
+    margin-right: 3rem;
+
+    background-color: #B4B4B4;
+}
+
+.mainHeading{
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 3rem;
+}
+.sessionMainHeading{
+    font-size: 18px;
+    border-bottom: 1px solid #B4B4B4;
+}
+
+.sessionMainHeading>div{
+    text-align: center;
+}
+
+
+.right{
+    padding-right: 2rem;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+@media only screen and (max-width : 768px) {
+    .container{
+        flex-direction: column;
+        overflow-y: auto;
+        padding-bottom: 5.5rem;
+    }
+    .left{
+        padding: 0;
+    }
+
+    .sessionMainHeading+div{
+        width: max-content;
+        margin: 0 auto;
+    }
+    .seperator{
+        height: auto;
+        width: 100%;
+        margin: 0 auto;
+        margin-top: 3rem;
+        border-top: 1px solid #B4B4B4;
+    }
+    .right{
+        overflow-y: unset;
+        overflow-x: unset;
+        margin-top: 3rem;
+    }
+
+}
+

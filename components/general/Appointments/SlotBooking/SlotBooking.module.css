@@ -1,0 +1,152 @@
+.container{
+    display: flex;
+    justify-content: center ;
+    align-items: center;
+}
+.horizontalCalander{
+    display: flex;
+}
+.varticalCalander{
+    display: none !important;
+}
+.left, .right{
+    width: 45%;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+}
+.left{
+    border-right: 2px solid rgb(167, 167, 167);
+    /* flex-direction: column; */
+}
+.right{
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+}
+.title{
+    width: 100%;
+    font-size: larger;
+    color: rgb(128, 128, 128);
+    justify-self: flex-start;
+    border-bottom: 1px solid rgb(167, 167, 167);
+}
+
+.left > div>div:nth-child(3){
+    display: none !important;
+}
+
+.slotBox{
+    padding-top: 10px;
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    gap: 1.7rem;
+    overflow-y: auto;
+}
+.slotBtn{
+    width: 50%;
+}
+.slotBox::-webkit-scrollbar{
+    width: 5px;
+}
+
+.noSlots{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    font-size: xx-large;
+    color: grey;
+    font-weight: bolder;
+}
+
+.innerContainer{
+    display: flex;
+    flex-direction: row;
+    height: 70%;
+    width: 100%;
+}
+
+@media only screen and (max-width : 1300px) {
+    .varticalCalander{
+        display: block !important;
+        width: auto;
+    }
+    .horizontalCalander{
+        display: none !important;
+    }
+}
+@media only screen and (max-width : 980px) {
+    .innerContainer{
+        /* flex-direction: column;
+         */
+        display: block;
+        align-items: center;
+        overflow: scroll;
+    }
+    .left{
+        /* padding: 0px; */
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+    .right{
+        /* padding: 0px; */
+        width: 100%;
+    }
+    .slotBtn{
+        width: 80%;
+    }
+}
+
+@media only screen and (max-width : 350px) {
+    .right{
+        padding: 0px;
+    }
+    .innerContainer{
+        width: 205px;
+        overflow-x: hidden;
+    }
+    .right{
+        width: 100%;
+    }
+    .left{
+        border: none;
+    }
+    .varticalCalander{
+        width: 205px;
+    }
+    .varticalCalander > div:nth-child(1) {
+        /* border: 2px solid blue; */
+        width: 205px;
+        margin: auto;
+    }
+    .varticalCalander > div:nth-child(2) {
+        /* border: 2px solid blue; */
+        width: 205px;
+        margin: auto;
+    }
+    .varticalCalander > div:nth-child(1) > div > h4 {
+        font-size: large;
+        font-weight: bolder;
+        margin: auto;
+    }
+    .varticalCalander > div:nth-child(1) > span {
+        font-size: x-small;
+        margin: auto;
+    }
+    .varticalCalander > div:nth-child(2) > div {
+        /* border: 2px solid yellow; */
+        width: 205px;
+    }
+    .varticalCalander > div:nth-child(2) > div > div:nth-child(1){
+        padding: 0px;
+    }
+    .varticalCalander > div:nth-child(2) > div > div:nth-child(1) > div:nth-child(1) > div{
+        /* border: 2px solid green; */
+        font-size: small;
+    }
+    
+}

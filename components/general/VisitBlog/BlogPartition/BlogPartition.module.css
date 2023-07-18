@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400&display=swap');
+.title{
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    color: #314351;
+}
+.text{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 17px;
+    line-height: 2rem;
+    color : #12181d
+}
+.block{
+    margin-bottom: 3rem;
+    padding: 0px 25px;
+}
+
+@media only screen and (max-width : 768px) {
+    .title{
+        font-size: 1.5rem;
+    }
+}

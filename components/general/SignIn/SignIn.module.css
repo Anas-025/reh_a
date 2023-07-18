@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@600&display=swap');
+
+
+.container{
+    width: 100%;
+    min-height: 97vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.card{
+    width: 380px;
+    height: 700px;
+    perspective: 2000px;
+    /* padding: 30px; */
+}
+.innerBox{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: 1.5s ease;
+    transform-style: preserve-3d;
+}
+.cardFront, .cardBack{
+    /* background-image: url('data:image/jpeg;base64,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'); */
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 30px;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+.cardFront form{
+    display: flex;
+    flex-direction: column;
+
+}
+.cardBack{
+    transform: rotateY(180deg);
+    /* background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTr7UvsE6VEQPFMGAvknB9LKH1zxaAuWMhRVw&usqp=CAU'); */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.title{
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: rgb(12, 12, 102);
+}
+.forgotPswd{
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+}
+.remember{
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+}
+
+.name{
+    display: flex;
+    justify-content: space-between;
+}
+.switchForm1{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.switchForm1 > div{
+    font-family: 'Mulish', sans-serif;
+    color: rgb(71, 71, 71);
+    display: flex;
+}
+.switchForm2 {
+    font-family: 'Mulish', sans-serif;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.terms{
+    text-align: center;
+    font-size: small;
+    font-family: 'Mulish', sans-serif;
+}

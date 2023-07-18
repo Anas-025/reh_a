@@ -1,0 +1,24 @@
+.image1{
+    position: relative;
+    margin-top: 70px;
+    width: 100%;
+    text-align: center;
+}
+.image1 > div{
+    position: relative;
+    margin: auto;
+    width: min(45rem, 94vw);
+    resize: both;
+    overflow: auto;
+}
+.image1 > div > img{
+    width: 100%;
+    border-radius: 10px;
+}
+
+@media only screen and (max-width : 500px) {
+    .image1 > img{
+        width: 80%;
+    }
+    
+}

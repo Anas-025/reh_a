@@ -1,0 +1,155 @@
+main {
+  padding-block: 16px;
+  padding-inline: 0!Important;
+  margin-bottom: 3rem;
+  overflow-x: auto;
+}
+.slice {
+  width: 100%;
+}
+.slice-container+.slice-container{
+  margin-top: 6rem;
+}
+.slice > span > img {
+  display: inline;
+  width: 80%;
+}
+.slice--image{
+  text-align: center;
+}
+.content-container{
+  padding-top: 3rem;
+}
+.content-hero-text {
+  font-size: 24px;
+  font-weight: 500;
+
+  margin-top: 1.5rem;
+}
+.content-info-text {
+  font-size: 18px;
+
+  margin-top: 1.5rem;
+}
+
+.testimonial-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin-top: 8rem;
+  /* background-color: pink; */
+}
+.testimonial {
+  width: min(90%, 470px);
+  padding: 2rem;
+
+  box-shadow: 0.9px 1.1px 3.3px rgba(0, 0, 0, 0.05),
+    3.1px 3.6px 11.2px rgba(0, 0, 0, 0.074), 14px 16px 50px rgba(0, 0, 0, 0.13);
+
+  border-radius: 8px;
+  background-color: #fff;
+}
+.testimonial-credentials{
+    display: flex;
+    padding-top: 2rem;
+    gap: 0.8rem;
+}
+.testimonial-avatar{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid lightblue;
+    background-color: rgb(138, 138, 138);
+}
+.testimonial-name{
+    font-weight: 500;
+}
+.testimonial-reputation{
+    color: rgb(130, 130, 130);
+}
+
+.slice--inverted{
+  display: flex;
+  flex-direction: column;
+}
+
+.spacer{
+    display: none;
+}
+
+@media only screen and (min-width: 768px) {
+  main {
+    padding-inline: 6rem!important;
+  }
+  .content-hero-text {
+    margin: 0;
+  }
+  .slice-container {
+    margin: 0!important;
+    display: flex;
+  }
+  .slice--inverted{
+    flex-direction: row-reverse;
+  }
+  .slice {
+    flex-basis: 50%;
+    min-height: 100vh;
+  }
+  .content-container{
+    padding: 0;
+  }
+  .content-container > div {
+    height: 100vh;
+  }
+  .content-hero-text {
+    font-size: 30px;
+    font-weight: 700;
+  }
+  .content-info-text {
+    font-size: 21px;
+    line-height: 2rem;
+  }
+
+  .content-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .slice--image {
+    height: 100vh !important;
+  }
+  .slice--image > span {
+    display: grid;
+    place-items: center;
+
+    width: 50%;
+    height: 100vh;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    opacity: 0;
+
+  }
+  .slice--inverted-image > span {
+    left: auto;
+    right: 0;
+  }
+  .slice--image > span > img {
+    width: 450px;
+  }
+
+  .testimonial-container{
+    margin: 0;
+  }
+
+  .spacer{
+    display: block;
+    height: 60vh!important;
+  }
+  /* .slice--image > span {
+    display: none;
+  } */
+}

@@ -1,0 +1,135 @@
+.container{
+    display: flex;
+    padding-block: 1rem;
+    padding-inline: 2rem;
+}
+.grid_container{
+    display: grid;
+    grid-template-columns: 240px 240px 240px 240px;
+    gap: 20px;
+}
+
+.grid_container>a, .more{
+    height: 180px;
+
+    border: 2px solid black;
+    border-radius: 10px;
+    overflow: hidden;
+    background-image: linear-gradient(0deg, hsl(0deg, 0%, 0%, 0.34),#ffffff00);
+
+    cursor: pointer;
+}
+
+.hero{
+    position: relative;
+    grid-column: span 2;
+    grid-row: span 2;
+
+    width: 100%!important;
+    height: 100% !important;
+}
+
+.hero_text{
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+
+    padding-bottom: 2rem;
+    padding-left: 2rem;
+
+    color: white;
+}
+.hero_text::after{
+    --opacity: 0.8;
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(0deg, rgba(20, 36, 50, var(--opacity)) 11.8%, rgba(0, 0, 0, 0) 83.8%);
+    z-index: -1;
+}
+
+.hero_text>h1{
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    padding-right: 1rem;
+}
+
+.hero_text>p{
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.grid_container>a>img{
+    height: 100%;
+    transition: transform 250ms ease-in-out;
+    position: relative;
+    z-index: -1;
+
+    object-fit: cover;
+}
+
+.grid_container>a:hover img{
+    transform-origin: center;
+    transform: scale(1.025);
+}
+
+.normal{
+    position: relative;
+}
+
+.more{
+    display: grid;
+    place-content: center;
+
+    font-size: 1rem;
+    font-weight: 700;
+
+    width: 100%!important;
+    grid-column: span 2;
+
+    background-image: unset!important;
+}
+
+.more:hover{
+    color: rgb(39, 91, 235);
+}
+
+
+
+@media only screen and (max-width : 1200px) {
+    .container{
+        display: grid;
+        place-items: center;
+    }
+    .grid_container{
+        display: block;
+    }
+    .grid_container>a{
+        display: block;
+        margin-bottom: 2rem;
+        height: 333px!important;
+    }
+    
+}
+
+@media only screen and (min-width : 1200px) {
+    .normal>.hero_text{
+        padding-left: 1rem!important;
+        padding-bottom: 0.5rem!important;
+    }
+    .normal>.hero_text>h1{
+        font-size: 1.2rem!important;
+    }
+    .normal>.hero_text>p{
+        font-size: 0.8rem!important;
+    }
+    
+}
