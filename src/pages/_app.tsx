@@ -1,12 +1,13 @@
 import "@/styles/Main.css";
 import "@/styles/globals.css";
+import { GPCProvider } from "Providers/GPC_Provider";
 import { MeetingProvider } from "components/MeetingContext";
 import { UserProvider } from "components/UserContext";
-import AppLayout from "components/app/AppLayout/AppLayout";
-import BlogsLayout from "components/blogs/Blogs/BlogsLayout";
+import BlogsLayout from "components/general/Blogs/BlogsLayout";
 import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
 import { Suspense } from "react";
+import Layout from "./Layout";
 
 const Loading = () => <div className="bg-[#000]">Loading...</div>;
 
@@ -16,13 +17,15 @@ export default function App({ Component, pageProps }: AppProps) {
   if (router.pathname.startsWith("/app")) {
     return (
       <Suspense fallback={<Loading />}>
+        <GPCProvider>
         <UserProvider>
           <MeetingProvider>
-            <AppLayout>
+            <Layout>
               <Component {...pageProps} />
-            </AppLayout>
+            </Layout>
           </MeetingProvider>
         </UserProvider>
+        </GPCProvider>
       </Suspense>
     );
   } else if (router.pathname.startsWith("/blogs")) {

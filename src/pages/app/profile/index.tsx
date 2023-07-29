@@ -1,7 +1,12 @@
-import Profile from "components/app/profile/Profile/Profile";
+import Profile from "components/app/profile/Profile"
 
 function index() {
-  return <Profile />;
+
+
+  return (
+    <Profile />
+  )
 }
 
-export default index;
+export default index
+

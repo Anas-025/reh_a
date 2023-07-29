@@ -1,10 +1,10 @@
-import EditIcon from "@mui/icons-material/Edit";
 import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
+import EditIcon from "@mui/icons-material/Edit";
 import { IconButton, Tooltip, Zoom } from "@mui/material";
+import Image from "next/image";
 import { Dispatch, SetStateAction, useRef, useState } from "react";
 import { returnFileSize, validFileType } from "utils/ExtendedUtils";
 import style from "../../BlogCreator/BlogCreator.module.css";
-import Image from "next/image";
 
 export default function HeroImage({
   blogCoverImage,
@@ -73,6 +73,7 @@ export default function HeroImage({
             )}
           </div>
         </Tooltip>
+        
         <IconButton className="absolute right-6 top-2 z-40 w-12 h-12 cursor-pointer bg-black flex items-center justify-center hover:bg-gray-400">
           <input
             ref={blogCoverImageRef}

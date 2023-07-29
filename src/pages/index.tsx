@@ -1,12 +1,15 @@
-import Main from "components/home/Main/Main";
-import Footer from "../../components/home/Footer/Footer";
-import Hero from "../../components/home/Hero/Hero";
-import Services from "../../components/home/Services/Services";
-import SignIn from "../../components/signin/SignIn/SignInPage";
+import Main from "components/Landing/Main/Main";
+import { useEffect } from "react";
+import Footer from "components/Landing/Footer/Footer";
+import Hero from "components/Landing/Hero/Hero";
+import Services from "components/Landing/Services/Services";
+import SignIn from "components/Landing/SignIn/SignIn";
 
-export default function Home({random}: {random: number}) {
-  console.log(random)
-  
+export default function Home() {
+  useEffect(() => {
+    window.localStorage.getItem("loggedIn") == "true" &&
+      window.location.replace("/app");
+  }, []);
   return (
     <>
       <Hero />
@@ -19,14 +22,3 @@ export default function Home({random}: {random: number}) {
     </>
   );
 }
-
-export const getServerSideProps = () => {
-  const random = "ME";
-  console.log(random)
-
-  return {
-    props: {
-      random,
-    },
-  };
-};
