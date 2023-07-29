@@ -21,7 +21,7 @@ import EnhancedTableHead from '../TableComponents/EnhancedTableHead';
 import EnhancedTableToolbar from '../TableComponents/EnhancedTableToolbar';
 import { Data, HeadCell, Order } from '../TableComponents/Table.interface';
 import { getComparator, stableSort } from '../TableComponents/Table.utils';
-import { db } from '../firebase-config';
+import { db } from '../../firebase/firebase-config';
 
 
 

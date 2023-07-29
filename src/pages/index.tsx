@@ -1,9 +1,9 @@
 import Main from "components/Landing/Main/Main";
 import { useEffect } from "react";
-import Footer from "../../components/Landing/Footer/Footer";
-import Hero from "../../components/Landing/Hero/Hero";
-import Services from "../../components/Landing/Services/Services";
-import SignIn from "../../components/general/SignIn/SignIn";
+import Footer from "components/Landing/Footer/Footer";
+import Hero from "components/Landing/Hero/Hero";
+import Services from "components/Landing/Services/Services";
+import SignIn from "components/Landing/SignIn/SignIn";
 
 export default function Home() {
   useEffect(() => {

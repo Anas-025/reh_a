@@ -2,7 +2,7 @@ import Loading from "Providers/Loading";
 import { useUser } from "components/UserContext";
 import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { db } from "../firebase-config";
+import { db } from "../../firebase/firebase-config";
 import AppointmentCard from "./AppointmentCard";
 import NewAppointmentCard from "./NewAppointmentCard";
 import { Button } from "@mui/material";

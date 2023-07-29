@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Footer from "../../Landing/Footer/Footer";
-import { auth } from "../firebase-config";
+import { auth } from "../../firebase/firebase-config";
 import BlogsNav from "./BlogsNav/BlogsNav";
 
 function BlogsLayout(props: any) {

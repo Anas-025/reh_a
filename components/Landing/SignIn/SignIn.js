@@ -25,7 +25,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
-import { auth, db } from "../firebase-config.js";
+import { auth, db } from "components/firebase/firebase-config";
 import classes from "./SignIn.module.css";
 import {
   validateConfirmPassword,

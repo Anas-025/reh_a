@@ -1,5 +1,5 @@
 import Blogs from "components/general/Blogs/Blogs";
-import { db } from "components/general/firebase-config";
+import { db } from "components/firebase/firebase-config";
 import { collection, getDocs, query, where } from "firebase/firestore";
 
 interface MetaBlog {

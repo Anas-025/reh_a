@@ -1,5 +1,5 @@
 import SlotGrid from "components/general/SlotGrid/SlotGrid";
-import { db } from "components/general/firebase-config";
+import { db } from "components/firebase/firebase-config";
 import { doc, getDoc } from "firebase/firestore";
 import { getDateArray, getDaysofWeek, getSlotMatrix, getTimings } from "utils/ExtendedUtils";
 

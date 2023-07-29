@@ -3,7 +3,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { styled } from "@mui/material/styles";
 import { useUser } from "components/UserContext";
 import Loading from "components/general/Loading/Loading";
-import { auth } from "components/general/firebase-config";
+import { auth } from "components/firebase/firebase-config";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import AppStructure from "../../components/general/AppStructure/AppStructure";

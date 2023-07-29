@@ -7,13 +7,13 @@ import {
   IconButton,
 } from "@mui/material";
 import { useUser } from "components/UserContext";
-import FormCheckbox from "components/general/Profile/FormCheckbox";
-import FormTextarea from "components/general/Profile/FormTextarea";
+import FormCheckbox from "components/app/profile/FormCheckbox";
+import FormTextarea from "components/app/profile/FormTextarea";
 import {
   diurnalOptions,
   painOptions,
-} from "components/general/Profile/constants";
-import { db } from "components/general/firebase-config";
+} from "components/app/profile/constants";
+import { db } from "components/firebase/firebase-config";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";

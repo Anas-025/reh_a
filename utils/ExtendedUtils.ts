@@ -1,6 +1,6 @@
 import { Chart, ChartTypeRegistry } from "chart.js/auto";
 import { _DeepPartialArray } from "chart.js/dist/types/utils";
-import { fbStorage } from "components/general/firebase-config";
+import { fbStorage } from "components/firebase/firebase-config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 export function returnFileSize(number: number) {

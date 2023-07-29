@@ -1,4 +1,4 @@
-import Profile from "components/general/Profile/Profile"
+import Profile from "components/app/profile/Profile"
 
 function index() {
 

@@ -1,6 +1,6 @@
 import { withAdmin } from 'ProtectedRoutes/AdminRoute';
 import UsersTable from 'components/general/PaymentHistoryTable/Table';
-import { db } from 'components/general/firebase-config';
+import { db } from 'components/firebase/firebase-config';
 import { collection, getDocs, limit, orderBy, query } from 'firebase/firestore';
 
 

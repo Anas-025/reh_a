@@ -1,6 +1,6 @@
 import MeetingsTable from "components/general/MeetingsTable/MeetingsTable";
 import { MeetingType } from "components/general/TableComponents/Table.interface";
-import { db } from "components/general/firebase-config";
+import { db } from "components/firebase/firebase-config";
 import {
   collection,
   doc,

@@ -1,5 +1,5 @@
 import BlogCreator from "components/app/blog/BlogCreator/BlogCreator";
-import { db } from "components/general/firebase-config";
+import { db } from "components/firebase/firebase-config";
 import { collection, doc, getDoc } from "firebase/firestore";
 import { GetServerSidePropsContext } from "next";
 

@@ -1,5 +1,5 @@
 import BlogsGrid from "components/general/App/BlogsGrid/BlogsGrid";
-import { db } from "components/general/firebase-config";
+import { db } from "components/firebase/firebase-config";
 import {
   collection,
   getDocs,

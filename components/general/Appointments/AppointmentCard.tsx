@@ -6,7 +6,7 @@ import { deleteDoc, doc } from "firebase/firestore";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { FC, useContext, useState } from "react";
-import { db } from "../firebase-config";
+import { db } from "../../firebase/firebase-config";
 import CurrentCaseContent from "./CurrentCaseContent/CurrentCaseContent";
 import SlotBooking from "./SlotBooking/SlotBooking.jsx";
 

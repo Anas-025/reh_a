@@ -1,7 +1,7 @@
 import { Button, styled } from "@mui/material";
 import { useMeeting } from "components/MeetingContext";
 import { useUser } from "components/UserContext";
-import { db } from "components/general/firebase-config";
+import { db } from "components/firebase/firebase-config";
 import { createMeeting, getToken } from "controllers/meeting";
 import { collection, doc, getDoc, getDocs, writeBatch } from "firebase/firestore";
 import { useRouter } from "next/router";

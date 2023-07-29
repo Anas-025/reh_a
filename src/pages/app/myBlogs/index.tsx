@@ -10,7 +10,7 @@ import BlogsCard from "components/general/Blogs/BlogsCard/BlogsCard";
 import GPBackdrop from 'components/general/GeneralPurpose/GPBackdrop';
 import GPDialog from 'components/general/GeneralPurpose/GPDialog';
 import GPSnackbar from 'components/general/GeneralPurpose/GPSnackbar';
-import { db } from "components/general/firebase-config";
+import { db } from "components/firebase/firebase-config";
 import { getCookie } from "cookies-next";
 import { collection, doc, getDoc, getDocs, query, where, writeBatch } from "firebase/firestore";
 import { NextApiRequest, NextApiResponse } from "next";

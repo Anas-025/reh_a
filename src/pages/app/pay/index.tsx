@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import { GPCContext } from "Providers/GPC_Provider";
 import Step1 from "components/app/pay/Step1";
 import Step2 from "components/app/pay/Step2";
-import { db } from "components/general/firebase-config";
+import { db } from "components/firebase/firebase-config";
 import { getCookie } from "cookies-next";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { useRouter } from "next/router";

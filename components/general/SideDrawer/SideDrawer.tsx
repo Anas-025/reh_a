@@ -12,7 +12,7 @@ import {
   ListItemText,
   Toolbar,
 } from "@mui/material";
-import { auth } from "components/general/firebase-config";
+import { auth } from "components/firebase/firebase-config";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";

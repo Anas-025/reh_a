@@ -5,11 +5,10 @@ import {
 } from "@mui/material";
 import { useUser } from "components/UserContext";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AiOutlineCamera } from "react-icons/ai";
 import { uploadFileToFirebaseAndGetUrl } from "utils/ExtendedUtils";
-import GPBackdrop from "../GeneralPurpose/GPBackdrop";
-import { db } from "../firebase-config.js";
+import { db } from "components/firebase/firebase-config";
 import FormCheckbox from "./FormCheckbox";
 import FormRadio from "./FormRadio";
 import FormTextarea from "./FormTextarea";
@@ -24,37 +23,16 @@ import {
   referrerOptions,
   surgicalHistoryOptions,
 } from "./constants";
-
-interface Profile {
-  fname?: string;
-  lname?: string;
-  email?: string;
-  age?: number;
-  gender?: string;
-  occupation?: string;
-  referredBy?: string;
-  painType?: string[];
-  chiefComplaint?: string;
-  diurnal?: string[];
-  otherComplaints?: string[];
-  problemInGait?: string;
-  medicalHistory?: string[];
-  personalHistory?: string[];
-  familyHistory?: string[];
-  surgicalHistory?: string[];
-  whenBad?: string;
-  whenBetter?: string;
-  profileImageUrl?: string;
-}
+import { GPCContext } from "Providers/GPC_Provider";
+import { Profile } from "./Profile.interface";
 
 const Profile = () => {
   const { user } = useUser();
   const [profileData, setProfileData] = useState<Profile | null>({});
   const [formData, setFormData] = useState<Profile | null>({});
   const [isEditing, setIsEditing] = useState(false);
-  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
-  const [isImageUploading, setIsImageUploading] = useState(false);
+  const {showBackdrop, closeBackdrop, showSnackbar} = useContext(GPCContext);
 
   const onChangeProfileImage = async (
     e: React.ChangeEvent<HTMLInputElement>
@@ -151,13 +129,13 @@ const Profile = () => {
   // update the profile image in the database
   const updateProfileImage = async () => {
     if (profileImageFile) {
-      setIsImageUploading(true);
+      showBackdrop("Uploading Image...");
       const profile = await uploadFileToFirebaseAndGetUrl(profileImageFile, "UserProfiles");
       setFormData((prev) => ({
         ...prev,
         profileImageUrl: profile.uploadedToUrl,
       }));
-      setIsImageUploading(false);
+      closeBackdrop();
     }
   };
 
@@ -204,12 +182,13 @@ const Profile = () => {
 
   // update the data and store in the firebase database
   const handleProfileSave = async () => {
+    showBackdrop("Updating Profile...");
     await setDoc(doc(db, "Userdata", user.uid), formData, { merge: true });
     setIsEditing(false);
-
     // get the latest data
     await getProfileData();
-    setIsSnackbarOpen(true);
+    showSnackbar("Profile updated successfully");
+    closeBackdrop();
   };
 
   return (
@@ -275,8 +254,6 @@ const Profile = () => {
                 )} */}
               </div>
             </Tooltip>
-            
-            <GPBackdrop loading={isImageUploading} message="Uploading Image..."/>
             
             <input
               type="file"
@@ -431,22 +408,6 @@ const Profile = () => {
           </button>
         </div>
       )}
-      <Snackbar
-        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-        open={isSnackbarOpen}
-        autoHideDuration={3000}
-        onClose={() => setIsSnackbarOpen(false)}
-      >
-        <Alert
-          variant="filled"
-          onClose={() => setIsSnackbarOpen(false)}
-          // onClose={handleClose}
-          severity="success"
-          sx={{ width: "100%" }}
-        >
-          Profile Saved Successfully!
-        </Alert>
-      </Snackbar>
     </div>
   );
 };

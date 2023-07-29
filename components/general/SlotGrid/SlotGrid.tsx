@@ -2,7 +2,7 @@ import { Input } from "@material-ui/core";
 import { Button, Dialog, DialogContent, DialogTitle, FormControl, FormGroup, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { useState } from "react";
-import { db } from "../firebase-config";
+import { db } from "../../firebase/firebase-config";
 import Cell from "./Cell/Cell";
 import style from "./SlotGrid.module.css";
 

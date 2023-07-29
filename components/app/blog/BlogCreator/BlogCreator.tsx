@@ -2,7 +2,7 @@ import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import CloseIcon from "@mui/icons-material/Close";
 import SaveIcon from "@mui/icons-material/Save";
 import { Button, Typography } from "@mui/material";
-import { db } from "components/general/firebase-config";
+import { db } from "components/firebase/firebase-config";
 import { collection, doc, writeBatch } from "firebase/firestore";
 import Image from "next/image";
 import { useRouter } from "next/router";

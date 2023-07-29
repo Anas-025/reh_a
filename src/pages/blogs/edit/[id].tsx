@@ -1,6 +1,6 @@
 import { withAdmin } from "ProtectedRoutes/AdminRoute";
 import BlogEditor from "components/app/blog/BlogEditor/BlogEditor";
-import { db } from "components/general/firebase-config";
+import { db } from "components/firebase/firebase-config";
 import { collection, doc, getDoc } from "firebase/firestore";
 
 

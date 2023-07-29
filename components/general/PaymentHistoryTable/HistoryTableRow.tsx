@@ -14,7 +14,7 @@ import { GPCContext } from "Providers/GPC_Provider";
 import { getCookie } from "cookies-next";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { useContext, useState } from "react";
-import { db } from "../firebase-config";
+import { db } from "../../firebase/firebase-config";
 
 interface Props {
   historyRow: { date: string; id: string; time: string; token: string, status: string };

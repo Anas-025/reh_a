@@ -5,7 +5,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
 import { GPCContext } from "Providers/GPC_Provider";
-import { db } from "components/general/firebase-config.js";
+import { db } from "components/firebase/firebase-config.js";
 import { doc, getDoc, writeBatch } from "firebase/firestore";
 import Image from "next/image";
 import { useContext, useState } from "react";
