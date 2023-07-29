@@ -1,4 +1,5 @@
-import { ContentCopy, DoneAll } from "@mui/icons-material";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import DoneAllIcon from "@mui/icons-material/DoneAll";
 import { IconButton } from "@mui/material";
 import { GPCContext } from "Providers/GPC_Provider";
 import Image from "next/image";
@@ -41,11 +42,11 @@ function Step1() {
         <div>UPI ID : {upi}</div>
         {copied ? (
           <IconButton>
-            <DoneAll fontSize="small" color="success" />
+            <DoneAllIcon fontSize="small" color="success" />
           </IconButton>
         ) : (
           <IconButton onClick={handleCopyButton}>
-            <ContentCopy fontSize="small" />
+            <ContentCopyIcon fontSize="small" />
           </IconButton>
         )}
       </div>

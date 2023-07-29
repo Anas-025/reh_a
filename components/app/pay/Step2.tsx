@@ -1,4 +1,5 @@
-import { AddPhotoAlternateOutlined, Edit } from "@mui/icons-material";
+import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
+import EditIcon from "@mui/icons-material/Edit";
 import { IconButton, Tooltip, Zoom } from "@mui/material";
 import { GPCContext } from "Providers/GPC_Provider";
 import Image from "next/image";
@@ -62,7 +63,7 @@ function Step2(props: Props) {
                 onClick={() => blogCoverImageRef.current?.click()}
                 className="flex flex-col gap-4 items-center justify-center w-full h-full"
               >
-                <AddPhotoAlternateOutlined className="text-6xl" />
+                <AddPhotoAlternateOutlinedIcon className="text-6xl" />
                 <span className="text-xl md:text-2xl font-semibold">
                   Upload Payment Screen Shot
                 </span>
@@ -83,7 +84,7 @@ function Step2(props: Props) {
               hidden
               onChange={handleBlogCoverImageChange}
             />
-            <Edit style={{ color: "white" }} />
+            <EditIcon style={{ color: "white" }} />
           </label>
         </IconButton>
       </div>

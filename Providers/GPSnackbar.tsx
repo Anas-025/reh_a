@@ -1,4 +1,4 @@
-import { Close } from "@mui/icons-material";
+import CloseIcon from "@mui/icons-material/Close";
 import { Alert, Grow, GrowProps, IconButton, Snackbar } from "@mui/material";
 
 function GrowTransition(props: GrowProps) {
@@ -28,7 +28,7 @@ function GPSnackbar(props: any) {
           sx={{ marginLeft: 1, p: 0 }}
           onClick={handleClose}
         >
-          <Close />
+          <CloseIcon />
         </IconButton>
       </Alert>
     </Snackbar>

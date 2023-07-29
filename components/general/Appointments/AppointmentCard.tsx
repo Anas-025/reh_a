@@ -1,11 +1,10 @@
-import { Delete } from "@mui/icons-material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Button, IconButton, Modal, Popover, Typography } from "@mui/material";
 import { GPCContext } from "Providers/GPC_Provider";
 import { deleteDoc, doc } from "firebase/firestore";
 import Image from "next/image";
-import { useRouter } from "next/router";
-import React, { FC, useContext, useState } from "react";
+import React, { FC, useContext } from "react";
 import { db } from "../../firebase/firebase-config";
 import CurrentCaseContent from "./CurrentCaseContent/CurrentCaseContent";
 import SlotBooking from "./SlotBooking/SlotBooking.jsx";
@@ -98,7 +97,7 @@ const AppointmentCard: FC<AppointmentCardProps> = ({
           }}
         >
           <Button sx={{ m: 2 }} onClick={handleDeleteButton}>
-            <Delete color="error" />
+            <DeleteIcon color="error" />
             <Typography sx={{ px: 2, py: 1 }} color={"black"}>
               Delete
             </Typography>
