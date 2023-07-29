@@ -4,6 +4,7 @@ import { Button, IconButton, Modal, Popover, Typography } from "@mui/material";
 import { GPCContext } from "Providers/GPC_Provider";
 import { deleteDoc, doc } from "firebase/firestore";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import React, { FC, useContext, useState } from "react";
 import { db } from "../../firebase/firebase-config";
 import CurrentCaseContent from "./CurrentCaseContent/CurrentCaseContent";

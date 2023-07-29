@@ -1,7 +1,7 @@
 // adminRoute.tsx
 import { Typography } from "@mui/material";
-import Loading from "components/general/Loading/Loading";
 import { auth } from "components/firebase/firebase-config";
+import Loading from "components/general/Loading/Loading";
 import { useRouter } from "next/router";
 import { useState } from "react";
 

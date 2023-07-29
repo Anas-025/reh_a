@@ -7,16 +7,15 @@ import { collection, doc, writeBatch } from "firebase/firestore";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { uploadFileToFirebaseAndGetUrl } from "utils/ExtendedUtils";
-import emptyHere from "../../../public/emptyHere.jpg";
-import BlogImage from "../BlogComponents/BlogImage/BlogImage";
-import BlogPartition from "../BlogComponents/BlogPartition/BlogPartition";
-import HeadTitle from "../BlogComponents/HeadTitle/HeadTitle";
-import HeroImage from "../BlogComponents/HeroImage/HeroImage";
-import style from "../BlogCreator/VisitBlog.module.css";
-import GPBackdrop from "../GeneralPurpose/GPBackdrop";
+import emptyHere from "public/emptyHere.jpg";
+import BlogImage from "components/app/blog/blog_components/BlogImage/BlogImage";
+import BlogPartition from "components/app/blog/blog_components/BlogPartition/BlogPartition";
+import HeadTitle from "components/app/blog/blog_components/HeadTitle/HeadTitle";
+import HeroImage from "components/app/blog/blog_components/HeroImage/HeroImage";
+import style from "../Blog.module.css";
+import GPBackdrop from "../../../general/GeneralPurpose/GPBackdrop";
 
 export default function BlogEditor(props) {
-  const [titles, setTitles] = useState([]);
   const container = useRef(null);
   const blogImageInput = useRef(null);
   const [headTitle, setHeadTitle] = useState(props.metaBlogData.headTitle);
@@ -27,7 +26,9 @@ export default function BlogEditor(props) {
   const displayName = props.metaBlogData.displayName;
   const [uid, setUid] = useState(null);
   const [open, setOpen] = useState(false);
-  const [blogCoverImage, setBlogCoverImage] = useState(props.metaBlogData?.heroImageSrc || "");
+  const [blogCoverImage, setBlogCoverImage] = useState(
+    props.metaBlogData?.heroImageSrc || ""
+  );
   const [blogCoverImageFile, setBlogCoverImageFile] = useState(null);
 
   useEffect(() => {
@@ -99,7 +100,7 @@ export default function BlogEditor(props) {
 
   return (
     <>
-      <GPBackdrop loading={loading} message="Saving..."/>
+      <GPBackdrop loading={loading} message="Saving..." />
 
       <HeadTitle
         displayName={displayName}

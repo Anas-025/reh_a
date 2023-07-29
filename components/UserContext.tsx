@@ -26,6 +26,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   const [userLoading, setUserLoading] = useState<string | null>('');
 
   useEffect(() => {
+
     setUserLoading("loading");
     onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);

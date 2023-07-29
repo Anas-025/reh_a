@@ -43,11 +43,14 @@ export default function Layout(props: LayoutProps ) {
     }
   }, []);
 
+  
+
   return (
     <>
       {userLoading !== 'loaded' || loading ? (
-        <Loading message="Loading..." />
-      ) : (
+        <Loading message="Loading Data..." />
+      ) : 
+      (
         <>
           <Box sx={{ display: "flex" }}>
             <CssBaseline />

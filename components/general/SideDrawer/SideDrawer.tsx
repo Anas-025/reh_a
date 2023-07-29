@@ -24,6 +24,14 @@ interface drawerList {
   link: string;
 }
 
+interface Props {
+  window?: () => Window;
+  setMobieOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  mobileOpen: boolean;
+  handleDrawerToggle: () => void;
+  drawerList: drawerList[];
+}
+
 export default function SideDrawer(props: any) {
   const router = useRouter();
   const id = router.query.id;

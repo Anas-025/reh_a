@@ -16,6 +16,8 @@ function index({ meetingsDataString }: {meetingsDataString: string}) {
     
   const rows = JSON.parse(meetingsDataString);
 
+  console.log(rows);
+
   return (
     <>
         <MeetingsTable rows={rows} />   
