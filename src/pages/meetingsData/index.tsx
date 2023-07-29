@@ -26,9 +26,6 @@ interface MeetingsDataProps {
 
 const MeetingsData = ({ meetingsData }: MeetingsDataProps) => {
   
-  meetingsData.map((item)=>{
-    console.log(JSON.parse(item.userData))
-  })
   const router = useRouter();
   const { updateToken } = useMeeting();
 

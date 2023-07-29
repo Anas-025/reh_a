@@ -1,6 +1,5 @@
 import "@/styles/Main.css";
 import "@/styles/globals.css";
-import { GPCProvider } from "Providers/GPC_Provider";
 import { MeetingProvider } from "components/MeetingContext";
 import { UserProvider } from "components/UserContext";
 import BlogsLayout from "components/general/Blogs/BlogsLayout";
@@ -17,7 +16,6 @@ export default function App({ Component, pageProps }: AppProps) {
   if (router.pathname.startsWith("/app")) {
     return (
       <Suspense fallback={<Loading />}>
-        <GPCProvider>
         <UserProvider>
           <MeetingProvider>
             <Layout>
@@ -25,7 +23,6 @@ export default function App({ Component, pageProps }: AppProps) {
             </Layout>
           </MeetingProvider>
         </UserProvider>
-        </GPCProvider>
       </Suspense>
     );
   } else if (router.pathname.startsWith("/blogs")) {

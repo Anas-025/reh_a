@@ -8,13 +8,13 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import { uploadFileToFirebaseAndGetUrl } from "utils/ExtendedUtils";
-import emptyHere from "public/emptyHere.jpg";
-import BlogImage from "../blog_components/BlogImage/BlogImage";
-import BlogPartition from "../blog_components/BlogPartition/BlogPartition";
-import HeadTitle from "../blog_components//HeadTitle/HeadTitle";
-import HeroImage from "../blog_components//HeroImage/HeroImage";
-import GPBackdrop from "../../../general/GeneralPurpose/GPBackdrop";
-import style from "../Blog.module.css";
+import emptyHere from "../../../public/emptyHere.jpg";
+import BlogImage from "../BlogComponents/BlogImage/BlogImage";
+import BlogPartition from "../BlogComponents/BlogPartition/BlogPartition";
+import HeadTitle from "../BlogComponents/HeadTitle/HeadTitle";
+import HeroImage from "../BlogComponents/HeroImage/HeroImage";
+import GPBackdrop from "../GeneralPurpose/GPBackdrop";
+import style from "./VisitBlog.module.css";
 
 export default function BlogCreator({ dataString }: { dataString: string }) {
   const data = JSON.parse(dataString);

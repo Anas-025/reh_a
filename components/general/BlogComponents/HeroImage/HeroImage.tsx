@@ -1,11 +1,10 @@
-import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
 import EditIcon from "@mui/icons-material/Edit";
+import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
 import { IconButton, Tooltip, Zoom } from "@mui/material";
-import Image from "next/image";
 import { Dispatch, SetStateAction, useRef, useState } from "react";
 import { returnFileSize, validFileType } from "utils/ExtendedUtils";
-import style from "../../Blog.module.css";
-
+import style from "../../BlogCreator/VisitBlog.module.css";
+import Image from "next/image";
 
 export default function HeroImage({
   blogCoverImage,

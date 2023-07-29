@@ -27,7 +27,6 @@ export default function HorizontalLinearStepper() {
   const { showSnackbar, showBackdrop, closeBackdrop, showError } = useContext(GPCContext);
 
 
-
   
   const handleNext = async () => {
     if (activeStep === 1) {

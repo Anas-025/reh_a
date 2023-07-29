@@ -38,7 +38,6 @@ const Profile = () => {
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (e.target.files) {
-      console.log(e.target.files);
       setProfileImageFile(e.target.files[0]);
       setIsEditing(true);
     }

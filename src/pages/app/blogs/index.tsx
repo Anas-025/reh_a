@@ -8,6 +8,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
+import { NextApiRequest, NextApiResponse } from "next";
 
 interface MetaBlog {
   id: string;
@@ -31,7 +32,13 @@ const app = ({ metaBlogsDataString }: { metaBlogsDataString: string }) => {
 
 export default app;
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = async ({
+  req,
+  res,
+}: {
+  req: NextApiRequest;
+  res: NextApiResponse;
+}) => {
   // get the latest 10 blogs from firestore
   const q = query(
     collection(db, "metaBlogs"),

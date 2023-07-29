@@ -19,6 +19,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "components/**/*.tsx", "components/general/SlotGrid/Cell", "components/general/Appointments/SlotBooking/SlotBooking.jsx", "components/general/AppStructure/AppStructure.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "components/**/*.tsx", "components/general/SlotGrid/Cell"],
   "exclude": ["node_modules"]
 }

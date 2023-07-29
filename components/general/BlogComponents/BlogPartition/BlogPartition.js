@@ -1,16 +1,13 @@
-import DeleteIcon from "@mui/icons-material/Delete";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import DeleteIcon from '@mui/icons-material/Delete';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { IconButton } from "@mui/material";
 import styles from "./BlogPartition.module.css";
 
-export default function BlogPartition({
-  anchorId,
-  data,
-  index,
-  length,
-  setBlogData,
-}) {
+
+
+export default function BlogPartition({anchorId, data, index, length, setBlogData}) {
+
   const handleTitleChange = (e) => {
     const title = e.target.value;
     setBlogData((current) => {
@@ -39,7 +36,7 @@ export default function BlogPartition({
 
   // up click will move the partition up
   const handleUpClick = () => {
-    if (length === 0) return;
+    if(length === 0) return;
     if (index === 0) return;
     setBlogData((current) => {
       const newData = [...current];
@@ -51,7 +48,7 @@ export default function BlogPartition({
   };
 
   const handleDownClick = () => {
-    if (length === 0) return;
+    if(length === 0) return;
     if (index === length - 1) return;
     setBlogData((current) => {
       const newData = [...current];
@@ -61,46 +58,42 @@ export default function BlogPartition({
       return newData;
     });
   };
+  
 
   return (
     <div className={styles.block} id={anchorId}>
-      <div style={{ position: "relative" }}>
+      <div style={{position: 'relative'}}>
         <textarea
-          type="text"
+          type='text'
           className={styles.title}
           value={data.title}
           onChange={handleTitleChange}
-          onInput={(e) => {
-            e.target.style.height = "auto";
-            e.target.style.height = e.target.scrollHeight + "px";
-          }}
+          onInput={(e) => {e.target.style.height = 'auto'; e.target.style.height = e.target.scrollHeight + 'px';}}
         />
-        <div className={styles.buttonGroup}>
-          <IconButton onClick={handleUpClick}>
-            <KeyboardArrowUpIcon color="primary" />
-          </IconButton>
+      <div className={styles.buttonGroup}>
+        <IconButton onClick={handleUpClick}>
+          <KeyboardArrowUpIcon color="primary" />
+        </IconButton>
 
-          <IconButton onClick={handleDownClick}>
-            <KeyboardArrowDownIcon color="primary" />
-          </IconButton>
-
-          <IconButton onClick={handleDeleteClick}>
-            <DeleteIcon color="error" />
-          </IconButton>
-        </div>
+        <IconButton onClick={handleDownClick}>
+          <KeyboardArrowDownIcon color="primary" />
+        </IconButton>
+        
+        <IconButton onClick={handleDeleteClick}>
+          <DeleteIcon color="error" />
+        </IconButton>
+      </div>
       </div>
       <div>
         <textarea
           type="text"
           className={styles.text}
           onChange={handleContentChange}
-          onInput={(e) => {
-            e.target.style.height = "auto";
-            e.target.style.height = e.target.scrollHeight + "px";
-          }}
+          onInput={(e) => {e.target.style.height = 'auto'; e.target.style.height = e.target.scrollHeight + 'px';}}
           value={data.content}
         />
       </div>
+
     </div>
   );
 }

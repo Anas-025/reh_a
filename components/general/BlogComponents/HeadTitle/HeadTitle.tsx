@@ -1,6 +1,6 @@
 import { Avatar, Typography } from "@mui/material";
 import { useEffect, useRef } from "react";
-import { HeadTitleProps } from "../../Blog.interface";
+import { HeadTitleProps } from "../../BlogCreator/BlogCreator.interface";
 import style from "./HeadTitle.module.css";
 
 function HeadTitle(props: HeadTitleProps) {

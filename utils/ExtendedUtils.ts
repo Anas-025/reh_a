@@ -31,9 +31,7 @@ export const uploadFileToFirebaseAndGetUrl = async (file: File | null, path: str
   if (!type) {
     type = "other";
   }
-  // create a random 8 letter alphabet string
-  const name = Math.random().toString(36).substring(2, 10);
-  const storagePath = path ? `${path}/${type}/${name}` : `${type}/${name}`;
+  const storagePath = path ? `${path}/${type}/${newFile.name}` : `${type}/${newFile.name}`;
   const storageRef = ref(fbStorage, storagePath);
 
   const uploadedToUrl = await uploadBytes(storageRef, newFile).then(

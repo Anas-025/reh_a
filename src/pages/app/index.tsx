@@ -11,7 +11,7 @@ const app = (props: any) => {
   return (
     <>
       <AppointmentHeroImage />
-      <Appointments sessionCount={sessionCount} />
+      <Appointments sessionCount={sessionCount}/>
     </>
   );
 };
@@ -29,7 +29,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
       },
     };
   }
-
+  
   const userRef = doc(db, "Userdata", uid);
   const uerSnap = await getDoc(userRef);
   if (uerSnap.exists()) {
