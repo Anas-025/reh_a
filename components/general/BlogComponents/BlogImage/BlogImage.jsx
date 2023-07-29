@@ -13,8 +13,6 @@ export default function BlogImage({ setBlogData, index, data, length }) {
     
   const src = data.src;
 
-  console.log(src)
-
 
     const handleUpClick = () => {
         if(length === 0) return;

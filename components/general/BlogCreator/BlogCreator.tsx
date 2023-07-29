@@ -38,8 +38,6 @@ export default function BlogCreator({ dataString }: { dataString: string }) {
     null
   );
 
-  console.log(data);
-
   const handleParaClick = () => {
     setBlogData((current) => [
       ...current,
