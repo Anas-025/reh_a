@@ -1,17 +1,17 @@
-import Link from "next/link";
-import { styled } from "@mui/material/styles";
+import { Theme } from "@material-ui/core";
+import ArrowForwardOutlinedIcon from "@mui/icons-material/ArrowForwardOutlined";
 import {
   Divider,
-  Drawer as MuiDrawer,
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Drawer as MuiDrawer,
   Typography,
 } from "@mui/material";
-import { ArrowForwardOutlined } from "@mui/icons-material";
-import { Theme } from "@material-ui/core";
+import { styled } from "@mui/material/styles";
+import Link from "next/link";
 import { AppNavList } from "types/app";
 
 interface AppDrawerProps {
@@ -106,7 +106,7 @@ const AppDrawer = ({
             }}
             id="drawerBtn"
           >
-            <ArrowForwardOutlined
+            <ArrowForwardOutlinedIcon
               sx={{ transform: "rotate(180deg)" }}
               fontSize="medium"
               color="action"

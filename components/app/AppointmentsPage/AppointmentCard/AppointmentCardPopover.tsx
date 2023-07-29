@@ -1,6 +1,6 @@
-import { Delete } from "@mui/icons-material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { Button, Popover, Typography } from "@mui/material";
-import React, { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 interface AppointmentCardPopoverProps {
   popoverId: string | undefined;
@@ -33,7 +33,7 @@ const AppointmentCardPopover = ({
       }}
     >
       <Button sx={{ m: 1 }} onClick={() => setDialogOpen(true)}>
-        <Delete color="error" />
+        <DeleteIcon color="error" />
         <Typography sx={{ px: 2, py: 1 }} color={"black"}>
           Delete
         </Typography>

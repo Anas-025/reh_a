@@ -1,8 +1,8 @@
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { IconButton, Modal } from "@mui/material";
-import React, { Dispatch, SetStateAction } from "react";
-import styles from "../Appointments/Appoinments.module.css";
 import Image from "next/image";
-import { ContentCopy } from "@mui/icons-material";
+import { Dispatch, SetStateAction } from "react";
+import styles from "../Appointments/Appoinments.module.css";
 
 interface BuySessionsModalProps {
   buy: boolean;
@@ -44,7 +44,7 @@ const BuySessionsModal = ({
         <div style={{ display: "flex", marginTop: "40px" }}>
           <div>UPI ID : sample384983@oksbi &nbsp;&nbsp;</div>
           <IconButton onClick={handleCopyButton}>
-            <ContentCopy
+            <ContentCopyIcon
               fontSize="small"
               sx={{ width: "max-content" }}
               className={styles.copyIcn}

@@ -1,29 +1,32 @@
-import { ImportContacts, AccountBalanceWalletOutlined, CalendarMonth, PermIdentity } from "@mui/icons-material"
+import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import ImportContactsIcon from '@mui/icons-material/ImportContacts';
+import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import { AppNavList } from "types/app";
 
 export const bottomNavList: AppNavList[] = [
   {
     id: 0,
     name: "Blogs",
-    icon: ImportContacts ,
+    icon: ImportContactsIcon ,
     link: "/app/blogs",
   },
   {
     id: 1,
     name: "Payments",
-    icon: AccountBalanceWalletOutlined ,
+    icon: AccountBalanceWalletOutlinedIcon ,
     link: "/app/paymentHistory",
   },
   {
     id: 2,
     name: "Appoinments",
-    icon: CalendarMonth ,
+    icon: CalendarMonthIcon ,
     link: "/app",
   },
   {
     id: 3,
     name: "Profile",
-    icon: PermIdentity ,
+    icon: PermIdentityIcon ,
     link: "/app/profile",
   },
 ];

@@ -1,4 +1,5 @@
-import { Close, Logout } from "@mui/icons-material";
+import CloseIcon from "@mui/icons-material/Close";
+import LogoutIcon from "@mui/icons-material/Logout";
 import {
   Box,
   Divider,
@@ -15,8 +16,8 @@ import { auth } from "components/general/firebase-config";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect } from "react";
-import Avatar from "../Avatar/Avatar";
 import { AppDrawerList } from "types/app";
+import Avatar from "../Avatar/Avatar";
 
 interface SideDrawerProps {
   mobileOpen: boolean;
@@ -78,7 +79,7 @@ export default function SideDrawer({
             sx={{ justifyContent: "space-between", paddingBlock: "1.5rem" }}
           >
             <IconButton onClick={handleDrawerToggle}>
-              <Close />
+              <CloseIcon />
             </IconButton>
             <Link href="/app/profile">
               <Avatar withPopOver={false} />
@@ -107,7 +108,7 @@ export default function SideDrawer({
                 onClick={handleLogOutClick}
               >
                 <ListItemIcon sx={{ color: "black!important" }}>
-                  <Logout />
+                  <LogoutIcon />
                 </ListItemIcon>
                 <ListItemText primary="Logout" />
               </ListItemButton>
