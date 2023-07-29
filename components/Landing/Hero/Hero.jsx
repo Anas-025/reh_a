@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../Navbar/Navbar";
+import Navbar from "../../general/Navbar/Navbar";
 import Link from "next/link";
 
 const Hero = () => {

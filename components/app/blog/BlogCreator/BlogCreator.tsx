@@ -5,39 +5,40 @@ import { Button, Typography } from "@mui/material";
 import { db } from "components/general/firebase-config";
 import { collection, doc, writeBatch } from "firebase/firestore";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/router";
+import { useRef, useState } from "react";
 import { uploadFileToFirebaseAndGetUrl } from "utils/ExtendedUtils";
-import emptyHere from "../../../public/emptyHere.jpg";
-import BlogImage from "../BlogComponents/BlogImage/BlogImage";
-import BlogPartition from "../BlogComponents/BlogPartition/BlogPartition";
-import HeadTitle from "../BlogComponents/HeadTitle/HeadTitle";
-import HeroImage from "../BlogComponents/HeroImage/HeroImage";
-import style from "../BlogCreator/VisitBlog.module.css";
-import GPBackdrop from "../GeneralPurpose/GPBackdrop";
+import emptyHere from "public/emptyHere.jpg";
+import BlogImage from "../blog_components/BlogImage/BlogImage";
+import BlogPartition from "../blog_components/BlogPartition/BlogPartition";
+import HeadTitle from "../blog_components//HeadTitle/HeadTitle";
+import HeroImage from "../blog_components//HeroImage/HeroImage";
+import GPBackdrop from "../../../general/GeneralPurpose/GPBackdrop";
+import style from "../Blog.module.css";
 
-export default function BlogEditor(props) {
+export default function BlogCreator({ dataString }: { dataString: string }) {
+  const data = JSON.parse(dataString);
   const [titles, setTitles] = useState([]);
   const container = useRef(null);
-  const blogImageInput = useRef(null);
-  const [headTitle, setHeadTitle] = useState(props.metaBlogData.headTitle);
-  const [blogData, setBlogData] = useState(props.blogData);
-  const date = props.metaBlogData.date;
+  const blogImageInput = useRef<HTMLInputElement>(null);
+  const [headTitle, setHeadTitle] = useState("Click to Edit Title");
+  const [blogData, setBlogData] = useState<
+    { title: string; src?: string; content?: string }[]
+  >([]);
+  const displayName = `${data.fname} ${data.lname}`;
+  const date = new Date();
+  const userBlogs = data.blogs;
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const blogID = props.blogID;
-  const displayName = props.metaBlogData.displayName;
-  const [uid, setUid] = useState(null);
+  const uid = data.uid;
   const [open, setOpen] = useState(false);
-  const [blogCoverImage, setBlogCoverImage] = useState(props.metaBlogData?.heroImageSrc || "");
-  const [blogCoverImageFile, setBlogCoverImageFile] = useState(null);
 
-  useEffect(() => {
-    setUid(localStorage.getItem("uid"));
-  }, []);
+  const [blogCoverImage, setBlogCoverImage] = useState<string>("");
+  const [blogCoverImageFile, setBlogCoverImageFile] = useState<File | null>(
+    null
+  );
 
-  // const getTitle = (anchorId) => {
-  //   const title = document.getElementById(`${anchorId}`);
-  //   return title.children[0].innerText;
-  // };
+  console.log(data);
 
   const handleParaClick = () => {
     setBlogData((current) => [
@@ -68,10 +69,7 @@ export default function BlogEditor(props) {
         uid: uid,
       };
 
-      const blogCoverImageUrl = await uploadFileToFirebaseAndGetUrl(
-        blogCoverImageFile,
-        "BlogImages"
-      );
+      const blogCoverImageUrl = await uploadFileToFirebaseAndGetUrl(blogCoverImageFile, "BlogImages");
 
       const metaBlog = {
         displayName: displayName,
@@ -79,17 +77,23 @@ export default function BlogEditor(props) {
         headTitle: headTitle,
         heroImageSrc: blogCoverImageUrl.uploadedToUrl,
         uid: uid,
+        published: false,
       };
 
       // write blog to firestore in batch
       const batch = writeBatch(db);
+      const blogRef = doc(collection(db, "blogs"));
+      const blogId = blogRef.id;
 
-      const blogRef = doc(collection(db, "blogs"), blogID);
-      const metaBlogRef = doc(collection(db, "metaBlogs"), blogID);
+      const blogs = [...userBlogs, blogId] || [blogId];
+      const userRef = doc(collection(db, "Userdata"), uid);
+      const metaBlogRef = doc(collection(db, "metaBlogs"), blogId);
 
-      batch.update(blogRef, blog);
-      batch.update(metaBlogRef, metaBlog);
+      batch.set(userRef, { blogs: blogs }, { merge: true });
+      batch.set(blogRef, blog);
+      batch.set(metaBlogRef, metaBlog);
       await batch.commit();
+      router.push(`/blogs/edit/${blogId}`);
     } catch (error) {
       console.log(error);
     } finally {
@@ -99,11 +103,12 @@ export default function BlogEditor(props) {
 
   return (
     <>
-      <GPBackdrop loading={loading} message="Saving..."/>
+      
+      <GPBackdrop loading={loading} message="Creating new Blog..." />
 
       <HeadTitle
         displayName={displayName}
-        date={new Date()}
+        date={date}
         headTitle={headTitle}
         setHeadTitle={setHeadTitle}
       />
@@ -139,7 +144,7 @@ export default function BlogEditor(props) {
               <label htmlFor="addImage" className={style.addImage}>
                 <input
                   ref={blogImageInput}
-                  onClick={(e) => (e.target.value = null)}
+                  onClick={(e) => ((e.target as HTMLInputElement).value = "")}
                   onChange={handleAddImageClick}
                   type="file"
                   name="addImage"
@@ -193,6 +198,7 @@ export default function BlogEditor(props) {
                 return (
                   <BlogPartition
                     key={index}
+                    anchorId={index}
                     data={item}
                     index={index}
                     length={blogData.length}

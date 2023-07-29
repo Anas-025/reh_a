@@ -1,31 +1,22 @@
 import { Button } from "@mui/material";
 import Badge from "@mui/material/Badge";
 import CircularProgress from "@mui/material/CircularProgress";
-import Grow from "@mui/material/Grow";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
-import GPDialog from "components/general/GeneralPurpose/GPDialog";
+import { GPCContext } from "Providers/GPC_Provider";
 import { db } from "components/general/firebase-config.js";
 import { doc, getDoc, writeBatch } from "firebase/firestore";
 import Image from "next/image";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { timeMiner } from "utils/ExtendedUtils";
 import calander from "../../../../public/calander.png";
 import { useUser } from "../../../UserContext";
 import slotcss from "./SlotBooking.module.css";
 
-function GrowTransition(props) {
-  return <Grow {...props} />;
-}
-
 export default function SlotBooking({
   id,
   setSlot,
-  setState,
-  setErrorDialog,
-  setErrorMsg,
-  setSnackbarMessage,
 }) {
   const [open, setOpen] = useState(false);
   const [selectedSlot, setSelectedSlot] = useState("");
@@ -33,6 +24,7 @@ export default function SlotBooking({
   const [allSlots, setAllSlots] = useState([]);
   const [loading, setLoading] = useState(false);
   const { user } = useUser();
+  const { showSnackbar, showDialog, showError } = useContext(GPCContext);
 
   const handleChange = async (e) => {
     setLoading(true);
@@ -68,15 +60,13 @@ export default function SlotBooking({
     if(index === -1) {
       setSlot(false);
       setOpen(false);
-      setErrorDialog(true);
-      setErrorMsg("Sorry, the slot you selected is not available. Please try again");
+      showError("Sorry, the slot you selected is not available. Please try again");
       return
     }
     if(caseData.data().slot) {
       setSlot(false);
       setOpen(false);
-      setErrorDialog(true);
-      setErrorMsg("Sorry, you have already booked a slot for this case. Please cancel the previous slot to book a new one");
+      showError("Sorry, you have already booked a slot for this case. Please cancel the previous slot to book a new one");
       return
     }
     
@@ -97,44 +87,32 @@ export default function SlotBooking({
       await batch.commit()
       setOpen(false);
       setSlot(false);
-      setSnackbarMessage("Slot booked successfully");
+      showSnackbar("Slot booked successfully");
     }
     catch(err) {
       console.log(err)
       setSlot(false);
       setOpen(false);
-      setErrorDialog(true);
-      setErrorMsg("Sorry, something went wrong. Please try again");
+      showError("Sorry, something went wrong. Please try again");
       return
     }
+  };
 
+  const handleSlotClick = (slot) => {
+    setSelectedSlot(slot);
+    showDialog(
+      "Are you sure you want to book this slot?",
+      `Slot will be scheduled on ${date} between ${slot} ${timeMiner(slot)}`,
+      "No",
+      "Yes",
+      handleClick
+    );
   };
 
 
 
   return (
     <>
-
-      <GPDialog
-        open={open}
-        setOpen={setOpen}
-        title="Are you sure you want to book this slot?"
-        contentText={`Slot will be scheduled on ${date} between ${selectedSlot} ${timeMiner(selectedSlot)}`}
-        buttons={[
-          {
-            text: "No",
-            onClick: ()=> setOpen(false),
-            color: "warning",
-          },
-          {
-            text: "Yes",
-            onClick: handleClick,
-          },
-
-        ]}
-      />
-
-
       <div
         style={{ height: "100%", width: "100%", color: "black" }}
         className={slotcss.container}
@@ -216,8 +194,7 @@ export default function SlotBooking({
                       >
                         <Button
                           onClick={() => {
-                            setOpen(true);
-                            setSelectedSlot(slotArr[0]);
+                            handleSlotClick(slotArr[0]);
                           }}
                           style={{
                             width: "100%",

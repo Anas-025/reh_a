@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Footer from "../Footer/Footer";
+import Footer from "../../Landing/Footer/Footer";
 import { auth } from "../firebase-config";
 import BlogsNav from "./BlogsNav/BlogsNav";
 

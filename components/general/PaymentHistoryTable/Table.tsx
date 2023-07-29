@@ -199,9 +199,9 @@ function Row({row, index}: { row: any, index: number }) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.payments.map((historyRow : string, index : number) => {
+                  {row.payments.map((historyRow : {date: string, id: string, time: string, token: string, status: string}, index : number) => {
                     return(
-                    <HistoryTableRow key={`History-Table-Row${index}`} historyRow={row.id + " " + historyRow} index={index} />
+                    <HistoryTableRow key={`History-Table-Row${index}`} historyRow={historyRow} index={index} />
                   )})}
                 </TableBody>
               </Table>

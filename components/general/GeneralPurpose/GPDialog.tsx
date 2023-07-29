@@ -29,7 +29,7 @@ export default function GPDialog(props: Props) {
   };
 
   return (
-    <div>
+    <>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -51,6 +51,6 @@ export default function GPDialog(props: Props) {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   );
 }

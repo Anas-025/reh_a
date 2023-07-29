@@ -1,21 +1,14 @@
-import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
-import AnalyticsOutlinedIcon from '@mui/icons-material/AnalyticsOutlined';
 import ArrowForwardOutlinedIcon from "@mui/icons-material/ArrowForwardOutlined";
-import BookIcon from '@mui/icons-material/Book';
-import BookOutlinedIcon from '@mui/icons-material/BookOutlined';
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth"; //appoinment
-import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
-import ImportContactsIcon from "@mui/icons-material/ImportContacts"; //blog
-import PermIdentityIcon from "@mui/icons-material/PermIdentity"; //profile
-import ScheduleIcon from '@mui/icons-material/Schedule';
-import { Typography } from "@mui/material";
-import Divider from "@mui/material/Divider";
-import MuiDrawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
+import {
+  Divider,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Drawer as MuiDrawer,
+  Typography,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -24,6 +17,7 @@ import AppNavBar from "../AppNavBar/AppNavBar";
 import SideDrawer from "../SideDrawer/SideDrawer";
 import BottomNav from "./BottomNav/BottomNav";
 import sidebar from "./Sidebar.module.css";
+import { adminList, drawerList, normalList } from "./constants";
 
 const drawerWidth = 270;
 
@@ -74,81 +68,24 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function MiniDrawer({isAdmin}) {
+export default function MiniDrawer({ isAdmin }) {
   const [open, setOpen] = useState(true);
   const [current, setCurrent] = useState(0);
   const router = useRouter();
   const [uid, setUid] = useState("hello");
   const [mobileOpen, setMobileOpen] = useState(false);
 
-
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const normalList = [
-    {
-      id: 0,
-      name: "My appoinments",
-      icon: <CalendarMonthIcon />,
-      link: "/app",
-    },
-    {
-      id: 1,
-      name: "Blogs",
-      icon: <BookOutlinedIcon />,
-      link: "/app/blogs",
-    },
-    {
-      id: 2,
-      name: "Profile",
-      icon: <PermIdentityIcon />,
-      link: "/app/profile",
-    },
-    
-  ];
-
-  const adminList = [
-    {
-      id: 3,
-      name: "My Blogs",
-      icon: <ImportContactsIcon />,
-      link: "/app/myBlogs",
-    },
-    {
-      id: 4,
-      name: "Payment History",
-      icon: <AccountBalanceWalletOutlinedIcon />,
-      link: "/app/paymentHistory",
-    },
-    {
-      id: 5,
-      name: "Create Slots",
-      icon: <ScheduleIcon />,
-      link: "/app/createSlots",
-    },
-    {
-      id: 6,
-      name: "Meeting Data",
-      icon: <GroupsOutlinedIcon />,
-      link: "/app/meetingData",
-    },
-    {
-      id: 7,
-      name: "Analytics",
-      icon: <AnalyticsOutlinedIcon />,
-      link: "/app/analytics",
-    },
-  ];
-
   const navList = isAdmin ? [...normalList, ...adminList] : normalList;
-
 
   useEffect(() => {
     setUid(localStorage.getItem("uid"));
 
     const activeMenu = navList.find((item) => item.link === router.pathname);
-    if(activeMenu){
+    if (activeMenu) {
       activeElement(activeMenu.id);
     }
   }, [router.pathname]);
@@ -185,46 +122,20 @@ export default function MiniDrawer({isAdmin}) {
     else if (ind == 2) tp = 264;
     else if (ind == 3) tp = 346;
     else if (ind == 4) tp = 426;
-    else if (ind == 5) tp = 508; 
-    else if (ind == 6) tp = 590; 
-    else tp = 672;
+    else if (ind == 5) tp = 508;
+    else if (ind == 6) tp = 590;
+    else if (ind == 7) tp = 672;
+    else tp = 754;
 
     document.getElementById(`item${current}`).style.color = "black";
     document.getElementById(`icon${current}`).children[0].style.color = "black";
-    
+
     setCurrent(ind);
-    
 
     bar.style.top = `${tp}px`;
     document.getElementById(`item${ind}`).style.color = "white";
     document.getElementById(`icon${ind}`).children[0].style.color = "white";
-
-
   };
-
-  const drawerList = [
-    {
-      name: "My Blogs",
-      icon: <BookIcon />,
-      link: "/app/myBlogs",
-    },
-    {
-      name: "Analytics",
-      icon: <AnalyticsOutlinedIcon />,
-      link: "/app/analytics",
-    },
-    {
-      name: "Create Slots",
-      icon: <ScheduleIcon />,
-      link: "/app/createSlots",
-    },
-    {
-      name: "Meetings Data",
-      icon: <GroupsOutlinedIcon />,
-      link: "/app/meetingData",
-    },
-  ];
-
 
   return (
     <>
@@ -269,61 +180,61 @@ export default function MiniDrawer({isAdmin}) {
 
           <div className={sidebar.bar} id="bar"></div>
 
-          {navList.map(
-            (item, index) => (
-              <Link key={index} href={item.link }   >
-                <ListItem
-                  disablePadding
+          {navList.map((item, index) => (
+            <Link key={index} href={item.link}>
+              <ListItem
+                disablePadding
+                sx={{
+                  display: "block",
+                  color: index == 0 ? "white" : "black",
+                }}
+                id={`item${index}`}
+                className={sidebar.elements}
+              >
+                <ListItemButton
                   sx={{
-                    display: "block",
-                    color: index == 0 ? "white" : "black",
+                    height: "auto",
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
+                    paddingX: "20px",
+                    paddingY: "25px",
                   }}
-                  id={`item${index}`}
-                  className={sidebar.elements}
                 >
-                  <ListItemButton
+                  <ListItemIcon
                     sx={{
-                      height: "auto",
-                      justifyContent: open ? "initial" : "center",
-                      px: 2.5,
-                      paddingX: "20px",
-                      paddingY: "25px",
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                      color: index == 0 ? "white" : "black",
                     }}
+                    id={`icon${index}`}
                   >
-                    <ListItemIcon
-                      sx={{
-                        minWidth: 0,
-                        mr: open ? 3 : "auto",
-                        justifyContent: "center",
-                        color: index == 0 ? "white" : "black",
-                      }}
-                      id={`icon${index}`}
-                    >
-                      {item.icon}
-                      
-                    </ListItemIcon>
+                    {item.icon}
+                  </ListItemIcon>
 
-                    <ListItemText
-                      primary={item.name}
-                      sx={{ opacity: open ? 1 : 0,  }}
-                    />
-                  </ListItemButton>
-                </ListItem>
-              </Link>
-            )
-          )}
+                  <ListItemText
+                    primary={item.name}
+                    sx={{ opacity: open ? 1 : 0 }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            </Link>
+          ))}
         </List>
         <Divider />
       </Drawer>
 
-
       {/* navigation bar for mobile view */}
-      <BottomNav handleDrawerToggle={handleDrawerToggle} current={current}/>
+      <BottomNav handleDrawerToggle={handleDrawerToggle} current={current} />
 
       {/* rectractable drawer from hamburger */}
-      <SideDrawer sx={{display: { "@media (min-width:768px)": "none" }}}  drawerList={drawerList} handleDrawerToggle={handleDrawerToggle} setMobileOpen={setMobileOpen} mobileOpen={mobileOpen}/>
+      <SideDrawer
+        sx={{ display: { "@media (min-width:768px)": "none" } }}
+        drawerList={drawerList}
+        handleDrawerToggle={handleDrawerToggle}
+        setMobileOpen={setMobileOpen}
+        mobileOpen={mobileOpen}
+      />
     </>
   );
 }
-
-

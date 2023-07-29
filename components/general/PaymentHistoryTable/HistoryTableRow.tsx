@@ -1,72 +1,76 @@
-import { Alert, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Link, Snackbar, TableCell, TableRow, Typography, useTheme } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
-import LaunchIcon from "@mui/icons-material/Launch";
 import EditIcon from "@mui/icons-material/Edit";
-import { useEffect, useState } from "react";
-import { db } from "../firebase-config";
+import LaunchIcon from "@mui/icons-material/Launch";
+import {
+  Button,
+  CircularProgress,
+  IconButton,
+  Link,
+  TableCell,
+  TableRow,
+  Typography
+} from "@mui/material";
+import { GPCContext } from "Providers/GPC_Provider";
+import { getCookie } from "cookies-next";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { useContext, useState } from "react";
+import { db } from "../firebase-config";
 
-export default function HistoryTableRow({historyRow, index} : {historyRow: string, index: number}) {
-    const [loading, setLoading] = useState(false);
-    const [open, setOpen] = useState(false);
-    const [dialog, setDialog] = useState("confirm");
-    const [id, date, time, link, statusTemp] = historyRow.split(" ");
-    const [status, setStatus] = useState(statusTemp);
-    const [statusToBeChanged, setStatusToBeChanged] = useState(statusTemp);
-    const [errorMessage, setErrorMessage] = useState("");
-    const [errorOpen, setErrorOpen] = useState(false);
-    const [snackbarOpen, setSnackbarOpen] = useState(false);
+interface Props {
+  historyRow: { date: string; id: string; time: string; token: string, status: string };
+  index: number;
+}
 
-  
-    const handleClickOpen = (value: string) => {
-        setDialog(value);
-        setStatusToBeChanged(value === "confirm" ? "y" : "n");
-        setOpen(true);
-    };
-  
-    const handleClose = () => {
-      setOpen(false);
-    };
+export default function HistoryTableRow(props: Props) {
+  const { historyRow, index } = props;
+  const { id, date, time, token, status } = historyRow;
+  const [confirm, setConfirm] = useState(status === "y");
+  const link = `https://firebasestorage.googleapis.com/v0/b/reh-a-demo1-9efe4.appspot.com/o/BlogImages%2Fimage%2F${id}?alt=media&token=${token}`;
+  const [loading, setLoading] = useState(false);
+  const uid = getCookie("uid") as string;
+  const { showError, showSnackbar, showDialog } = useContext(GPCContext);
 
-    const handleStatusChangeClick = async (value: string) => {
-      const docRef = doc(db, "Userdata", id);
-      setLoading(true);
-      setOpen(false);
-      const findDoc = await getDoc(docRef);
-      if (findDoc.exists()) {
-        const user = findDoc.data();
-        const payments = user?.payments;
-        payments[index] = `${date} ${time} ${link} ${value}`;
-        try{
-          await updateDoc(docRef, {
-            payments: payments,
-          });
-          setStatus(value);
-          setLoading(false);
-          setSnackbarOpen(true);
-        }
-        catch(e){
-          setLoading(false);
-          setErrorMessage("Oops! Something went wrong. Please try again later.");
-          setErrorOpen(true);
-        }
+  const handleClickOpen = (value: string) => {
+    const message = value === "confirm" ? "Confirm" : "Un-Confirm";
+    showDialog(
+      `Are you sure you want to ${message} this payment?`,
+      `By clicking on ${message}, you are ${message}ing that user have paid the amount.`,
+      "Cancel",
+      message,
+      () => handleStatusChangeClick(value === "confirm" ? "y" : "n"),
+    )
+  };
 
-      } else {
+  const handleStatusChangeClick = async (value: string) => {
+    const userRef = doc(db, "Userdata", uid);
+    setLoading(true);
+    const uerSnap = await getDoc(userRef);
+    if (uerSnap.exists()) {
+      const user = uerSnap.data();
+      const payments = user?.payments;
+      let sessionCount = user?.sessionCount;
+      payments[index].status = value;
+      sessionCount = value === "y" ? sessionCount + 5 : sessionCount - 5;
+      sessionCount = sessionCount < 0 ? 0 : sessionCount;
+      
+      try {
+        await updateDoc(userRef, {
+          payments: payments,
+          sessionCount: sessionCount,
+        });
         setLoading(false);
-        setErrorMessage("Oops! Something went wrong. Please try again later.");
-        setErrorOpen(true);
+        setConfirm(value === "y");
+        showSnackbar("Payment Status changed successfully!");
+      } catch (e) {
+        setLoading(false);
+        showError("Oops! Something went wrong. Please try again later. Open console for more details.");
+        console.log(e);
       }
-
+    } else {
+      setLoading(false);
+      showError("User not found!");
     }
-
-    const handleErrorClose = () => {
-      setErrorOpen(false);
-    };
-
-    const handleSnackbarClose = () => {
-      setSnackbarOpen(false);
-    };
-
+  };
 
 
   return (
@@ -79,101 +83,56 @@ export default function HistoryTableRow({historyRow, index} : {historyRow: strin
         <TableCell>{time}</TableCell>
         <TableCell align="right">
           <Link href={link} target="_blank">
-            {link}
+            see image
             <LaunchIcon sx={{ fontSize: 15, marginLeft: "0.5rem" }} />
           </Link>
         </TableCell>
 
         <TableCell align="right">
-          {status === "y" ? (
-            loading ?  ( <CircularProgress size={24}/> ) : 
-            (
+          {confirm ? (
+            loading ? (
+              <CircularProgress size={24} />
+            ) : (
               <Typography color="green">
                 Confirmed
                 <IconButton
                   aria-label="edit"
                   size="small"
                   sx={{ marginLeft: "0.5rem" }}
+                  onClick={() => handleClickOpen("unconfirm")}
                 >
-                  <EditIcon sx={{ fontSize: 18 }} color="warning" onClick={()=> handleClickOpen("unconfirm")} />
+                  <EditIcon
+                    sx={{ fontSize: 18 }}
+                    color="warning"
+                  />
                 </IconButton>
               </Typography>
             )
-
           ) : (
             <Button
               disableElevation
               variant="contained"
               disabled={loading}
-              sx={{ backgroundColor: loading ? "#fafafa" : "rgb(250 184 0)!important" , color: "white" }}
+              sx={{
+                backgroundColor: loading
+                  ? "#fafafa"
+                  : "rgb(250 184 0)!important",
+                color: "white",
+              }}
               onClick={() => handleClickOpen("confirm")}
             >
-              {loading ?
-
-                (<CircularProgress size={24}/>)
-              
-              : (
-                  <>
-                    Confirm
-                    <DoneIcon sx={{ fontSize: 18, marginLeft: "0.5rem" }} />
-                  </>
-              )
-              }
+              {loading ? (
+                <CircularProgress size={24} />
+              ) : (
+                <>
+                  Confirm
+                  <DoneIcon sx={{ fontSize: 18, marginLeft: "0.5rem" }} />
+                </>
+              )}
             </Button>
           )}
         </TableCell>
       </TableRow>
-
-
-
-      <Dialog
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="responsive-dialog-title"
-      >
-        <DialogTitle id="responsive-dialog-title">
-          {dialog === "confirm" ? "Confirm " : " Unconfirm "}          
-          this payment?
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            By clicking Yes, you will
-            {dialog === "confirm" ? " confirm " : " unconfirm "}
-            this payment.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={handleClose}>
-            No
-          </Button>
-          <Button color="warning" onClick={()=> handleStatusChangeClick(statusToBeChanged)} autoFocus>
-            Yes
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-
-      <Dialog
-        open={errorOpen}
-        onClose={handleErrorClose}
-        aria-labelledby="error dialog"
-      >
-        <DialogTitle>
-          <Typography>
-            {errorMessage}
-          </Typography>
-        </DialogTitle>
-        <DialogActions>
-          <Button onClick={handleErrorClose}>Okay</Button>
-        </DialogActions>
-      </Dialog>
-
-      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
-        <Alert onClose={handleSnackbarClose} variant="filled" severity="success" sx={{ width: '100%' }}>
-          Payment status updated successfully!
-        </Alert>
-      </Snackbar>
-
     </>
   );
 }

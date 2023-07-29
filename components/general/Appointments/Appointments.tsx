@@ -1,47 +1,18 @@
-import React, { useEffect, useState } from "react";
+import Loading from "Providers/Loading";
+import { useUser } from "components/UserContext";
+import { collection, getDocs } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { db } from "../firebase-config";
 import AppointmentCard from "./AppointmentCard";
 import NewAppointmentCard from "./NewAppointmentCard";
-import Button from "@mui/material/Button";
-import Snackbar from "@mui/material/Snackbar";
-import Grow from "@mui/material/Grow";
-import { TransitionProps } from "@mui/material/transitions";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import { Alert, CircularProgress } from "@mui/material";
-import { collection, getDoc, getDocs } from "firebase/firestore";
-import { db } from "../firebase-config";
-import { useUser } from "components/UserContext";
+import { Button } from "@mui/material";
+import { useRouter } from "next/router";
 
-const Appointments = () => {
-  const [state, setState] = React.useState<{
-    openSnackbar: boolean;
-    Transition: React.ComponentType<
-      TransitionProps & {
-        children: React.ReactElement<any, any>;
-      }
-    >;
-  }>({
-    openSnackbar: false,
-    Transition: Grow,
-  });
-  const [errorDialog, setErrorDialog] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
+const Appointments = ({ sessionCount }: { sessionCount: number }) => {
   const { user, userLoading } = useUser();
   const [appointmentsData, setAppointmentsData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-
-  const handleErrorDialog = () => {
-    setErrorDialog(false);
-  };
-  const handleClose = () => {
-    setState({
-      ...state,
-      openSnackbar: false,
-    });
-  };
+  const router = useRouter();
 
   const getAppointmentData = async () => {
     setLoading(true);
@@ -60,42 +31,28 @@ const Appointments = () => {
   useEffect(() => {
     getAppointmentData();
   }, []);
+
   return loading ? (
-    <div className="flex justify-center items-center h-[80vh]">
-      <CircularProgress />
-    </div>
+    <Loading message="Loading Appointments..." />
   ) : (
     <>
-      <Dialog
-        open={errorDialog}
-        onClose={handleErrorDialog}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+      <div
+        className="ml-0 pl-4 py-4 rounded mt-6  md:ml-6 flex gap-5 items-center"
+        style={{ background: "rgb(242 242 242)" }}
       >
-        <DialogTitle id="alert-dialog-title">Try again</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {errorMsg}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleErrorDialog}>Ok</Button>
-        </DialogActions>
-      </Dialog>
-
-      <Snackbar
-        open={state.openSnackbar}
-        onClose={handleClose}
-        TransitionComponent={state.Transition}
-        // message="Your slot is booked successfully..."
-        key={state.Transition.name}
-        autoHideDuration={3000}
-      >
-        <Alert variant="filled" severity="success">
-          Your slot is booked successfully...
-        </Alert>
-      </Snackbar>
-
+        <h1 className="text-2xl">No. of meeting left: {sessionCount}</h1>
+        <Button
+          variant="contained"
+          disableElevation
+          sx={{
+            backgroundColor: "rgb(250 184 0)!important",
+            "&:hover": { backgroundColor: "rgb(233, 171, 2)!important" },
+          }}
+          onClick={() => router.push("/app/pay")}
+        >
+          Buy More
+        </Button>
+      </div>
       <div
         className={`flex flex-row flex-wrap justify-center md:justify-start gap-8 text-[#000] px-8 py-8`}
       >
@@ -108,10 +65,6 @@ const Appointments = () => {
               number={index + 1}
               name={appointment.caseName}
               date={appointment.createdAt.toDate().toDateString()}
-              numberOfSessions={appointment.numberOfSessions}
-              setState={setState}
-              setErrorDialog={setErrorDialog}
-              setErrorMsg={setErrorMsg}
               getAppointmentData={getAppointmentData}
             />
           );
