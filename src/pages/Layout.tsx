@@ -2,10 +2,7 @@ import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import { styled } from "@mui/material/styles";
 import { useUser } from "components/UserContext";
-import Loading from "components/general/Loading/Loading";
-import { auth } from "components/firebase/firebase-config";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AppStructure from "../../components/general/AppStructure/AppStructure";
 
 interface LayoutProps {
@@ -22,50 +19,35 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   ...theme.mixins.toolbar,
 }));
 
-export default function Layout(props: LayoutProps ) {
-  const { userLoading } = useUser();
-  const router = useRouter();
+export default function Layout(props: LayoutProps) {
+  const { user } = useUser();
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
 
-  const user = auth.currentUser;
-  user?.getIdTokenResult().then((idTokenResult) => {
-    setIsAdmin(idTokenResult.claims.admin);
-    setLoading(false);
-  });
-
-  
-  useEffect(() => {
-    if (window) {
-      if (window.localStorage.getItem("loggedIn") === "false") {
-        router.push("/signin");
-      }
-    }
-  }, []);
-
-  
+  if(user.accessToken)
+    user?.getIdTokenResult().then((idTokenResult: any) => {
+      setIsAdmin(idTokenResult.claims.admin);
+    });
 
   return (
     <>
-      {userLoading !== 'loaded' || loading ? (
-        <Loading message="Loading Data..." />
-      ) : 
-      (
-        <>
-          <Box sx={{ display: "flex" }}>
-            <CssBaseline />
+      <Box sx={{ display: "flex" }}>
+        <CssBaseline />
 
-            <AppStructure isAdmin={isAdmin}/>
+        <AppStructure isAdmin={isAdmin} />
 
-            <Box component="main" sx={{ flexGrow: 1, paddingBottom: "3rem" }}>
-              <DrawerHeader />
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            paddingBottom: "3rem",
+            paddingTop: "2rem",
+          }}
+        >
+          <DrawerHeader />
 
-              {props.children}
-            </Box>
-          </Box>
-        </>
-      )}
+          {props.children}
+        </Box>
+      </Box>
     </>
   );
 }
-

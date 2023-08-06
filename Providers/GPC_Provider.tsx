@@ -1,14 +1,11 @@
-import { Grow, GrowProps } from '@mui/material';
-import React, { ReactNode, createContext, useState } from 'react';
+import React, { ReactNode, createContext, useContext, useState } from 'react';
 import ErrorDialog from './ErrorDialog';
 import GPBackdrop from './GPBackdrop';
 import GPDialog from './GPDialog';
 import GPSnackbar from './GPSnackbar';
 
 
-function GrowTransition(props: GrowProps) {
-  return <Grow {...props} />;
-}
+
 export interface GPCType {
   showError: (message: string) => void;
   showSnackbar: (message: string) => void;
@@ -78,8 +75,6 @@ const GPCProvider: React.FC<GPCProviderProps> = ({ children }) => {
     setOpen(false);
   };
 
-  
-
   const showError = (message: string) => {
     setErrorMessage(message);
     setOpenDialog(true);
@@ -113,3 +108,4 @@ const GPCProvider: React.FC<GPCProviderProps> = ({ children }) => {
 };
 
 export { GPCProvider };
+export const useGPC = () => useContext(GPCContext);

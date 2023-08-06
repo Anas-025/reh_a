@@ -34,6 +34,10 @@ function SlotGrid({ slotMatrix, daysOfWeek, dateArray }: { slotMatrix: Array<Arr
         "19:00",
         "19:30",
         "20:00",
+        "20:30",
+        "21:00",
+        "21:30",
+        "22:00",
     ];
     const [slots, setSlots] = useState<Array<Array<number>>>(slotMatrix);
     const [setterSlots, setSetterSlots] = useState<Array<Array<number>>>(slotMatrix);

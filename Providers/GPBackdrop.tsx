@@ -11,7 +11,7 @@ function GPBackdrop(props: Props) {
     
     return (
         <Backdrop
-            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 999 }}
             open={loading}
             className="flex flex-col gap-2"
         >

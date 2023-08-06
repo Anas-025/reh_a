@@ -1,17 +1,22 @@
+import { Button } from "@mui/material";
 import Loading from "Providers/Loading";
 import { useUser } from "components/UserContext";
 import { collection, getDocs } from "firebase/firestore";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase/firebase-config";
 import AppointmentCard from "./AppointmentCard";
 import NewAppointmentCard from "./NewAppointmentCard";
-import { Button } from "@mui/material";
-import { useRouter } from "next/router";
 
-const Appointments = ({ sessionCount }: { sessionCount: number }) => {
+interface Props {
+  sessionCount: number;
+}
+
+const Appointments = (props: Props) => {
   const { user, userLoading } = useUser();
   const [appointmentsData, setAppointmentsData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [sessionCount, setSessionCount] = useState(props.sessionCount);
   const router = useRouter();
 
   const getAppointmentData = async () => {
@@ -37,7 +42,7 @@ const Appointments = ({ sessionCount }: { sessionCount: number }) => {
   ) : (
     <>
       <div
-        className="ml-0 pl-4 py-4 rounded mt-6  md:ml-6 flex gap-5 items-center"
+        className="ml-0 pl-4 py-4 rounded mt-6  md:ml-6 flex flex-wrap gap-5 items-center"
         style={{ background: "rgb(242 242 242)" }}
       >
         <h1 className="text-2xl">No. of meeting left: {sessionCount}</h1>
@@ -66,6 +71,7 @@ const Appointments = ({ sessionCount }: { sessionCount: number }) => {
               name={appointment.caseName}
               date={appointment.createdAt.toDate().toDateString()}
               getAppointmentData={getAppointmentData}
+              setSessionCount={setSessionCount}
             />
           );
         })}

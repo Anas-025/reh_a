@@ -4,10 +4,10 @@ import { Button, IconButton, Modal, Popover, Typography } from "@mui/material";
 import { GPCContext } from "Providers/GPC_Provider";
 import { deleteDoc, doc } from "firebase/firestore";
 import Image from "next/image";
-import React, { FC, useContext } from "react";
+import React, { Dispatch, FC, SetStateAction, useContext } from "react";
 import { db } from "../../firebase/firebase-config";
 import CurrentCaseContent from "./CurrentCaseContent/CurrentCaseContent";
-import SlotBooking from "./SlotBooking/SlotBooking.jsx";
+import SlotBooking from "./SlotBooking/SlotBooking";
 
 interface AppointmentCardProps {
   number: number;
@@ -17,6 +17,7 @@ interface AppointmentCardProps {
   date?: string;
   user: any;
   getAppointmentData: () => void;
+  setSessionCount: Dispatch<SetStateAction<number>>;
 }
 
 const AppointmentCard: FC<AppointmentCardProps> = ({
@@ -26,6 +27,7 @@ const AppointmentCard: FC<AppointmentCardProps> = ({
   date,
   user,
   getAppointmentData,
+  setSessionCount
 }) => {
   const [open, setOpen] = React.useState(false);
   const [slot, setSlot] = React.useState(false);
@@ -149,6 +151,7 @@ const AppointmentCard: FC<AppointmentCardProps> = ({
             toggleSlot={toggleSlot}
             handleClose={handleClose}
             id={id}
+            setSessionCount={setSessionCount}
           />
         </div>
       </Modal>
@@ -160,7 +163,7 @@ const AppointmentCard: FC<AppointmentCardProps> = ({
         aria-describedby="modal-modal-description"
       >
         <div className="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] rounded-[15px] justify-center items-center h-[80vh] w-[97%] bg-[#fff] m-auto sm:w-[80%]">
-          <SlotBooking id={id} setSlot={setSlot} />
+          <SlotBooking id={id} setSlot={setSlot} setSessionCount={setSessionCount}/>
         </div>
       </Modal>
     </>

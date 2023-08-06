@@ -24,9 +24,9 @@ export const normalList = [
   },
   {
     id: 2,
-    name: "Pay",
+    name: "Buy More",
     icon: <PaymentIcon />,
-    link: "/app/pay",
+    link: "/app/buyMore",
   },
   {
     id: 3,
@@ -45,7 +45,7 @@ export const adminList = [
   },
   {
     id: 5,
-    name: "Payment History",
+    name: "All Payment History",
     icon: <AccountBalanceWalletOutlinedIcon />,
     link: "/app/paymentHistory",
   },
@@ -90,4 +90,37 @@ export const drawerList = [
     icon: <GroupsOutlinedIcon />,
     link: "/app/meetingData",
   },
+  {
+    name: "All Payment History",
+    icon: <AccountBalanceWalletOutlinedIcon />,
+    link: "/app/paymentHistory",
+  }
+];
+
+export const bottomNavList = [
+  {
+    id: 0,
+    name: "Blogs",
+    icon: <ImportContactsIcon />,
+    link: "/app/blogs",
+  },
+  {
+    id: 1,
+    name: "Buy",
+    icon: <PaymentIcon />,
+    link: "/app/buyMore",
+  },
+  {
+    id: 2,
+    name: "Appoinments",
+    icon: <CalendarMonthIcon />,
+    link: "/app",
+  },
+  {
+    id: 3,
+    name: "Profile",
+    icon: <PermIdentityIcon />,
+    link: "/app/profile",
+  },
+
 ];

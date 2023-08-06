@@ -8,31 +8,41 @@ import { GPCContext } from "Providers/GPC_Provider";
 import { db } from "components/firebase/firebase-config.js";
 import { doc, getDoc, writeBatch } from "firebase/firestore";
 import Image from "next/image";
-import { useContext, useState } from "react";
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import { timeMiner } from "utils/ExtendedUtils";
 import calander from "../../../../public/calander.png";
 import { useUser } from "../../../UserContext";
 import slotcss from "./SlotBooking.module.css";
 
-export default function SlotBooking({
-  id,
-  setSlot,
-}) {
+interface SlotBookingProps {
+  id: string;
+  setSlot: Dispatch<SetStateAction<boolean>>;
+  setSessionCount: Dispatch<SetStateAction<number>>;
+}
+
+export default function SlotBooking(props : SlotBookingProps) {
+  const { id, setSlot, setSessionCount } = props;
   const [open, setOpen] = useState(false);
   const [selectedSlot, setSelectedSlot] = useState("");
   const [date, setDate] = useState("");
-  const [allSlots, setAllSlots] = useState([]);
+  const [allSlots, setAllSlots] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const { user } = useUser();
   const { showSnackbar, showDialog, showError } = useContext(GPCContext);
 
-  const handleChange = async (e) => {
+  const handleClose = () => {
+    setOpen(false);
+    setSlot(false);
+  }
+
+  const handleChange = async (e : any) => {
     setLoading(true);
     if (e == null) {
       setDate("");
       return;
     }
-    const currdate = `${e.$D}-${e.$M + 1}-${e.$y}`;
+    const day = e.$D / 10 < 1 ? `0${e.$D}` : e.$D;
+    const currdate = `${day}-${e.$M + 1}-${e.$y}`;  
     setDate(currdate);
     const refDoc = doc(db, "Slots", currdate);
     const findDoc = await getDoc(refDoc);
@@ -47,25 +57,28 @@ export default function SlotBooking({
     }
   };
 
-
   const handleClick = async () => {
-
     const slotRef = doc(db, "Slots", date);
-    const slotsDoc = await getDoc(slotRef);
     const caseRef = doc(db, `Userdata/${user.uid}/cases`, id);
+    const userRef = doc(db, `Userdata`, user.uid);
+    const slotsDoc = await getDoc(slotRef);
+    const userDoc = await getDoc(userRef);
     const caseData = await getDoc(caseRef);
-
-    // find index of selected slot in slots array
-    const index = slotsDoc.data().slots.findIndex((slot) => slot.split(" ")[0] === selectedSlot)
-    if(index === -1) {
-      setSlot(false);
-      setOpen(false);
+    
+    if(!slotsDoc.exists()) {
+      handleClose();
       showError("Sorry, the slot you selected is not available. Please try again");
       return
     }
-    if(caseData.data().slot) {
-      setSlot(false);
-      setOpen(false);
+    // find index of selected slot in slots array
+    const index = slotsDoc.data().slots.findIndex((slot:string) => slot.split(" ")[0] === selectedSlot)
+    if(index === -1) {
+      handleClose();
+      showError("Sorry, the slot you selected is not available. Please try again");
+      return
+    }
+    if(caseData.exists() && caseData.data().slot) {
+      handleClose();
       showError("Sorry, you have already booked a slot for this case. Please cancel the previous slot to book a new one");
       return
     }
@@ -80,35 +93,39 @@ export default function SlotBooking({
     }
 
     // create a batch and update the slots array and the case status
-    const batch = writeBatch(db);
+    const batch = writeBatch(db)
     batch.update(slotRef, { slots })
+    batch.update(userRef, { sessionCount: userDoc.data()!.sessionCount - 1 })
     batch.set(caseRef, { slot: `${date} ${selectedSlot}` }, { merge: true })
     try{
       await batch.commit()
-      setOpen(false);
-      setSlot(false);
+      setSessionCount(userDoc.data()!.sessionCount - 1)
       showSnackbar("Slot booked successfully");
     }
     catch(err) {
       console.log(err)
-      setSlot(false);
-      setOpen(false);
       showError("Sorry, something went wrong. Please try again");
       return
     }
+    finally {
+      handleClose();
+    }
   };
 
-  const handleSlotClick = (slot) => {
+  const handleSlotClick = (slot: string) => {
     setSelectedSlot(slot);
+  };
+
+  useEffect(() => {
+    if (selectedSlot === "") return;
     showDialog(
       "Are you sure you want to book this slot?",
-      `Slot will be scheduled on ${date} between ${slot} ${timeMiner(slot)}`,
+      `Slot will be scheduled on ${date} between ${selectedSlot} ${timeMiner(selectedSlot)}`,
       "No",
       "Yes",
       handleClick
     );
-  };
-
+  }, [selectedSlot]);
 
 
   return (
@@ -166,6 +183,7 @@ export default function SlotBooking({
                   height={250}
                   style={{ marginTop: "2rem" }}
                   src={calander}
+                  alt="calander"
                 />
                 <div
                   style={{ color: "rgb(135, 135, 135)", fontSize: "1.5rem" }}

@@ -1,72 +1,67 @@
-import { Button } from '@mui/material';
-import Box from '@mui/material/Box';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Paper from '@mui/material/Paper';
-import Switch from '@mui/material/Switch';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import { withAdmin } from 'ProtectedRoutes/AdminRoute';
+import { Button } from "@mui/material";
+import Box from "@mui/material/Box";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Paper from "@mui/material/Paper";
+import Switch from "@mui/material/Switch";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TablePagination from "@mui/material/TablePagination";
+import TableRow from "@mui/material/TableRow";
+import { withAdmin } from "ProtectedRoutes/AdminRoute";
 import { useMeeting } from "components/MeetingContext";
-import { endMeeting, getToken } from 'controllers/meeting';
-import { Timestamp, deleteDoc, doc, getDoc, setDoc } from 'firebase/firestore';
-import { useRouter } from 'next/router';
-import * as React from 'react';
-import { useMemo, useState } from 'react';
-import DetailsDialog from '../TableComponents/DetailsDialog';
-import EnhancedTableHead from '../TableComponents/EnhancedTableHead';
-import EnhancedTableToolbar from '../TableComponents/EnhancedTableToolbar';
-import { Data, HeadCell, Order } from '../TableComponents/Table.interface';
-import { getComparator, stableSort } from '../TableComponents/Table.utils';
-import { db } from '../../firebase/firebase-config';
-
-
-
-
+import { endMeeting, getToken } from "controllers/meeting";
+import { Timestamp, deleteDoc, doc, getDoc, setDoc } from "firebase/firestore";
+import { useRouter } from "next/router";
+import * as React from "react";
+import { useMemo, useState } from "react";
+import { db } from "../../firebase/firebase-config";
+import DetailsDialog from "../TableComponents/DetailsDialog";
+import EnhancedTableHead from "../TableComponents/EnhancedTableHead";
+import EnhancedTableToolbar from "../TableComponents/EnhancedTableToolbar";
+import { Data, HeadCell, Order } from "../TableComponents/Table.interface";
+import { getComparator, stableSort } from "../TableComponents/Table.utils";
 
 const headCells: readonly HeadCell[] = [
   {
-    id: 'displayName',
+    id: "displayName",
     numeric: false,
     disablePadding: false,
-    label: 'Patient Name',
+    label: "Patient Name",
   },
   {
     // @ts-ignore
-    id: 'patientDetails',
+    id: "patientDetails",
     numeric: true,
     disablePadding: false,
-    label: 'Patient Details',
+    label: "Patient Details",
   },
   {
-    id: 'slot',
+    id: "slot",
     numeric: true,
     disablePadding: false,
-    label: 'Meeting Time',
+    label: "Meeting Time",
   },
   {
-    id: 'meetingId',
+    id: "meetingId",
     numeric: true,
     disablePadding: false,
-    label: 'Meeting ID',
+    label: "Meeting ID",
   },
   {
     // @ts-ignore
-    id: 'actions',
+    id: "actions",
     numeric: true,
     disablePadding: false,
-    label: 'Actions',
+    label: "Actions",
   },
 ];
 
-
 function MeetingsTable(props: { rows: Data[] }) {
   const [rows, setRows] = useState<Data[]>(props.rows);
-  const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] = useState<keyof Data>('displayName');
+  const [order, setOrder] = useState<Order>("asc");
+  const [orderBy, setOrderBy] = useState<keyof Data>("displayName");
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -76,14 +71,16 @@ function MeetingsTable(props: { rows: Data[] }) {
   const { updateToken } = useMeeting();
   const [triggerRowChange, setTriggerRowChange] = useState(false);
 
-
-
-  const handleMeetingSuccess = async (userId: string, meetingId: string, createdAt: Timestamp) => {
+  const handleMeetingSuccess = async (
+    userId: string,
+    meetingId: string,
+    createdAt: string
+  ) => {
     const data = {
-        createdAt: createdAt,
-        successAt: Timestamp.now(),
-        meetingId: meetingId,
-    }
+      createdAt: createdAt,
+      successAt: Timestamp.now(),
+      meetingId: meetingId,
+    };
     const docRef = doc(db, "Userdata", userId);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
@@ -92,9 +89,7 @@ function MeetingsTable(props: { rows: Data[] }) {
       await setDoc(
         docRef,
         {
-          meetings: docData.meetings
-            ? [...docData.meetings, data]
-            : [data],
+          meetings: docData.meetings ? [...docData.meetings, data] : [data],
           activeMeetingId: null,
         },
         { merge: true }
@@ -102,12 +97,11 @@ function MeetingsTable(props: { rows: Data[] }) {
 
       // await setDoc(docRef, { activeMeetingId: null }, { merge: true });
       await deleteDoc(doc(db, "Meetings", meetingId));
-        rows.splice(
-            rows.findIndex((row) => row.meetingId === meetingId),
-            1
-        );
-        setRows([...rows]);
-      
+      rows.splice(
+        rows.findIndex((row) => row.meetingId === meetingId),
+        1
+      );
+      setRows([...rows]);
 
       // end the meeting
       const token = await getToken();
@@ -118,32 +112,28 @@ function MeetingsTable(props: { rows: Data[] }) {
     }
   };
 
-
-
   const handleToggleDialog = () => {
     setOpen(!open);
   };
 
-  
-
-//   console.log(rows.map((meeting) => meeting))
-
+  //   console.log(rows.map((meeting) => meeting))
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof Data,
+    property: keyof Data
   ) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
-
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
@@ -158,43 +148,34 @@ function MeetingsTable(props: { rows: Data[] }) {
 
   const visibleRows = useMemo(
     () =>
-    //   @ts-ignore
+      //   @ts-ignore
       stableSort(rows, getComparator(order, orderBy)).slice(
         page * rowsPerPage,
-        page * rowsPerPage + rowsPerPage,
+        page * rowsPerPage + rowsPerPage
       ),
-    [order, orderBy, page, rowsPerPage, rows],
+    [order, orderBy, page, rowsPerPage, rows]
   );
 
-
-  const handleDetailsClick = (event: React.MouseEvent<unknown>, row: Data) => {
+  const handleDetailsClick = (event: React.MouseEvent<unknown>, row: any) => {
     setDetailsCase(row);
     handleToggleDialog();
   };
 
-
-
-
-
-
-
-
-
   return (
-    <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
+    <Box sx={{ width: "100%", marginInline: "1rem" }}>
+      <Paper sx={{ width: "100%", mb: 2 }}>
         <EnhancedTableToolbar message="Meetings" />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
+            size={dense ? "small" : "medium"}
           >
             <EnhancedTableHead
               headCells={headCells}
               order={order}
               orderBy={orderBy}
-            //   @ts-ignore
+              //   @ts-ignore
               onRequestSort={handleRequestSort}
             />
             <TableBody>
@@ -207,31 +188,54 @@ function MeetingsTable(props: { rows: Data[] }) {
                     role="checkbox"
                     tabIndex={-1}
                     key={row.meetingId}
-                    sx={{ cursor: 'pointer' }}
+                    sx={{ cursor: "pointer" }}
                   >
-                    <TableCell
-                      component="th"
-                      id={labelId}
-                      scope="row"
-                    >
+                    <TableCell component="th" id={labelId} scope="row">
                       {row.displayName}
                     </TableCell>
                     <TableCell align="right">
-                        {/* @ts-ignore */}
-                        <Button sx={{backgroundColor: "black!important", color: "white"}} onClick={(e)=>handleDetailsClick(e, row)}>
-                            Details
-                        </Button>
+                      {/* @ts-ignore */}
+                      <Button
+                        sx={{
+                          backgroundColor: "black!important",
+                          color: "white",
+                        }}
+                        onClick={(e) => handleDetailsClick(e, row)}
+                      >
+                        Details
+                      </Button>
                     </TableCell>
                     <TableCell align="right">{row.slot}</TableCell>
                     <TableCell align="right">{row.meetingId}</TableCell>
                     <TableCell align="right">
-                        <Button sx={{backgroundColor: "rgb(250 184 0)!important", color: "white", marginRight: "1rem"}} onClick={()=>router.push(`/meeting?meetId=${row.meetingId}`)}>
-                            Join Meet
-                        </Button>
-                        {/* @ts-ignore */}
-                        <Button onClick={()=>handleMeetingSuccess(row.userId, row.meetingId, row.createdAt)} sx={{backgroundColor: "rgb(250 184 0)!important", color: "white"}}>
-                            Success
-                        </Button>
+                      <Button
+                        sx={{
+                          backgroundColor: "rgb(250 184 0)!important",
+                          color: "white",
+                          marginRight: "1rem",
+                        }}
+                        onClick={() =>
+                          router.push(`/meeting?meetId=${row.meetingId}`)
+                        }
+                      >
+                        Join Meet
+                      </Button>
+                      {/* @ts-ignore */}
+                      <Button
+                        onClick={() =>
+                          handleMeetingSuccess(
+                            row.userId,
+                            row.meetingId,
+                            row.createdAt
+                          )
+                        }
+                        sx={{
+                          backgroundColor: "rgb(250 184 0)!important",
+                          color: "white",
+                        }}
+                      >
+                        Success
+                      </Button>
                     </TableCell>
                   </TableRow>
                 );
@@ -260,17 +264,17 @@ function MeetingsTable(props: { rows: Data[] }) {
       </Paper>
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
-        sx={{color: "black"}}
+        sx={{ color: "black" }}
         label="Dense padding"
       />
 
-
-      <DetailsDialog open={open} handleToggleDialog={handleToggleDialog} detailsCase={detialsCase}/>
+      <DetailsDialog
+        open={open}
+        handleToggleDialog={handleToggleDialog}
+        detailsCase={detialsCase}
+      />
     </Box>
   );
 }
 
-
-
 export default withAdmin(MeetingsTable);
-

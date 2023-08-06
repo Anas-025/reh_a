@@ -12,12 +12,10 @@ import FormHelperText from "@mui/material/FormHelperText";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import InputLabel from "@mui/material/InputLabel";
-import { useRouter } from "next/router";
-import { useState } from "react";
-
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { useUser } from "components/UserContext.tsx";
+import { useGPC } from "Providers/GPC_Provider";
+import { auth, db } from "components/firebase/firebase-config";
 import { setCookie } from "cookies-next";
 import {
   createUserWithEmailAndPassword,
@@ -25,7 +23,8 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
-import { auth, db } from "components/firebase/firebase-config";
+import { useRouter } from "next/router";
+import { useRef, useState } from "react";
 import classes from "./SignIn.module.css";
 import {
   validateConfirmPassword,
@@ -33,8 +32,6 @@ import {
   validateName,
   validatePassword,
 } from "./SigninFunctions.js";
-
-
 
 const theme = createTheme({
   palette: {
@@ -58,9 +55,7 @@ const initialCreateAccData = {
   cPassword: "",
 };
 
-
 function SignIn() {
-
   const iniErrCreateUserState = {
     email_err: false,
     fname_err: false,
@@ -75,21 +70,24 @@ function SignIn() {
   const [showLoginPassword, setShowLoginPassword] = useState(false);
   const [showRegisterPassword, setShowRegisterPassword] = useState(false);
   const [showCPassword, setShowCPassword] = useState(false);
-  const { setLoggedIn } = useUser();
   const router = useRouter();
+  const { showBackdrop, closeBackdrop, showError } = useGPC();
+  const innerBox = useRef<HTMLDivElement>(null);
 
   const [err, setErr] = useState(iniErrCreateUserState);
 
   function handleLoginPage() {
-    let inBox = document.getElementById("innerbox");
-    inBox.style.transform = "rotateY(-180deg)";
-    inBox.style.transformStyle = "preserve-3d";
+    if(innerBox.current){
+      innerBox.current.style.transform = "rotateY(-180deg)";
+      innerBox.current.style.transformStyle = "preserve-3d";
+    }
   }
 
   function handleSignUpPage() {
-    let inBox = document.getElementById("innerbox");
-    inBox.style.transform = "rotateY(0deg)";
-    inBox.style.transformStyle = "preserve-3d";
+    if(innerBox.current){
+      innerBox.current.style.transform = "rotateY(0deg)";
+      innerBox.current.style.transformStyle = "preserve-3d";
+    }
   }
 
   function handleClear() {
@@ -144,53 +142,51 @@ function SignIn() {
 
     if (validCred) {
       try {
-        const user = await createUserWithEmailAndPassword(
+        const userCredentials = await createUserWithEmailAndPassword(
           auth,
           createAccData.email,
           createAccData.password
         );
-        await updateProfile(auth.currentUser, {
+        const user = userCredentials.user;
+        await updateProfile(user, {
           displayName: `${createAccData.fname} ${createAccData.lname}`,
-        }).catch((err) => console.log(err));
-        const userId = user.user.uid;
+        });
+        const userId = user.uid;
         await setDoc(doc(db, "Userdata", userId), {
           fname: createAccData.fname,
           lname: createAccData.lname,
           email: createAccData.email,
         });
         setCreateAccData(initialCreateAccData);
-        setLoggedIn(true);
         if (window) {
-          window.localStorage.setItem("loggedIn", true);
+          window.localStorage.setItem("loggedIn", "true");
           window.localStorage.setItem("uid", userId);
-        }       
+        }
         setCookie("uid", userId, {
           path: "/",
           sameSite: true,
           secure: true,
           maxAge: 3600 * 24 * 7,
         });
-        router.push('/app');
-      } catch (error) {
+        router.push("/app");
+      } catch (error: any) {
         alert(error.message);
       }
     }
   };
-  
+
   const handleLogin = async () => {
-    const res_email = validateEmail(loginData.email);
-    setLoginEmailErr(!res_email);
-    if (res_email == true) {
+    const email = loginData.email;
+    const password = loginData.password;
+    const emailIsValid = validateEmail(email);
+    setLoginEmailErr(!emailIsValid);
+    if (emailIsValid == true) {
       try {
-        const user = await signInWithEmailAndPassword(
-          auth,
-          loginData.email,
-          loginData.password
-        );
+        showBackdrop("Logging in...");
+        const user = await signInWithEmailAndPassword(auth, email, password);
         setLoginData(initialLoginData);
-        setLoggedIn(true);
         if (window) {
-          window.localStorage.setItem("loggedIn", 'true');
+          window.localStorage.setItem("loggedIn", "true");
           window.localStorage.setItem("uid", user.user.uid);
         }
 
@@ -201,10 +197,10 @@ function SignIn() {
           maxAge: 3600 * 24 * 7,
         });
 
-        router.push('/app');
-        
-      } catch (error) {
-        alert(error);
+        router.push("/app");
+      } catch (error: any) {
+        closeBackdrop();
+        showError("Wrong Credentials!");
       }
     }
   };
@@ -215,7 +211,7 @@ function SignIn() {
         {/* <div>{loggedInUser}</div> */}
         <ThemeProvider theme={theme}>
           <Paper className={classes.card} elevation={0}>
-            <div className={classes.innerBox} id="innerbox">
+            <div className={classes.innerBox} id="innerbox" ref={innerBox}>
               <div className={classes.cardFront}>
                 <div className={classes.title}>Login</div>
                 <TextField
@@ -449,7 +445,7 @@ function SignIn() {
                   fullWidth
                   color="warning"
                   variant="outlined"
-                  onClick={() => handleClear2(setErr)}
+                  onClick={() => handleClear2()}
                 >
                   Clear
                 </Button>

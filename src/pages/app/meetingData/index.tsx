@@ -1,6 +1,6 @@
+import { db } from "components/firebase/firebase-config";
 import MeetingsTable from "components/general/MeetingsTable/MeetingsTable";
 import { MeetingType } from "components/general/TableComponents/Table.interface";
-import { db } from "components/firebase/firebase-config";
 import {
   collection,
   doc,
@@ -15,8 +15,6 @@ import {
 function index({ meetingsDataString }: {meetingsDataString: string}) {
     
   const rows = JSON.parse(meetingsDataString);
-
-  console.log(rows);
 
   return (
     <>

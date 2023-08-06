@@ -16,7 +16,7 @@ import {
 import { db } from "components/firebase/firebase-config";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import EmptyHere from "../../../../public/emptyHere.jpg";
 import style from "./CurrentCaseContent.module.css";
 import Session from "./Session/Session";
@@ -48,16 +48,20 @@ function CurrentCaseContent({
   handleClose,
   toggleSlot,
   id,
+  setSessionCount,
 }: {
   handleClose: () => void;
   toggleSlot: () => void;
   id: string;
+  setSessionCount: Dispatch<SetStateAction<number>>;
 }) {
   const [formData, setFormData] = useState<Profile | null>({});
   const [profileData, setProfileData] = useState<Profile | null>({});
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const { user, userLoading } = useUser();
+  const [slot, setSlot] = useState<string | undefined>("");
+
 
   const onChangePainOptions = (newCheckedValues: string[]) => {
     setFormData((prev) => ({
@@ -99,6 +103,7 @@ function CurrentCaseContent({
       setLoading(false);
       if (docSnap.exists()) {
         setProfileData(docSnap.data());
+        setSlot(docSnap.data()?.slot);
         setFormData(docSnap.data());
       } else {
         console.log("No such document!");
@@ -151,7 +156,7 @@ function CurrentCaseContent({
               <h4 className={style.sessionMainHeading}>Session Details:</h4>
 
               <div>
-                {profileData?.slot === undefined ? (
+                {slot === undefined || slot === "" ? (
                   <>
                   <Container
                     sx={{
@@ -177,8 +182,10 @@ function CurrentCaseContent({
                   
                 ) : (
                     <Session
-                      slot={profileData?.slot}
+                      slot={slot}
                       caseId={id}
+                      setSlot={setSlot}
+                      setSessionCount={setSessionCount}
                     />
                 )}
               </div>

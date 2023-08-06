@@ -1,6 +1,6 @@
 import { withAdmin } from 'ProtectedRoutes/AdminRoute';
-import UsersTable from 'components/general/PaymentHistoryTable/Table';
 import { db } from 'components/firebase/firebase-config';
+import UsersTable from 'components/general/PaymentHistoryTable/Table';
 import { collection, getDocs, limit, orderBy, query } from 'firebase/firestore';
 
 
@@ -8,9 +8,9 @@ import { collection, getDocs, limit, orderBy, query } from 'firebase/firestore';
 const app = ({rows}: {rows: any}) => {
 
   return (
-    <>
+    <div style={{paddingInline: "1rem"}}>
       <UsersTable rows={rows}/>
-  </>
+  </div>
   );
 };
 
