@@ -74,17 +74,20 @@ export default function MiniDrawer({ isAdmin }) {
   const router = useRouter();
   const [uid, setUid] = useState("hello");
   const [mobileOpen, setMobileOpen] = useState(false);
+  console.log(isAdmin)
+  const [navList, setNavList] = useState(isAdmin? [...normalList, ...adminList] : normalList);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const navList = isAdmin ? [...normalList, ...adminList] : normalList;
 
   useEffect(() => {
     setUid(localStorage.getItem("uid"));
-
-    const activeMenu = navList.find((item) => item.link === router.pathname);
+    const activeMenu = navList.find((item) => {
+      console.log(item.link, router.pathname);
+      return item.link === router.pathname
+    } );
     if (activeMenu) {
       activeElement(activeMenu.id);
     }

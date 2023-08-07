@@ -1,3 +1,4 @@
+import { withAdmin } from "ProtectedRoutes/AdminRoute";
 import { db } from "components/firebase/firebase-config";
 import MeetingsTable from "components/general/MeetingsTable/MeetingsTable";
 import { MeetingType } from "components/general/TableComponents/Table.interface";
@@ -23,7 +24,7 @@ function index({ meetingsDataString }: {meetingsDataString: string}) {
     );
 }
 
-export default index;
+export default withAdmin(index);
 
 
 

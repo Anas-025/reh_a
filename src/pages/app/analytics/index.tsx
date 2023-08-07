@@ -1,4 +1,5 @@
 import { Grid, Paper, styled } from "@mui/material";
+import { withAdmin } from "ProtectedRoutes/AdminRoute";
 import { useEffect } from "react";
 import { chartMaker } from "utils/ExtendedUtils";
 import style from "./more.module.css";
@@ -173,4 +174,4 @@ function More() {
   );
 }
 
-export default More;
+export default withAdmin(More);

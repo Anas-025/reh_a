@@ -2,6 +2,7 @@ import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import { styled } from "@mui/material/styles";
 import { useUser } from "components/UserContext";
+import Loading from "components/general/Loading/Loading";
 import { useState } from "react";
 import AppStructure from "../../components/general/AppStructure/AppStructure";
 
@@ -22,13 +23,17 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 export default function Layout(props: LayoutProps) {
   const { user } = useUser();
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  if(user.accessToken)
+  if (user.accessToken)
     user?.getIdTokenResult().then((idTokenResult: any) => {
       setIsAdmin(idTokenResult.claims.admin);
+      setLoading(false);
     });
 
-  return (
+  return loading ? (
+    <Loading message="Loading Data..." />
+  ) : (
     <>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />

@@ -34,6 +34,7 @@ export default function SideDrawer(props: any) {
 
   const handleLogOutClick = async () => {
     try {
+      console.log("logging out")
       await auth.signOut();
       if (window) {
         // @ts-ignore
