@@ -17,7 +17,7 @@ import AppNavBar from "../AppNavBar/AppNavBar";
 import SideDrawer from "../SideDrawer/SideDrawer";
 import BottomNav from "./BottomNav/BottomNav";
 import sidebar from "./Sidebar.module.css";
-import { adminList, drawerList, normalList } from "./constants";
+import { adminDrawerList, adminList, normalDrawerList, normalList } from "./constants";
 
 const drawerWidth = 270;
 
@@ -74,8 +74,8 @@ export default function MiniDrawer({ isAdmin }) {
   const router = useRouter();
   const [uid, setUid] = useState("hello");
   const [mobileOpen, setMobileOpen] = useState(false);
-  console.log(isAdmin)
   const [navList, setNavList] = useState(isAdmin? [...normalList, ...adminList] : normalList);
+  const drawerList = isAdmin? [...normalDrawerList, ...adminDrawerList] : normalDrawerList;
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);

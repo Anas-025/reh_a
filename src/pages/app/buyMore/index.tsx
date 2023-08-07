@@ -10,7 +10,6 @@ import Step2 from "components/app/pay/Step2";
 import { db } from "components/firebase/firebase-config";
 import { getCookie } from "cookies-next";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
-import { useRouter } from "next/router";
 import * as React from "react";
 import { useContext, useState } from "react";
 import { uploadFileToFirebaseAndGetUrl } from "utils/ExtendedUtils";
@@ -23,17 +22,13 @@ export default function HorizontalLinearStepper() {
     null
   );
   const uid = getCookie("uid") as string;
-  const router = useRouter();
-  const { showSnackbar, showBackdrop, closeBackdrop, showError } = useContext(GPCContext);
+  const { showSnackbar, showBackdrop, closeBackdrop, showError } =
+    useContext(GPCContext);
 
-
-
-  
   const handleNext = async () => {
     if (activeStep === 1) {
       await handleUploadImage();
-    }
-    else{
+    } else {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
   };
@@ -46,15 +41,19 @@ export default function HorizontalLinearStepper() {
     setActiveStep(0);
   };
 
-
-  const handleUploadImage = async () =>{
-    if(blogCoverImageFile){
-      showBackdrop("Uploading Image...")
-      const blogCoverImageUrl = await uploadFileToFirebaseAndGetUrl(blogCoverImageFile, "BlogImages");
+  const handleUploadImage = async () => {
+    if (blogCoverImageFile) {
+      showBackdrop("Uploading Image...");
+      const blogCoverImageUrl = await uploadFileToFirebaseAndGetUrl(
+        blogCoverImageFile,
+        "BlogImages"
+      );
       const id = blogCoverImageUrl.uploadedToUrl.split("%2F")[2].split("?")[0];
-      const token = blogCoverImageUrl.uploadedToUrl.split("%2F")[2].split("?")[1].split("=")[2];
+      const token = blogCoverImageUrl.uploadedToUrl
+        .split("%2F")[2]
+        .split("?")[1]
+        .split("=")[2];
       const userRef = doc(db, "Userdata", uid);
-
 
       await updateDoc(userRef, {
         payments: arrayUnion({
@@ -63,20 +62,19 @@ export default function HorizontalLinearStepper() {
           date: new Date().toLocaleDateString(),
           time: new Date().toLocaleTimeString(),
           status: "n",
-        })
-      })
+        }),
+      });
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
       showSnackbar("Payment Uploaded Successfully");
       closeBackdrop();
-    }
-    else{
+    } else {
       closeBackdrop();
       showError("Please upload a valid image");
     }
-  }
+  };
 
   return (
-    <Box sx={{ width: "100%", marginTop: "2rem" }}>
+    <Box sx={{ width: "100%", marginTop: "0rem" }}>
       <Stepper activeStep={activeStep}>
         {steps.map((label, index) => {
           const stepProps: { completed?: boolean } = {};
@@ -92,7 +90,9 @@ export default function HorizontalLinearStepper() {
       </Stepper>
 
       {activeStep === steps.length ? (
-        <Typography sx={{ mt: 2, mb: 1, ml: 4 }}>
+        <Typography
+          sx={{ mt: 4, mb: 6, ml: 2, fontWeight: "600", fontSize: 18 }}
+        >
           All steps completed - you&apos;re finished
         </Typography>
       ) : (
@@ -108,30 +108,64 @@ export default function HorizontalLinearStepper() {
 
       {activeStep === 0 ? (
         <Step1 />
-      ) : (
+      ) : activeStep === 1 ? (
         <Step2
           setBlogCoverImageFile={setBlogCoverImageFile}
           blogCoverImageFile={blogCoverImageFile}
         />
+      ) : (
+        <Typography sx={{ mt: 2, mb: 1, ml: 2, fontSize: 16 }}>
+          You have Successfully uploaded the payment. Please wait for the admin
+          to verify the payment.
+          <br />
+          <br />
+          It may take upto <b>48 hours</b> for the admin to verify the payment.
+        </Typography>
       )}
 
       {activeStep === steps.length ? (
         <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
           <Box sx={{ flex: "1 1 auto" }} />
-          <Button onClick={handleReset}>Reset</Button>
+          <Button
+            onClick={handleReset}
+            sx={{
+              backgroundColor: "#fab700!important",
+              color: "#fff",
+              "&:hover": {
+                backgroundColor: "hsl(44, 100%, 45%)!important",
+              },
+            }}
+          >
+            Reset
+          </Button>
         </Box>
       ) : (
         <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
           <Button
-            color="inherit"
             disabled={activeStep === 0}
             onClick={handleBack}
-            sx={{ mr: 1 }}
+            sx={{
+              mr: 1,
+              backgroundColor: "#fab700!important",
+              color: "#fff!important",
+              "&:hover": {
+                backgroundColor: "hsl(44, 100%, 45%)!important",
+              },
+            }}
           >
             Back
           </Button>
           <Box sx={{ flex: "1 1 auto" }} />
-          <Button onClick={handleNext}>
+          <Button
+            onClick={handleNext}
+            sx={{
+              backgroundColor: "#fab700!important",
+              color: "#fff",
+              "&:hover": {
+                backgroundColor: "hsl(44, 100%, 45%)!important",
+              },
+            }}
+          >
             {activeStep === steps.length - 1 ? "Upload" : "Next"}
           </Button>
         </Box>

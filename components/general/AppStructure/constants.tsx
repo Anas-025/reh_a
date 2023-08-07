@@ -47,7 +47,7 @@ export const adminList = [
     id: 5,
     name: "All Payment History",
     icon: <AccountBalanceWalletOutlinedIcon />,
-    link: "/app/paymentHistory",
+    link: "/app/allPaymentHistory",
   },
   {
     id: 6,
@@ -68,6 +68,50 @@ export const adminList = [
     link: "/app/analytics",
   },
 ];
+
+
+
+
+
+export const normalDrawerList = [
+  {
+    name: "Payment History",
+    icon: <AccountBalanceWalletOutlinedIcon />,
+    link: "/app/paymentHistory",
+  }
+];
+
+export const adminDrawerList = [
+  {
+    name: "My Blogs",
+    icon: <BookIcon />,
+    link: "/app/myBlogs",
+  },
+  {
+    name: "Analytics",
+    icon: <AnalyticsOutlinedIcon />,
+    link: "/app/analytics",
+  },
+  {
+    name: "Create Slots",
+    icon: <ScheduleIcon />,
+    link: "/app/createSlots",
+  },
+  {
+    name: "Meetings Data",
+    icon: <GroupsOutlinedIcon />,
+    link: "/app/meetingData",
+  },
+  {
+    name: "All Payment History",
+    icon: <AccountBalanceWalletOutlinedIcon />,
+    link: "/app/allPaymentHistory",
+  }
+];
+
+
+
+
 
 export const drawerList = [
   {
