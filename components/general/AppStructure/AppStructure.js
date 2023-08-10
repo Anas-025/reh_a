@@ -10,8 +10,10 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import logo from "public/logo.jpeg";
 import { useEffect, useState } from "react";
 import AppNavBar from "../AppNavBar/AppNavBar";
 import SideDrawer from "../SideDrawer/SideDrawer";
@@ -146,8 +148,9 @@ export default function MiniDrawer({ isAdmin }) {
 
       <Drawer variant="permanent" open={open} className={sidebar.view1}>
         <DrawerHeader>
-          <Typography className={sidebar.drawerHead} variant="h5">
-            R-A
+          <Typography className={sidebar.drawerHead} variant="h5" style={{display: "flex", gap: "1rem", alignItems: "center"}}>
+            <Image src={logo} alt="logo" width={50} height={50} />
+            <Typography style={{fontSize: "1.5rem"}} variant="h1">R-A</Typography>
           </Typography>
         </DrawerHeader>
         <Divider />
