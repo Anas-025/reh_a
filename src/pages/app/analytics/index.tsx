@@ -5,7 +5,7 @@ import style from "./more.module.css";
 import { _DeepPartialArray } from "chart.js/dist/types/utils";
 import { chartMaker } from "utils/ExtendedUtils";
 import { collection, doc, getDocs, query } from "firebase/firestore";
-import { db } from "components/general/firebase-config";
+import { db } from "components/firebase/firebase-config";
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
