@@ -38,11 +38,15 @@ export const UserProvider = ({ children }: UserProviderProps) => {
         setUserLoading("loaded");
       }else{
         setUser({loggedIn: false});
+        setLoading(false);
       }
     });
   }, []);
 
-  if(user.loggedIn === false){
+  if(router.pathname === "/" && user.loggedIn === true){
+    router.push("/app");
+  }
+  else if(router.pathname !== "/" && user.loggedIn === false){
     router.push("/signin");
   }
 
