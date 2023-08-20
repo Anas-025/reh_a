@@ -13,7 +13,7 @@ import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { ThemeOptions, ThemeProvider, createTheme } from "@mui/material/styles";
 import { useGPC } from "Providers/GPC_Provider";
 import { auth, db } from "components/firebase/firebase-config";
 import { setCookie } from "cookies-next";
@@ -43,6 +43,58 @@ const theme = createTheme({
     },
     warning: {
       main: "#e65100",
+    },
+  },
+});
+const lightTheme: ThemeOptions = createTheme({
+  palette: {
+    primary: {
+      main: "#00000",
+    },
+  },
+  components: {
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              border: "2px solid black",
+              borderRadius: "10px",
+            },
+          },
+        },
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          "& fieldset": {
+            border: "2px solid black",
+            borderRadius: "10px",
+          },
+        },
+      },
+    },
+    MuiFormLabel: {
+      styleOverrides: {
+        root: {
+          color: "black",
+          "&.Mui-focused": {
+            color: "black",
+          },
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: "10px",
+          "&.MuiButton-containedPrimary": {
+            backgroundColor: "black!important",
+            paddingBlock: "12px",
+          },
+        },
+      },
     },
   },
 });
@@ -77,14 +129,14 @@ function SignIn() {
   const [err, setErr] = useState(iniErrCreateUserState);
 
   function handleLoginPage() {
-    if(innerBox.current){
+    if (innerBox.current) {
       innerBox.current.style.transform = "rotateY(-180deg)";
       innerBox.current.style.transformStyle = "preserve-3d";
     }
   }
 
   function handleSignUpPage() {
-    if(innerBox.current){
+    if (innerBox.current) {
       innerBox.current.style.transform = "rotateY(0deg)";
       innerBox.current.style.transformStyle = "preserve-3d";
     }
@@ -209,7 +261,7 @@ function SignIn() {
     <>
       <div className={classes.container}>
         {/* <div>{loggedInUser}</div> */}
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={lightTheme}>
           <Paper className={classes.card} elevation={0}>
             <div className={classes.innerBox} id="innerbox" ref={innerBox}>
               <div className={classes.cardFront}>
@@ -280,15 +332,21 @@ function SignIn() {
                 </Button>
                 <Button
                   fullWidth
-                  color="warning"
                   variant="outlined"
                   onClick={handleClear}
+                  sx={{
+                    border: "2px solid black!important",
+                    paddingBlock: "12px",
+                    "&:hover": {
+                      backgroundColor: "#f7f7f7 !important",
+                    },
+                  }}
                 >
                   Clear
                 </Button>
                 <div className={classes.switchForm1}>
                   <div>Don&apos;t Have an account yet?</div>
-                  <Button color="primary" onClick={handleLoginPage}>
+                  <Button style={{ color: "blue" }} onClick={handleLoginPage}>
                     Create Account
                   </Button>
                 </div>
@@ -446,12 +504,20 @@ function SignIn() {
                   color="warning"
                   variant="outlined"
                   onClick={() => handleClear2()}
+                  sx={{
+                    color: "black",
+                    border: "2px solid black!important",
+                    paddingBlock: "12px",
+                    "&:hover": {
+                      backgroundColor: "#f7f7f7 !important",
+                    },
+                  }}
                 >
                   Clear
                 </Button>
                 <div className={classes.switchForm2}>
                   <div> Already have an account?</div>
-                  <Button onClick={handleSignUpPage}>Login</Button>
+                  <Button sx={{color: "blue!important"}} onClick={handleSignUpPage}>Login</Button>
                 </div>
                 <div className={classes.terms}>
                   By clicking &apos;Create account&apos;, I agree to

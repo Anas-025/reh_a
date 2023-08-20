@@ -1,7 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@600&display=swap');
-
-
 .container{
     width: 100%;
     min-height: 97vh;
@@ -10,7 +6,7 @@
     justify-content: center;
 }
 .card{
-    width: 380px;
+    width: min(100%, 450px);
     height: 700px;
     perspective: 2000px;
     /* padding: 30px; */
@@ -44,7 +40,6 @@
 }
 .cardBack{
     transform: rotateY(180deg);
-    /* background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTr7UvsE6VEQPFMGAvknB9LKH1zxaAuWMhRVw&usqp=CAU'); */
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -53,7 +48,7 @@
 .title{
     font-size: 2.5rem;
     font-weight: 700;
-    color: rgb(12, 12, 102);
+    color: black;
 }
 .forgotPswd{
     display: flex;
@@ -81,8 +76,6 @@
     display: flex;
 }
 .switchForm2 {
-    font-family: 'Mulish', sans-serif;
-
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -90,5 +83,4 @@
 .terms{
     text-align: center;
     font-size: small;
-    font-family: 'Mulish', sans-serif;
 }
