@@ -11,7 +11,6 @@ import { collection, doc, writeBatch } from "firebase/firestore";
 import Image from "next/image";
 import emptyHere from "public/emptyHere.jpg";
 import { useEffect, useRef, useState } from "react";
-import { flushSync } from "react-dom";
 import { uploadFileToFirebaseAndGetUrl } from "utils/ExtendedUtils";
 import GPBackdrop from "../../../general/GeneralPurpose/GPBackdrop";
 import style from "../Blog.module.css";
@@ -58,29 +57,27 @@ export default function BlogEditor(props) {
   };
 
   const handleSaveClick = async () => {
-
     setLoading(true);
     try {
       const blog = {
         blogData: blogData,
         uid: uid,
       };
+      let url;
 
-      if(blogCoverImage !== "" && blogCoverImageFile){
-        const url = await uploadFileToFirebaseAndGetUrl(
+      if (blogCoverImage !== "" && blogCoverImageFile) {
+        url = await uploadFileToFirebaseAndGetUrl(
           blogCoverImageFile,
           "BlogImages"
         );
-        flushSync(
-          setBlogCoverImage(url.uploadedToUrl)
-        );
+        setBlogCoverImage(url.uploadedToUrl);
       }
 
       const metaBlog = {
         displayName: displayName,
         date: date,
         headTitle: headTitle,
-        heroImageSrc: blogCoverImage,
+        heroImageSrc: url?.uploadedToUrl || blogCoverImage,
         uid: uid,
       };
 
