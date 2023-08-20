@@ -1,5 +1,4 @@
-import BookIcon from "@mui/icons-material/Book";
-import CottageIcon from "@mui/icons-material/Cottage";
+
 import EditIcon from "@mui/icons-material/Edit";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Button, IconButton } from "@mui/material";
@@ -10,6 +9,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { scrollTrigger } from "utils/scrollTrigger";
 import SideDrawer from "../../SideDrawer/SideDrawer";
+import { getDrawerList } from "../constants";
 import styles from "./BlogsNav.module.css";
 
 export default function BlogsNav({
@@ -21,35 +21,14 @@ export default function BlogsNav({
 }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const router = useRouter();
-  const id = router.query.id;
-  const uid = getCookie("uid");
-
-  let triggered = false;
-  if (router.pathname === "/blogs") {
-    [triggered] = scrollTrigger();
-  }
+  const id = router.query.id as string;
+  const uid = getCookie("uid") as string;
+  const drawerList = getDrawerList(isAdmin, uid, id);
+  const triggered = scrollTrigger();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-
-  const drawerList = [
-    {
-      name: "Home",
-      link: "/app",
-      icon: <CottageIcon />,
-    },
-    {
-      name: "Book Appointment",
-      link: "/app",
-      icon: <BookIcon />,
-    },
-    {
-      name: "Edit",
-      link: `/blogs/edit/${id}`,
-      icon: <EditIcon />,
-    },
-  ];
 
   if (!router.pathname.startsWith("/blogs/read/")) {
     drawerList.pop();
