@@ -1,5 +1,5 @@
-import VisitBlog from "components/general/VisitBlog/VisitBlog";
 import { db } from "components/firebase/firebase-config";
+import VisitBlog from "components/general/VisitBlog/VisitBlog";
 import { doc, getDoc } from "firebase/firestore";
 import { NextApiRequest, NextApiResponse } from "next";
 

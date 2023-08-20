@@ -2,18 +2,19 @@ import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import CloseIcon from "@mui/icons-material/Close";
 import SaveIcon from "@mui/icons-material/Save";
 import { Button, Typography } from "@mui/material";
-import { db } from "components/firebase/firebase-config";
-import { collection, doc, writeBatch } from "firebase/firestore";
-import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-import { uploadFileToFirebaseAndGetUrl } from "utils/ExtendedUtils";
-import emptyHere from "public/emptyHere.jpg";
 import BlogImage from "components/app/blog/blog_components/BlogImage/BlogImage";
 import BlogPartition from "components/app/blog/blog_components/BlogPartition/BlogPartition";
 import HeadTitle from "components/app/blog/blog_components/HeadTitle/HeadTitle";
 import HeroImage from "components/app/blog/blog_components/HeroImage/HeroImage";
-import style from "../Blog.module.css";
+import { db } from "components/firebase/firebase-config";
+import { collection, doc, writeBatch } from "firebase/firestore";
+import Image from "next/image";
+import emptyHere from "public/emptyHere.jpg";
+import { useEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
+import { uploadFileToFirebaseAndGetUrl } from "utils/ExtendedUtils";
 import GPBackdrop from "../../../general/GeneralPurpose/GPBackdrop";
+import style from "../Blog.module.css";
 
 export default function BlogEditor(props) {
   const container = useRef(null);
@@ -57,10 +58,6 @@ export default function BlogEditor(props) {
   };
 
   const handleSaveClick = async () => {
-    if (!blogCoverImageFile) {
-      alert("Please add a cover image");
-      return;
-    }
 
     setLoading(true);
     try {
@@ -69,16 +66,21 @@ export default function BlogEditor(props) {
         uid: uid,
       };
 
-      const blogCoverImageUrl = await uploadFileToFirebaseAndGetUrl(
-        blogCoverImageFile,
-        "BlogImages"
-      );
+      if(blogCoverImage !== "" && blogCoverImageFile){
+        const url = await uploadFileToFirebaseAndGetUrl(
+          blogCoverImageFile,
+          "BlogImages"
+        );
+        flushSync(
+          setBlogCoverImage(url.uploadedToUrl)
+        );
+      }
 
       const metaBlog = {
         displayName: displayName,
         date: date,
         headTitle: headTitle,
-        heroImageSrc: blogCoverImageUrl.uploadedToUrl,
+        heroImageSrc: blogCoverImage,
         uid: uid,
       };
 
