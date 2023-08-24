@@ -10,7 +10,7 @@ export default function BlogPartition({ text, title, index }) {
         {title}
       </div>
       <div className={blogpart.text}>
-        <p contentEditable="true" dangerouslySetInnerHTML={{ __html: sanitized }} />
+        <pre style={{fontFamily : 'Arial', whiteSpace : 'pre-wrap'}} contentEditable="true" dangerouslySetInnerHTML={{ __html: sanitized }} />
       </div>
     </div>
   );
