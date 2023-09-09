@@ -7,6 +7,7 @@ import {
 } from "@mui/material";
 import { visuallyHidden } from '@mui/utils';
 import { Data, EnhancedTableProps } from "components/general/TableComponents/Table.interface";
+import { useRouter } from "next/router";
 import { MouseEvent } from "react";
 
 
@@ -17,6 +18,7 @@ export default function EnhancedTableHead(props: EnhancedTableProps) {
     onRequestSort,
     headCells,
   } = props;
+  const router = useRouter();
 
   const createSortHandler =
     (property: keyof Data) => (event: MouseEvent<unknown>) => {
@@ -26,6 +28,13 @@ export default function EnhancedTableHead(props: EnhancedTableProps) {
   return (
     <TableHead>
       <TableRow>
+        {
+          router.pathname === "/app/paymentHistory" ? (
+            <TableCell></TableCell>
+          ) : (
+            null 
+          )
+        }
         
         {headCells.map((headCell) => (
           <TableCell

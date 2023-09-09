@@ -12,33 +12,31 @@ import {
   ListItemText,
   Toolbar,
 } from "@mui/material";
-import { auth } from "components/general/firebase-config";
+import { auth } from "components/firebase/firebase-config";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Dispatch, SetStateAction, useEffect } from "react";
-import { AppDrawerList } from "types/app";
+import { useEffect } from "react";
 import Avatar from "../Avatar/Avatar";
 
-interface SideDrawerProps {
-  mobileOpen: boolean;
-  setMobileOpen: Dispatch<SetStateAction<boolean>>;
-  handleDrawerToggle: () => void;
-  drawerList: AppDrawerList[];
+interface drawerList {
+  name: string;
+  icon: any;
+  link: string;
 }
 
-export default function SideDrawer({
-  mobileOpen,
-  setMobileOpen,
-  handleDrawerToggle,
-  drawerList,
-}: SideDrawerProps) {
+export default function SideDrawer(props: any) {
   const router = useRouter();
+  const id = router.query.id;
+  const { window } = props;
+  const { mobileOpen, setMobileOpen, handleDrawerToggle, drawerList } = props;
+
   const drawerWidth = 240;
 
   const handleLogOutClick = async () => {
     try {
+      console.log("logging out")
       await auth.signOut();
-      if (typeof window !== "undefined") {
+      if (window) {
         // @ts-ignore
         window.localStorage.setItem("loggedIn", "false");
       }
@@ -53,7 +51,7 @@ export default function SideDrawer({
   }, [router.pathname]);
 
   const container =
-    typeof window !== "undefined" ? () => window.document.body : undefined;
+    window !== undefined ? () => window().document.body : undefined;
 
   return (
     <>
@@ -89,12 +87,12 @@ export default function SideDrawer({
           <Divider />
 
           <List>
-            {drawerList.map((item, index) => (
+            {drawerList.map((item: drawerList, index: number) => (
               <Link href={item.link} key={`drawer-${index}`}>
                 <ListItem disablePadding>
                   <ListItemButton sx={{ paddingBlock: "1rem" }}>
                     <ListItemIcon sx={{ color: "black!important" }}>
-                      <item.icon />
+                      {item.icon}
                     </ListItemIcon>
                     <ListItemText primary={item.name} />
                   </ListItemButton>

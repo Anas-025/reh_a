@@ -9,7 +9,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import arrow_down from "../../../public/arrow_down.svg";
-import { auth, db } from "../firebase-config";
+import { auth, db } from "../../firebase/firebase-config";
 import styles from "./Avatar.module.css";
 
 function Avatar({ withPopOver = true }: { withPopOver?: boolean }) {

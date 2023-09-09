@@ -1,19 +1,14 @@
 import { onAuthStateChanged } from "firebase/auth";
-import React, {
-  Dispatch,
-  SetStateAction,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-import { auth } from "./general/firebase-config.js";
+import { useRouter } from "next/router.js";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { auth } from "./firebase/firebase-config.js";
+import Loading from "./general/Loading/Loading";
 
 interface ContextType {
   user: any;
   userLoading: string | null;
   loggedIn: boolean;
-  setLoggedIn: Dispatch<SetStateAction<boolean>>;
+  setLoggedIn: any;
 }
 
 interface UserProviderProps {
@@ -24,28 +19,46 @@ export const UserContext = createContext<ContextType>({
   user: null,
   userLoading: null,
   loggedIn: false,
-  setLoggedIn: () => {},
+  setLoggedIn: null,
 });
 
 export const UserProvider = ({ children }: UserProviderProps) => {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<any>({loggedIn: null});
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
-  const [userLoading, setUserLoading] = useState<string | null>("");
+  const [userLoading, setUserLoading] = useState<string | null>('');
+  const [loading, setLoading] = useState<boolean>(true);
+  const router = useRouter();
 
   useEffect(() => {
     setUserLoading("loading");
     onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      if (currentUser) {
+      if(currentUser) {
+        setUser(currentUser);
+        setLoading(false);
         setUserLoading("loaded");
+      }else{
+        setUser({loggedIn: false});
+        setLoading(false);
       }
     });
   }, []);
 
+  if(router.pathname === "/" && user.loggedIn === true){
+    router.push("/app");
+  }
+  else if(router.pathname !== "/" && user.loggedIn === false){
+    router.push("/signin");
+  }
+
+
   return (
-    <UserContext.Provider value={{ user, userLoading, loggedIn, setLoggedIn }}>
-      {children}
-    </UserContext.Provider>
+      loading ? (
+        <Loading message="Loading Data..." />
+      ) : (
+        <UserContext.Provider value={{ user, userLoading, loggedIn, setLoggedIn }}>
+          {children}
+        </UserContext.Provider>
+      )
   );
 };
 
