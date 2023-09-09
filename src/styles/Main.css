@@ -3,6 +3,7 @@ main {
   padding-inline: 0!Important;
   margin-bottom: 3rem;
   overflow-x: auto;
+  padding-inline: 2rem;
 }
 .slice {
   width: 100%;

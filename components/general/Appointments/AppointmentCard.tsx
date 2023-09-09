@@ -1,22 +1,13 @@
-import { Delete } from "@material-ui/icons";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import DeleteIcon from "@mui/icons-material/Delete";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import {
-    Button,
-    IconButton,
-    Modal,
-    Popover,
-    Typography
-} from "@mui/material";
+import { Button, IconButton, Modal, Popover, Typography } from "@mui/material";
+import { GPCContext } from "Providers/GPC_Provider";
 import { deleteDoc, doc } from "firebase/firestore";
 import Image from "next/image";
-import React, { Dispatch, FC, SetStateAction, useState } from "react";
-import GPDialog from "../GeneralPurpose/GPDialog";
-import { db } from "../firebase-config";
-import appoinmentcss from "./Appoinments.module.css";
+import React, { Dispatch, FC, SetStateAction, useContext } from "react";
+import { db } from "../../firebase/firebase-config";
 import CurrentCaseContent from "./CurrentCaseContent/CurrentCaseContent";
-import SlotBooking from "./SlotBooking/SlotBooking.js";
-import qrSample from "./qrSample.png";
+import SlotBooking from "./SlotBooking/SlotBooking";
 
 interface AppointmentCardProps {
   number: number;
@@ -24,14 +15,9 @@ interface AppointmentCardProps {
   name: string;
   time?: string;
   date?: string;
-  setErrorDialog: any;
-  setErrorMsg: any;
   user: any;
-  numberOfSessions: number;
   getAppointmentData: () => void;
-  setCardDeleteLoading: Dispatch<SetStateAction<boolean>>;
-  setSnackbarMessage: Dispatch<SetStateAction<string>>;
-  setDialogProps: Dispatch<SetStateAction<any>>;
+  setSessionCount: Dispatch<SetStateAction<number>>;
 }
 
 const AppointmentCard: FC<AppointmentCardProps> = ({
@@ -39,29 +25,17 @@ const AppointmentCard: FC<AppointmentCardProps> = ({
   id,
   name,
   date,
-  setErrorDialog,
-  setErrorMsg,
   user,
-  numberOfSessions,
   getAppointmentData,
-  setCardDeleteLoading,
-  setSnackbarMessage,
-  setDialogProps
+  setSessionCount
 }) => {
   const [open, setOpen] = React.useState(false);
   const [slot, setSlot] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [buy, setBuy] = useState(false);
-  const toggleBuy = () => setBuy((prev) => !prev);
   const toggleSlot = () => setSlot((prev) => !prev);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [dialogOpen, setDialogOpen] = useState(false);
-
-  const handleCopyButton = () => {
-    navigator.clipboard.writeText("sampelupiid@oksbi");
-    setSnackbarMessage("UPI ID copied to clipboard");
-  };
+  const { showSnackbar, showBackdrop, closeBackdrop, showDialog, showError } =
+    useContext(GPCContext);
 
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
@@ -80,59 +54,29 @@ const AppointmentCard: FC<AppointmentCardProps> = ({
 
   const handleCaseDelete = async () => {
     setAnchorEl(null);
-    setCardDeleteLoading(true);
-    setDialogProps({open: false});
+    showBackdrop("Deleting...");
     try {
       await deleteDoc(doc(db, `Userdata/${user.uid}/cases`, id));
-      getAppointmentData();
-      setCardDeleteLoading(false);
-      setSnackbarMessage("Case Deleted successfully");
+      await getAppointmentData();
     } catch (err: any) {
-      setCardDeleteLoading(false);
-      setErrorMsg(err.message);
-      setErrorDialog(true);
+      showError("Something went wrong... Try again later");
     }
+    closeBackdrop();
   };
 
-  const handleDialogClose = () => {
-    handlePopoverClose();
-    setDialogProps({open: false});
+  const handleDeleteButton = () => {
+    showDialog(
+      "Are you sure you want to delete this case?",
+      `Delete case name, ${name}?`,
+      "Cancel",
+      "Delete",
+      handleCaseDelete
+    );
   };
-
-  const handleDeleteClick = () => {
-    setDialogProps({
-      open: true,
-      title: "Are you sure you want to delete this case?",
-      contentText: `Delete case name, ${name}?`,
-      handleClose: handleDialogClose,
-      primaryAction: handleCaseDelete,
-    });
-  };
-
 
   return (
     <>
-    
-      <GPDialog
-        open={dialogOpen}
-        setOpen={handleDialogClose}
-        title="Are you sure you want to delete this case?"
-        contentText = {`Delete case name, ${name}?`}
-        buttons = {[
-          {
-            text: "Cancel",
-            onClick: handleDialogClose
-          },
-          {
-            text: "Delete",
-            onClick: handleCaseDelete,
-            color: "error"
-          }
-        ]}
-      />
-
-
-      <div className="hover:outline hover:outline-[1px] transition ease-in-out flex flex-col w-[240px] border-[1px] border-[#000] rounded-[15px] cursor-pointer px-5 py-5 relative justify-items-start">
+      <div className="hover:outline hover:outline-[1px] transition ease-in-out flex flex-col w-[240px] border-[1px] border-[#000] rounded-[15px] cursor-pointer px-5 py-5 relative justify">
         <IconButton
           onClick={handlePopoverClick}
           className="!absolute top-4 right-1 z-50"
@@ -154,8 +98,8 @@ const AppointmentCard: FC<AppointmentCardProps> = ({
             horizontal: "left",
           }}
         >
-          <Button sx={{ m: 2 }} onClick={handleDeleteClick}>
-            <Delete color="error" />
+          <Button sx={{ m: 2 }} onClick={handleDeleteButton}>
+            <DeleteIcon color="error" />
             <Typography sx={{ px: 2, py: 1 }} color={"black"}>
               Delete
             </Typography>
@@ -163,15 +107,20 @@ const AppointmentCard: FC<AppointmentCardProps> = ({
         </Popover>
 
         <div onClick={handleOpen} style={{ position: "relative" }}>
-          <div style={{ marginBottom: "15px", overflow: 'hidden', textOverflow: 'ellipsis' }}>
+          <div
+            style={{
+              marginBottom: "15px",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
             <span className="text-[20px] mr-2">{number}.</span>
             <span className="text-[26px] mr-2">{name}</span>
           </div>
 
-          <div className="font-light mb-2">No. of Meetings Left: {numberOfSessions}</div>
           <div className="font-light mb-2">
-            Created at: &nbsp;
-            <span className="font-light">{date || ""}</span>
+            Created at:
+            <span className="font-light">{date || "2nd of January, 2023"}</span>
           </div>
           <Image
             src="/appointmentCardBg.svg"
@@ -181,22 +130,16 @@ const AppointmentCard: FC<AppointmentCardProps> = ({
             className="absolute bottom-5 right-5"
           />
         </div>
+
         <Button
           variant="contained"
-          style={{ backgroundColor: "#e9ab02", marginTop: "1.5rem" }}
-          onClick={toggleBuy}
-        >
-          Buy sessions
-        </Button>
-        <Button
-          variant="contained"
-          style={{ backgroundColor: "#e9ab02", marginTop: "10px" }}
+          style={{ backgroundColor: "#e9ab02", marginTop: "50px" }}
           onClick={toggleSlot}
         >
           Book Slots
         </Button>
       </div>
-      
+
       <Modal
         open={open}
         onClose={handleClose}
@@ -208,40 +151,8 @@ const AppointmentCard: FC<AppointmentCardProps> = ({
             toggleSlot={toggleSlot}
             handleClose={handleClose}
             id={id}
+            setSessionCount={setSessionCount}
           />
-        </div>
-      </Modal>
-
-      <Modal
-        open={buy}
-        onClose={toggleBuy}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <div
-          className={`${appoinmentcss.container} absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] rounded-[15px bg-[#fff] m-auto`}
-        >
-          <div className={appoinmentcss.name}>R-A</div>
-          <div className={appoinmentcss.title}>Scan this code for payment</div>
-          <div>
-            <Image
-              width={150}
-              height={150}
-              alt="img not found"
-              src={qrSample}
-              className={appoinmentcss.qrcode}
-            />
-          </div>
-          <div style={{ display: "flex", marginTop: "40px" }}>
-            <div>UPI ID : sample384983@oksbi &nbsp;&nbsp;</div>
-            <IconButton onClick={handleCopyButton}>
-              <ContentCopyIcon
-                fontSize="small"
-                sx={{ width: "max-content" }}
-                className={appoinmentcss.copyIcn}
-              />
-            </IconButton>
-          </div>
         </div>
       </Modal>
 
@@ -252,13 +163,7 @@ const AppointmentCard: FC<AppointmentCardProps> = ({
         aria-describedby="modal-modal-description"
       >
         <div className="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] rounded-[15px] justify-center items-center h-[80vh] w-[97%] bg-[#fff] m-auto sm:w-[80%]">
-          <SlotBooking
-            id={id}
-            setErrorMsg={setErrorMsg}
-            setErrorDialog={setErrorDialog}
-            setSnackbarMessage={setSnackbarMessage}
-            setSlot={setSlot}
-          />
+          <SlotBooking id={id} setSlot={setSlot} setSessionCount={setSessionCount}/>
         </div>
       </Modal>
     </>
@@ -266,4 +171,3 @@ const AppointmentCard: FC<AppointmentCardProps> = ({
 };
 
 export default AppointmentCard;
-

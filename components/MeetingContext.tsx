@@ -1,6 +1,6 @@
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { db } from "./general/firebase-config";
+import { db } from "./firebase/firebase-config";
 import { useUser } from "./UserContext";
 
 interface ContextType {

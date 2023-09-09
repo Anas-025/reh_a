@@ -1,5 +1,6 @@
-import SlotGrid from "components/general/SlotGrid/SlotGrid";
+import { withAdmin } from "ProtectedRoutes/AdminRoute";
 import { db } from "components/firebase/firebase-config";
+import SlotGrid from "components/general/SlotGrid/SlotGrid";
 import { doc, getDoc } from "firebase/firestore";
 import { getDateArray, getDaysofWeek, getSlotMatrix, getTimings } from "utils/ExtendedUtils";
 
@@ -14,7 +15,7 @@ function index(props: any) {
   )
 }
 
-export default index
+export default withAdmin(index)
 
 
 export async function getStaticProps() {

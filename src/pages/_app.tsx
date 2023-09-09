@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import { GPCProvider } from "Providers/GPC_Provider";
 import { MeetingProvider } from "components/MeetingContext";
 import { UserProvider } from "components/UserContext";
+import { NewUserProvider } from "components/context/userContext";
 import BlogsLayout from "components/general/Blogs/BlogsLayout";
 import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
@@ -18,13 +19,15 @@ export default function App({ Component, pageProps }: AppProps) {
     return (
       <Suspense fallback={<Loading />}>
         <GPCProvider>
-        <UserProvider>
-          <MeetingProvider>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </MeetingProvider>
-        </UserProvider>
+          <NewUserProvider>
+            <UserProvider>
+              <MeetingProvider>
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
+              </MeetingProvider>
+            </UserProvider>
+          </NewUserProvider>
         </GPCProvider>
       </Suspense>
     );
@@ -40,6 +43,12 @@ export default function App({ Component, pageProps }: AppProps) {
         </UserProvider>
       </Suspense>
     );
+  } else if (router.pathname === "/signin") {
+    return (
+      <GPCProvider>
+        <Component {...pageProps} />
+      </GPCProvider>
+    )
   }
 
   return (

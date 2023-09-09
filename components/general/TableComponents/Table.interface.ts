@@ -1,4 +1,3 @@
-import { Timestamp } from "firebase/firestore";
 
 export type Order = "asc" | "desc";
 
@@ -44,7 +43,7 @@ export interface Data {
   meetingId?: string,
   displayName?: string,
   caseName?: string,
-  createdAt?: Timestamp,
+  createdAt?: string,
   diurnal?: string[],
   numberOfSessions?: number,
   painType?: string[],

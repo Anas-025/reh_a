@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
+
+.container{
+    padding-inline: 5rem;
+    min-height: 100vh;
+}
+.grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    place-items: center;
+    text-align: center;
+    gap: -2rem;
+    margin-top: 7rem;
+}
+.image{
+    width: 50%;
+}
+.service:nth-child(4){ margin-top: 10rem }
+.service:nth-child(5){ margin-top: 10rem }
+.service:nth-child(6){ margin-top: 10rem }
+
+.name{
+    margin-top: 0.5rem;
+}
+
+.title{
+    font-size: 2.5rem;
+    font-weight: 600;
+    padding-top: 8rem;
+    padding-left: 2rem;
+    text-align: center;
+    color: rgb(12, 12, 102);;
+}
+
+@media only screen and (max-width : 1200px){
+    .grid{
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .service:nth-child(3){ margin-top: 5rem }
+    .service:nth-child(4){ margin-top: 5rem }
+    .service:nth-child(5){ margin-top: 5rem }
+    .service:nth-child(6){ margin-top: 5rem }
+}
+
+@media only screen and (max-width : 768px){
+    .grid{
+        grid-template-columns: repeat(1, 1fr);
+        gap: 8rem;
+    }
+    .service{
+        margin: 0!important;
+    }
+}

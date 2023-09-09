@@ -1,7 +1,7 @@
 // adminRoute.tsx
 import { Typography } from "@mui/material";
+import { auth } from "components/firebase/firebase-config";
 import Loading from "components/general/Loading/Loading";
-import { auth } from "components/general/firebase-config";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -14,10 +14,13 @@ export function withAdmin<T>(Component: React.ComponentType<any>) {
     user?.getIdTokenResult().then((idTokenResult) => {
       setIsAdmin(idTokenResult.claims.admin || false);
     });
-
+    
     if (isAdmin === true) {
-      return <Component {...props} />;
+      return  <Component {...props} />;
+    } else if (isAdmin === null) {
+      return <Loading message="Checking for Admin Priviledges" />;
     } else {
+      router.back();
       return (
         <div style={{ height: "75vh", display: "grid", placeItems: "center" }}>
           <Typography variant="h3">Not Authorised</Typography>
