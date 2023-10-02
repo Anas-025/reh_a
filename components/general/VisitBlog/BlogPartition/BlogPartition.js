@@ -1,6 +1,5 @@
-import React from "react";
-import blogpart from "./BlogPartition.module.css";
 import sanitize from "sanitize-html";
+import blogpart from "./BlogPartition.module.css";
 
 export default function BlogPartition({ text, title, index }) {
   const sanitized = sanitize(text);

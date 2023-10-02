@@ -1,12 +1,11 @@
 import Image from "next/image";
-import trustGIF from "./../../../public/trust.gif";
-import consultancyGIF from "./../../../public/consultancy.gif";
-import videoGIF from "./../../../public/video.gif";
+import { useEffect, useRef, useState } from "react";
+import useDevice from "utils/useDevice";
 import { useVisibility } from "../../../utils/isVisible";
 import Testimonial from "../../general/Testimonial/Testimonial";
-import useDevice from "utils/useDevice";
-import { useEffect, useRef, useState } from "react";
-import zIndex from "@mui/material/styles/zIndex";
+import consultancyGIF from "./../../../public/consultancy.gif";
+import trustGIF from "./../../../public/trust.gif";
+import videoGIF from "./../../../public/video.gif";
 
 export default function Main() {
   var offset: number = 1040;
