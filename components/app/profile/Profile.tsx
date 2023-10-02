@@ -1,18 +1,18 @@
 import {
-  Alert,
-  Snackbar,
   Tooltip
 } from "@mui/material";
+import { GPCContext } from "Providers/GPC_Provider";
 import { useUser } from "components/UserContext";
+import { db } from "components/firebase/firebase-config";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
 import { AiOutlineCamera } from "react-icons/ai";
 import { uploadFileToFirebaseAndGetUrl } from "utils/ExtendedUtils";
-import { db } from "components/firebase/firebase-config";
 import FormCheckbox from "./FormCheckbox";
 import FormRadio from "./FormRadio";
 import FormTextarea from "./FormTextarea";
 import Input from "./Input";
+import { Profile } from "./Profile.interface";
 import {
   familyHistoryOptions,
   genderOptions,
@@ -23,8 +23,6 @@ import {
   referrerOptions,
   surgicalHistoryOptions,
 } from "./constants";
-import { GPCContext } from "Providers/GPC_Provider";
-import { Profile } from "./Profile.interface";
 
 const Profile = () => {
   const { user } = useUser();
@@ -330,7 +328,7 @@ const Profile = () => {
                 onChange={onChangeReferrer}
               />
               <FormTextarea
-                label="Chief Complaint"
+                label="Chief Complaint / Pain"
                 value={formData?.chiefComplaint || ""}
                 onChange={onChangeChiefComplaint}
               />
@@ -376,12 +374,12 @@ const Profile = () => {
           <div className="grid border-[2px] p-4 justify-between align-start grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-8">
             <FormCheckbox
               options={otherComplaintsOptions}
-              label="Other Complaints"
+              label="Patient Complaints"
               checkedValues={formData?.otherComplaints || []}
               onChange={onChangeOtherComplaints}
             />
             <FormTextarea
-              label="Problem in Gait"
+              label="Difficulty in Walking"
               value={formData?.problemInGait || ""}
               onChange={onChangeProblemInGait}
             />

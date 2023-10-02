@@ -2,17 +2,8 @@ import { Typography } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { MetaBlog } from "./B.interface";
 import styles from "./BlogsGrid.module.css";
-
-interface MetaBlog {
-  id: string;
-  date: Date;
-  displayName: string;
-  headTitle: string;
-  heroImageSrc: string;
-  published: boolean;
-  uid: string;
-}
 
 function BlogsGrid({ data }: { data: MetaBlog[] }) {
   const router = useRouter();
@@ -22,6 +13,7 @@ function BlogsGrid({ data }: { data: MetaBlog[] }) {
   };
 
   const firstMetaBlog = data[0];
+  const firstVideoThumbnail = firstMetaBlog.heroVideoUrl !== "" ? firstMetaBlog.heroVideoUrl : firstMetaBlog.heroImageSrc;
 
   // only show 6 blogs in the grid
   const remainingMetaBlogs = data.slice(1, 7);
@@ -43,7 +35,8 @@ function BlogsGrid({ data }: { data: MetaBlog[] }) {
             passHref
             className={styles.hero}
           >
-            <img src={firstMetaBlog.heroImageSrc} alt="" />
+          
+            <img src={firstVideoThumbnail} alt="" />
 
             <div className={styles.hero_text}>
               <h1>{firstMetaBlog.headTitle}</h1>

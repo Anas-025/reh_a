@@ -53,7 +53,7 @@ const Appointments = (props: Props) => {
             backgroundColor: "rgb(250 184 0)!important",
             "&:hover": { backgroundColor: "rgb(233, 171, 2)!important" },
           }}
-          onClick={() => router.push("/app/pay")}
+          onClick={() => router.push("/app/buyMore")}
         >
           Buy More
         </Button>

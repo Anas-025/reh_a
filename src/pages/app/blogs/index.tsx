@@ -1,5 +1,6 @@
-import BlogsGrid from "components/general/App/BlogsGrid/BlogsGrid";
 import { db } from "components/firebase/firebase-config";
+import { MetaBlog } from "components/general/App/BlogsGrid/B.interface";
+import BlogsGrid from "components/general/App/BlogsGrid/BlogsGrid";
 import {
   collection,
   getDocs,
@@ -8,16 +9,6 @@ import {
   query,
   where,
 } from "firebase/firestore";
-
-interface MetaBlog {
-  id: string;
-  date: Date;
-  displayName: string;
-  headTitle: string;
-  heroImageSrc: string;
-  published: boolean;
-  uid: string;
-}
 
 const app = ({ metaBlogsDataString }: { metaBlogsDataString: string }) => {
   const data: MetaBlog[] = JSON.parse(metaBlogsDataString);

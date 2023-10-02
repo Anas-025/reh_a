@@ -37,12 +37,14 @@ export const diurnalOptions = [
 ];
 
 export const otherComplaintsOptions = [
+  { value: "pain", label: "Pain" },
   { value: "tingling", label: "Tingling" },
   { value: "numbness", label: "Numbness" },
   { value: "history", label: "history of fall" },
   { value: "locking", label: "Locking" },
   { value: "imbalance", label: "Imbalance" },
   { value: "swelling", label: "Swelling/Wasting" },
+  { value: "walking", label: "Difficulty in Walking" },
   { value: "external", label: "External aids & Ambulatory aids" },
 ];
 

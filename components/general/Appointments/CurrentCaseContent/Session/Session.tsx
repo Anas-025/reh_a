@@ -201,7 +201,7 @@ function Session(props: Props) {
           Date of meeting: <b style={{ whiteSpace: "nowrap" }}>{date}</b>
         </div>
         <div style={{ marginBottom: "1.2rem", whiteSpace: "normal" }}>
-          Time of xmeeting: <b style={{ whiteSpace: "nowrap" }}>{time}</b>
+          Time of meeting: <b style={{ whiteSpace: "nowrap" }}>{time}</b>
         </div>
 
         <Button

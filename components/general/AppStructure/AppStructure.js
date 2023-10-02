@@ -19,7 +19,12 @@ import AppNavBar from "../AppNavBar/AppNavBar";
 import SideDrawer from "../SideDrawer/SideDrawer";
 import BottomNav from "./BottomNav/BottomNav";
 import sidebar from "./Sidebar.module.css";
-import { adminDrawerList, adminList, normalDrawerList, normalList } from "./constants";
+import {
+  adminDrawerList,
+  adminList,
+  normalDrawerList,
+  normalList,
+} from "./constants";
 
 const drawerWidth = 270;
 
@@ -76,20 +81,23 @@ export default function MiniDrawer({ isAdmin }) {
   const router = useRouter();
   const [uid, setUid] = useState("hello");
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [navList, setNavList] = useState(isAdmin? [...normalList, ...adminList] : normalList);
-  const drawerList = isAdmin? [...normalDrawerList, ...adminDrawerList] : normalDrawerList;
+  const [navList, setNavList] = useState(
+    isAdmin ? [...normalList, ...adminList] : normalList
+  );
+  const drawerList = isAdmin
+    ? [...normalDrawerList, ...adminDrawerList]
+    : normalDrawerList;
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
-
   useEffect(() => {
     setUid(localStorage.getItem("uid"));
     const activeMenu = navList.find((item) => {
       console.log(item.link, router.pathname);
-      return item.link === router.pathname
-    } );
+      return item.link === router.pathname;
+    });
     if (activeMenu) {
       activeElement(activeMenu.id);
     }
@@ -148,9 +156,21 @@ export default function MiniDrawer({ isAdmin }) {
 
       <Drawer variant="permanent" open={open} className={sidebar.view1}>
         <DrawerHeader>
-          <Typography className={sidebar.drawerHead} variant="h5" style={{display: "flex", gap: "1rem", alignItems: "center"}}>
+          <Typography
+            className={sidebar.drawerHead}
+            variant="h5"
+            style={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+          >
             <Image src={logo} alt="logo" width={50} height={50} />
-            <Typography style={{fontSize: "1.5rem"}} variant="h1">R-A</Typography>
+            <Typography
+              style={{
+                fontSize: "1.5rem",
+                transition: "all .25ms ease-out"
+              }}
+              variant="h1"
+            >
+              R-A
+            </Typography>
           </Typography>
         </DrawerHeader>
         <Divider />

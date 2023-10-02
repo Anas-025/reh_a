@@ -50,6 +50,11 @@ export default function App({ Component, pageProps }: AppProps) {
       </GPCProvider>
     )
   }
+  else if (router.pathname === "/trial") {
+    return (
+        <Component {...pageProps} />
+    )
+  }
 
   return (
     <Suspense fallback={<Loading />}>

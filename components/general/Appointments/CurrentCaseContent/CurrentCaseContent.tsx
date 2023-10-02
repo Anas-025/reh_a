@@ -199,14 +199,14 @@ function CurrentCaseContent({
               <div className="grid justify-between align-start grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-8">
                 <FormCheckbox
                   options={painOptions}
-                  label="Type"
+                  label="Type of Pain"
                   checkedValues={formData?.painType || []}
                   onChange={onChangePainOptions}
                   otherOption={true}
                 />
                 <FormCheckbox
                   options={diurnalOptions}
-                  label="Diurnal"
+                  label="Time of Pain"
                   checkedValues={formData?.diurnal || []}
                   onChange={onChangeDiurnal}
                   otherOption={true}

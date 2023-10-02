@@ -22,4 +22,5 @@ export interface Data {
   heroImageSrc: string,
   id: string,
   uid: string
+  heroVideoId: string
 }

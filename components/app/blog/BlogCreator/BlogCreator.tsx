@@ -6,15 +6,15 @@ import { db } from "components/firebase/firebase-config";
 import { collection, doc, writeBatch } from "firebase/firestore";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import emptyHere from "public/emptyHere.jpg";
 import { useRef, useState } from "react";
 import { uploadFileToFirebaseAndGetUrl } from "utils/ExtendedUtils";
-import emptyHere from "public/emptyHere.jpg";
-import BlogImage from "../blog_components/BlogImage/BlogImage";
-import BlogPartition from "../blog_components/BlogPartition/BlogPartition";
-import HeadTitle from "../blog_components//HeadTitle/HeadTitle";
-import HeroImage from "../blog_components//HeroImage/HeroImage";
 import GPBackdrop from "../../../general/GeneralPurpose/GPBackdrop";
 import style from "../Blog.module.css";
+import HeadTitle from "../blog_components//HeadTitle/HeadTitle";
+import HeroImage from "../blog_components//HeroImage/HeroImage";
+import BlogImage from "../blog_components/BlogImage/BlogImage";
+import BlogPartition from "../blog_components/BlogPartition/BlogPartition";
 
 export default function BlogCreator({ dataString }: { dataString: string }) {
   const data = JSON.parse(dataString);
@@ -37,8 +37,7 @@ export default function BlogCreator({ dataString }: { dataString: string }) {
   const [blogCoverImageFile, setBlogCoverImageFile] = useState<File | null>(
     null
   );
-
-  console.log(data);
+  const [videoId, setVideoId] = useState<string>("");
 
   const handleParaClick = () => {
     setBlogData((current) => [
@@ -57,7 +56,11 @@ export default function BlogCreator({ dataString }: { dataString: string }) {
   };
 
   const handleSaveClick = async () => {
-    if (!blogCoverImageFile) {
+    let isVideo : boolean = false;
+    if(videoId !== ""){
+      isVideo = true;
+    }
+    if (!isVideo && !blogCoverImageFile) {
       alert("Please add a cover image");
       return;
     }
@@ -69,13 +72,18 @@ export default function BlogCreator({ dataString }: { dataString: string }) {
         uid: uid,
       };
 
-      const blogCoverImageUrl = await uploadFileToFirebaseAndGetUrl(blogCoverImageFile, "BlogImages");
+      
+      const blogCoverImageUrl = await uploadFileToFirebaseAndGetUrl(
+        blogCoverImageFile,
+        "BlogImages"
+      );
 
       const metaBlog = {
         displayName: displayName,
         date: date,
         headTitle: headTitle,
         heroImageSrc: blogCoverImageUrl.uploadedToUrl,
+        heroVideoId: videoId,
         uid: uid,
         published: false,
       };
@@ -103,7 +111,6 @@ export default function BlogCreator({ dataString }: { dataString: string }) {
 
   return (
     <>
-      
       <GPBackdrop loading={loading} message="Creating new Blog..." />
 
       <HeadTitle
@@ -117,6 +124,7 @@ export default function BlogCreator({ dataString }: { dataString: string }) {
         setBlogCoverImage={setBlogCoverImage}
         blogCoverImageFile={blogCoverImageFile}
         setBlogCoverImageFile={setBlogCoverImageFile}
+        setVideoId={setVideoId}
       />
 
       <div className={style.container}>

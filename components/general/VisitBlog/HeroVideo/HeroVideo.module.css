@@ -1,0 +1,25 @@
+.image1{
+    position: relative;
+    margin-top: 70px;
+    width: 100%;
+    text-align: center;
+}
+.image1 > div{
+    position: relative;
+    margin: auto;
+    width: min(45rem, 94vw);
+    max-height: 600px;
+    overflow: hidden;
+    border-radius: 10px;
+}
+.image1 > div > video{
+    width: 100%;
+    height: 100%;
+}
+
+@media only screen and (max-width : 500px) {
+    .image1 > img{
+        width: 80%;
+    }
+    
+}
