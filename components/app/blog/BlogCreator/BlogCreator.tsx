@@ -18,7 +18,6 @@ import BlogPartition from "../blog_components/BlogPartition/BlogPartition";
 
 export default function BlogCreator({ dataString }: { dataString: string }) {
   const data = JSON.parse(dataString);
-  const [titles, setTitles] = useState([]);
   const container = useRef(null);
   const blogImageInput = useRef<HTMLInputElement>(null);
   const [headTitle, setHeadTitle] = useState("Click to Edit Title");
@@ -125,6 +124,7 @@ export default function BlogCreator({ dataString }: { dataString: string }) {
         blogCoverImageFile={blogCoverImageFile}
         setBlogCoverImageFile={setBlogCoverImageFile}
         setVideoId={setVideoId}
+        videoId={videoId}
       />
 
       <div className={style.container}>

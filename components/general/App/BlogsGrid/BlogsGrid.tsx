@@ -13,7 +13,11 @@ function BlogsGrid({ data }: { data: MetaBlog[] }) {
   };
 
   const firstMetaBlog = data[0];
-  const firstVideoThumbnail = firstMetaBlog.heroVideoUrl !== "" ? firstMetaBlog.heroVideoUrl : firstMetaBlog.heroImageSrc;
+  console.log(firstMetaBlog);
+  const firstBlogThumbnail =
+    firstMetaBlog.heroVideoId 
+      ? `https://drive.google.com/thumbnail?id=${firstMetaBlog.heroVideoId}`
+      : firstMetaBlog.heroImageSrc;
 
   // only show 6 blogs in the grid
   const remainingMetaBlogs = data.slice(1, 7);
@@ -35,8 +39,7 @@ function BlogsGrid({ data }: { data: MetaBlog[] }) {
             passHref
             className={styles.hero}
           >
-          
-            <img src={firstVideoThumbnail} alt="" />
+            <img src={firstBlogThumbnail} alt="" />
 
             <div className={styles.hero_text}>
               <h1>{firstMetaBlog.headTitle}</h1>
@@ -45,6 +48,10 @@ function BlogsGrid({ data }: { data: MetaBlog[] }) {
           </Link>
 
           {remainingMetaBlogs.map((blog) => {
+            const thumbnail = blog.heroVideoId
+              ? `https://drive.google.com/thumbnail?id=${blog.heroVideoId}`
+              : blog.heroImageSrc;
+
             return (
               <Link
                 href={`/blogs/read/${blog.id}`}
@@ -52,7 +59,7 @@ function BlogsGrid({ data }: { data: MetaBlog[] }) {
                 key={blog.id}
                 className={styles.normal}
               >
-                <img src={blog.heroImageSrc} alt="" className="w-full" />
+                <img src={thumbnail} alt="" className="w-full" />
                 <div className={styles.hero_text}>
                   <h1>{blog.headTitle}</h1>
                   <p>- {blog.displayName}</p>

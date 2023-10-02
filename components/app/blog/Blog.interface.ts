@@ -13,4 +13,5 @@ export interface HeroImageProps {
   blogCoverImageFile: File | null;
   setBlogCoverImageFile: Dispatch<SetStateAction<File | null>>;
   setVideoId: Dispatch<SetStateAction<string>>;
+  videoId: string;
 }

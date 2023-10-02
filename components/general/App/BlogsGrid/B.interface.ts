@@ -6,5 +6,5 @@ export interface MetaBlog {
   heroImageSrc: string;
   published: boolean;
   uid: string;
-  heroVideoUrl: string;
+  heroVideoId: string;
 }

@@ -87,7 +87,6 @@ export default function MiniDrawer({ isAdmin }) {
   useEffect(() => {
     setUid(localStorage.getItem("uid"));
     const activeMenu = navList.find((item) => {
-      console.log(item.link, router.pathname);
       return item.link === router.pathname
     } );
     if (activeMenu) {

@@ -30,15 +30,11 @@ export default function BlogEditor(props) {
     props.metaBlogData?.heroImageSrc || ""
   );
   const [blogCoverImageFile, setBlogCoverImageFile] = useState(null);
+  const [videoId, setVideoId] = useState<string>("");
 
   useEffect(() => {
     setUid(localStorage.getItem("uid"));
   }, []);
-
-  // const getTitle = (anchorId) => {
-  //   const title = document.getElementById(`${anchorId}`);
-  //   return title.children[0].innerText;
-  // };
 
   const handleParaClick = () => {
     setBlogData((current) => [
@@ -77,6 +73,7 @@ export default function BlogEditor(props) {
         displayName: displayName,
         date: date,
         headTitle: headTitle,
+        videoId: videoId,
         heroImageSrc: url?.uploadedToUrl || blogCoverImage,
         uid: uid,
       };
@@ -112,6 +109,8 @@ export default function BlogEditor(props) {
         setBlogCoverImage={setBlogCoverImage}
         blogCoverImageFile={blogCoverImageFile}
         setBlogCoverImageFile={setBlogCoverImageFile}
+        videoId={videoId}
+        setVideoId={setVideoId}
       />
 
       <div className={style.container}>

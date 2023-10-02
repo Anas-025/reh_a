@@ -13,6 +13,7 @@ import {
   Tooltip,
   Zoom,
 } from "@mui/material";
+import HeroVideo from "components/general/VisitBlog/HeroVideo/HeroVideo";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { returnFileSize, validFileType } from "utils/ExtendedUtils";
@@ -26,6 +27,7 @@ export default function HeroImage(props: HeroImageProps) {
     setBlogCoverImageFile,
     blogCoverImageFile,
     setVideoId,
+    videoId,
   } = props;
   const [tooltipTitle, setTooltipTitle] = useState("Edit Image");
   const blogCoverImageRef = useRef<HTMLInputElement>(null);
@@ -99,6 +101,8 @@ export default function HeroImage(props: HeroImageProps) {
                   className="object-cover cursor-pointer rounded-[10px] transition-all duration-150"
                   onClick={handleDialogOpen}
                 />
+              ) : videoId ? (
+                <HeroVideo heroVideoId={videoId} />
               ) : (
                 <div
                   onClick={handleDialogOpen}

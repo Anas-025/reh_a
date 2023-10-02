@@ -12,6 +12,7 @@ import {
 
 const app = ({ metaBlogsDataString }: { metaBlogsDataString: string }) => {
   const data: MetaBlog[] = JSON.parse(metaBlogsDataString);
+  console.log(data)
 
   return (
     <>
