@@ -11,7 +11,8 @@ export interface HeadTitleProps {
 
 export interface BlogData{
   title: string,
-  content: string
+  content: string,
+  src: string,
 }
 
 export interface Data {

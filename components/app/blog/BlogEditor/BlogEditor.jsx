@@ -30,7 +30,7 @@ export default function BlogEditor(props) {
     props.metaBlogData?.heroImageSrc || ""
   );
   const [blogCoverImageFile, setBlogCoverImageFile] = useState(null);
-  const [videoId, setVideoId] = useState<string>("");
+  const [videoId, setVideoId] = useState("");
 
   useEffect(() => {
     setUid(localStorage.getItem("uid"));

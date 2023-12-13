@@ -1,17 +1,16 @@
 import { Grid, Paper, styled } from "@mui/material";
-import { Chart, ChartTypeRegistry } from "chart.js/auto";
-import React, { use, useEffect } from "react";
-import style from "./more.module.css";
-import { _DeepPartialArray } from "chart.js/dist/types/utils";
-import { chartMaker } from "utils/ExtendedUtils";
-import { collection, doc, getDocs, query } from "firebase/firestore";
 import { db } from "components/firebase/firebase-config";
+import { collection, getDocs, query } from "firebase/firestore";
+import { useEffect } from "react";
+import { chartMaker } from "utils/ExtendedUtils";
+import style from "./more.module.css";
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
-  padding: theme.spacing(1),
   textAlign: "center",
   color: theme.palette.text.secondary,
+  boxShadow: "1px 4px 10px -2px #d1d1d1",
+  padding: "1rem",
 }));
 
 interface ChartDataTypes {
@@ -297,7 +296,7 @@ function More() {
 
   return (
     <>
-      <Grid container spacing={2}>
+      <Grid container spacing={3}>
         <Grid item lg={8} md={12}>
           <Item className={style.item}>
             <canvas className={style.chart} id="ageChart"></canvas>

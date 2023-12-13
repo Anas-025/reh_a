@@ -43,7 +43,7 @@ export default function BlogImage({ setBlogData, index, data, length }) {
   return (
     <>
       <div className={style.image1} style={{ marginBottom: "70px" }}>
-        <div style={{ width: "min(25rem, 94vw)" }}>
+        <div style={{ width: "min(25rem, 94vw)", resize: "both" }}>
           <img src={src} alt="" />
         </div>
         <IconButton className={style.editIcon}>

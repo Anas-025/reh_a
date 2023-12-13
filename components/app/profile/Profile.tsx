@@ -198,7 +198,7 @@ const Profile = () => {
         <div className="mb-4">
           <h3 className="text-[20px] font-semibold mb-2">PERSONAL DETAILS</h3>
 
-          <div className="flex flex-col gap-8 border-[2px] p-4">
+          <div className="flex flex-col gap-8 border-[2px] p-4 rounded-md">
             <Tooltip TransitionProps={{ timeout: 600 }} title="Change profile picture" arrow>
               <div
                 className={`flex relative ${
@@ -338,7 +338,7 @@ const Profile = () => {
 
         <div className="mb-4">
           <h3 className="text-[20px] font-semibold mb-2">HISTORY</h3>
-          <div className="grid border-[2px] p-4 justify-between align-start grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-8">
+          <div className="grid border-[2px] p-4 justify-between align-start grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-8 rounded-md">
             <FormCheckbox
               options={medicalHistoryOptions}
               label="Medical History"
@@ -371,7 +371,7 @@ const Profile = () => {
         </div>
         <div className="mb-4">
           <h3 className="text-[20px] font-semibold mb-2">OTHER</h3>
-          <div className="grid border-[2px] p-4 justify-between align-start grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-8">
+          <div className="grid border-[2px] p-4 justify-between align-start grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-8 rounded-md">
             <FormCheckbox
               options={otherComplaintsOptions}
               label="Patient Complaints"

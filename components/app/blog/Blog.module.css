@@ -96,7 +96,6 @@
     position: relative;
     margin: auto;
     width: min(45rem, 94vw);
-    resize: both;
     overflow: auto;
 }
 .image1 > div > img{
