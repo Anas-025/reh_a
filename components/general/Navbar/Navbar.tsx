@@ -1,6 +1,5 @@
-import React from "react";
-import MobileNavbar from "../MobileNavbar/MobileNavbar";
 import Link from "next/link";
+import MobileNavbar from "../MobileNavbar/MobileNavbar";
 
 const Navbar = () => {
   return (
@@ -24,7 +23,7 @@ const Navbar = () => {
             <Link href="/signin">Sign in</Link>
           </li>
           <Link href="/app">
-            <li className="border-[1px] border-[#D9D9D9] rounded-full px-5 py-1.5 hover:bg-[#0081FE] hover:border-[#0081FE] transition-all duration-500">
+            <li className="border-[1px] border-[#D9D9D9] rounded-full px-5 py-1.5 hover:bg-[#FAB800] hover:border-[#FAB800]">
               Book your Slot
             </li>
           </Link>

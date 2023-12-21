@@ -1,3 +1,4 @@
+import FadeIn from "components/animaiton/animation";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import useDevice from "utils/useDevice";
@@ -66,7 +67,9 @@ export default function Main() {
                 </div>
               </div>
 
-              <Testimonial data={testimonials[0]} />
+              <FadeIn direction="left">
+                <Testimonial data={testimonials[0]} />
+              </FadeIn>
 
               <div className="spacer"></div>
             </div>
@@ -91,7 +94,9 @@ export default function Main() {
                 </div>
               </div>
 
-              <Testimonial data={testimonials[1]} />
+              <FadeIn direction="right">
+                <Testimonial data={testimonials[1]} />
+              </FadeIn>
 
               <div className="spacer"></div>
             </div>
@@ -118,7 +123,9 @@ export default function Main() {
                 </div>
               </div>
 
-              <Testimonial data={testimonials[2]} />
+              <FadeIn direction="left">
+                <Testimonial data={testimonials[2]} />
+              </FadeIn>
             </div>
           </div>
         </section>

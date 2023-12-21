@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import Navbar from "../../general/Navbar/Navbar";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import Navbar from "../../general/Navbar/Navbar";
 
 const Hero = () => {
   const [activeImage, setActiveImage] = useState(1);
@@ -39,7 +39,7 @@ const Hero = () => {
               <span>A new standard in the market.</span>
             </h1>
             <Link href="/app">
-              <button className="text-[18px] border-[1px] border-[#D9D9D9] rounded-[4px] px-6 py-2 hover:bg-[#0081FE] hover:border-[#0081FE] transition-all duration-500">
+              <button className="text-[18px] border-[1px] border-[#D9D9D9] rounded-[4px] px-6 py-2 hover:bg-[#FAB800] hover:border-[#FAB800]">
                 Book Now
               </button>
             </Link>

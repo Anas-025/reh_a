@@ -1,5 +1,6 @@
 import Image from "next/image";
 
+import FadeIn from "components/animaiton/animation";
 import styles from "./Testimonial.module.css";
 
 interface data {
@@ -10,6 +11,7 @@ interface data {
     name: string;
     animation: string;
     src: any;
+    fadeInFrom?: string;
     styles?: any;
   }[];
 }
@@ -19,8 +21,7 @@ function Testimonial({ data }: { data: data }) {
     <div className={styles.testimonial_container}>
       <div className={styles.testimonial}>
         <div className={styles.testimonial_content}>“ {data.content} ”</div>
-        
-        
+
         <div className={styles.testimonial_credentials}>
           <div className={styles.testimonial_avatar}>
             <img src={`${data.name}.jpg`} alt="" />
@@ -33,41 +34,19 @@ function Testimonial({ data }: { data: data }) {
           </div>
         </div>
 
-        {
-          data.decorations?.map((decoration) => {
-            return (
+        {data.decorations?.map((decoration) => {
+          return (
+            <FadeIn direction={decoration.fadeInFrom} style={{...decoration.styles, position: "absolute"}}>
               <Image
-                className={`${styles.decorations} ${styles[decoration.animation]}`}
-                style={decoration.styles}
+                className={`${styles.decorations} ${
+                  styles[decoration.animation]
+                }`}
                 src={decoration.src}
                 alt=""
               />
-            );
-          })
-        }
-
-
-{/* 
-        <Image
-          className={`${styles.decorations} ${styles.stars} ${styles.wobble}`}
-          src={stars}
-          alt=""
-        />
-        <Image
-          className={`${styles.decorations} ${styles.bigStar} ${styles.spin}`}
-          src={bigStar}
-          alt=""
-        />
-        <Image
-          className={`${styles.decorations} ${styles.bleed}`}
-          src={bleed}
-          alt=""
-        />
-        <Image
-          className={`${styles.decorations} ${styles.flower} ${styles.pulse}`}
-          src={flower}
-          alt=""
-        /> */}
+            </FadeIn>
+          );
+        })}
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ main {
   margin-bottom: 3rem;
   overflow-x: auto;
   padding-inline: 2rem;
+  overflow: hidden;
 }
 .slice {
   width: 100%;

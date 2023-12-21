@@ -1,7 +1,9 @@
 import bigStar from "public/testimonial/bigStar.svg";
 import bleed from "public/testimonial/bleed.svg";
+import flower2 from "public/testimonial/flower-2.svg";
 import flower from "public/testimonial/flower.svg";
 import stars from "public/testimonial/stars.svg";
+import video from "public/testimonial/video.svg";
 
 export const testimonials = [
   {
@@ -12,6 +14,7 @@ export const testimonials = [
     decorations: [
       {
         name: "stars",
+        fadeInFrom: "up",
         animation: "wobble",
         src: stars,
         styles: {
@@ -23,6 +26,7 @@ export const testimonials = [
       },
       {
         name: "bigStar",
+        fadeInFrom: "left",
         animation: "spin",
         src: bigStar,
         styles: {
@@ -50,7 +54,7 @@ export const testimonials = [
         src: flower,
         styles: {
           top: "unset",
-          bottom: "-250px",
+          bottom: "-350px",
           left: "-100px",
           right: "unset",
         },
@@ -63,9 +67,32 @@ export const testimonials = [
     reputation: "Graphic Designer",
     content:
       "I'm impressed with the effectiveness of the online physiotherapy provided here. The knowledgeable physiotherapists tailored a customized plan that addressed my specific needs, making my rehabilitation journey both efficient and enjoyable.",
-    style: {
-      
-    },
+    decorations: [
+      {
+        name: "bleed",
+        animation: "",
+        src: bleed,
+        styles: {
+          width: "60px",
+          top: "-45px",
+          bottom: "unset",
+          left: "-50px",
+          right: "unset",
+          transform: "scale(-1) rotate(70deg)",
+        },
+      },
+      {
+        name: "stars",
+        animation: "wobble",
+        src: flower2,
+        styles: {
+          top: "unset",
+          bottom: "-50px",
+          left: "unset",
+          right: "-50px",
+        },
+      },
+    ],
   },
 
   {
@@ -73,5 +100,31 @@ export const testimonials = [
     reputation: "Financial Analyst",
     content:
       "The platform's user-friendly interface and skilled physiotherapists made online sessions seamless and effective. I appreciate the dedication of the professionals behind this website, offering valuable insights and support throughout my entire recovery process.",
+      decorations: [
+        {
+          name: "bleed",
+          animation: "",
+          src: bleed,
+          styles: {
+            width: "60px",
+            top: "-45px",
+            bottom: "unset",
+            left: "unset",
+            right: "-50px",
+          },
+        },
+        {
+          name: "video",
+          animation: "wobble",
+          src: video,
+          styles: {
+            width: "80px",
+            top: "unset",
+            bottom: "-100px",
+            left: "-80px",
+            right: "unset",
+          },
+        },
+      ],  
   },
 ];
