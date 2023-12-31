@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import FadeIn from "components/animaiton/animation";
+import FadeIn from "components/animation/animation";
 import styles from "./Testimonial.module.css";
 
 interface data {

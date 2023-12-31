@@ -1,4 +1,4 @@
-import FadeIn from "components/animaiton/animation";
+import FadeIn from "components/animation/animation";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import useDevice from "utils/useDevice";
@@ -59,12 +59,12 @@ export default function Main() {
           <div className="slice slice--content" ref={firstSlice}>
             <div className="content-container">
               <div className="content-text">
-                <div className="content-hero-text">Quality and Trust!</div>
-                <div className="content-info-text">
-                  Quality and trust are the foundation of our online
-                  physiotherapy services, and we are dedicated to helping you
-                  achieve your health and wellness goals with confidence.
-                </div>
+                  <div className="content-hero-text">Quality and Trust!</div>
+                  <div className="content-info-text">
+                    Quality and trust are the foundation of our online
+                    physiotherapy services, and we are dedicated to helping you
+                    achieve your health and wellness goals with confidence.
+                  </div>
               </div>
 
               <FadeIn direction="left">
@@ -86,12 +86,14 @@ export default function Main() {
           <div className="slice" ref={secondSlice}>
             <div className="content-container">
               <div className="content-text">
-                <div className="content-hero-text">Virtual Physiotherapy!</div>
-                <div className="content-info-text">
-                  With secure video consultations and messaging, our online
-                  physiotherapy consultancy lets you connect with experienced
-                  physiotherapists from home, saving you time and hassle.
-                </div>
+                  <div className="content-hero-text">
+                    Virtual Physiotherapy!
+                  </div>
+                  <div className="content-info-text">
+                    With secure video consultations and messaging, our online
+                    physiotherapy consultancy lets you connect with experienced
+                    physiotherapists from home, saving you time and hassle.
+                  </div>
               </div>
 
               <FadeIn direction="right">
@@ -116,7 +118,7 @@ export default function Main() {
                 <div className="content-hero-text">
                   Clear and Concise Videos!
                 </div>
-                <div className="content-info-text">
+                <div className="content-info-text content-info-text--right">
                   From injury prevention to post-operative rehabilitation, our
                   video illustrations provide the guidance you need to achieve
                   your physiotherapy goals.

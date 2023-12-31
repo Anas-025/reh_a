@@ -1,4 +1,4 @@
-import FadeIn from "components/animaiton/animation";
+import FadeIn from "components/animation/animation";
 import services from "./Services.module.css";
 export default function Service({ image, name }) {
   return (

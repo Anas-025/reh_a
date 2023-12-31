@@ -3,6 +3,7 @@ import Hero from "components/Landing/Hero/Hero";
 import Main from "components/Landing/Main/Main";
 import Services from "components/Landing/Services/Services";
 import SignIn from "components/Landing/SignIn/SignIn";
+import FadeIn from "components/animation/animation";
 
 export default function Home() {
   return (
@@ -11,9 +12,11 @@ export default function Home() {
       <Main />
       <Services />
       <div style={{ marginTop: "8rem" }}>
-        <SignIn />
+        <FadeIn direction="up">
+          <SignIn />
+        </FadeIn>
       </div>
-      <Footer />    
+      <Footer />
     </>
   );
 }
@@ -36,7 +39,6 @@ export default function Home() {
 //       },
 //     };
 //   }
-
 
 //   return {
 //     props: {},
