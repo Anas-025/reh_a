@@ -12,7 +12,7 @@ export default function FadeIn(props: any) {
       ? css.fadeInRight
       : css.fadeInDown;
   const [isVisible, setVisible] = useState(true);
-  const domRef = useRef();
+  const domRef = useRef<HTMLDivElement>(null); // Initialize with the correct type
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => setVisible(entry.isIntersecting));
@@ -31,7 +31,7 @@ export default function FadeIn(props: any) {
     <div
       className={`${direction} ${isVisible ? css.isVisible : ""}`}
       style={style}
-      ref={domRef}
+      ref={domRef} // Assign the ref with the correct type
     >
       {props.children}
     </div>
