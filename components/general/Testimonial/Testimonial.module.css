@@ -3,7 +3,7 @@
   justify-content: center;
   align-items: center;
 
-  font-size: 18px;
+  font-size: clamp(14px, 1.5vw, 18px);
 
   margin-top: 8rem;
   /* background-color: pink; */

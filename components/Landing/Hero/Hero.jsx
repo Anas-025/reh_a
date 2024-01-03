@@ -30,7 +30,13 @@ const Hero = () => {
         <div className="flex flex-col h-full z-20 relative">
           <Navbar />
           <div className="flex flex-col gap-8 h-full px-8 hero-break:px-16 justify-center mt-0 hero-break:-mt-16">
-            <h1 className="text-[48px] leading-[58px] w-full hero-break:w-[50%]">
+            <h1
+              style={{
+                fontSize: "clamp(40px, 3vw, 80px)",
+                lineHeight: "clamp(2.8rem, 3.5vw, 80px)",
+              }}
+              className="leading-[58px] w-full hero-break:w-[50%]"
+            >
               <span>Online</span>
               <br />
               <span className="font-serif">Physiotherapy</span>{" "}

@@ -34,7 +34,18 @@
     .service:nth-child(4){ margin-top: 5rem }
     .service:nth-child(5){ margin-top: 5rem }
     .service:nth-child(6){ margin-top: 5rem }
+
+    .title{
+        padding-left: 0;
+    }
+    .grid{
+        padding-inline: 0;
+    }
+    .image{
+        width: 75%;
+    }
 }
+
 
 @media only screen and (max-width : 768px){
     .grid{

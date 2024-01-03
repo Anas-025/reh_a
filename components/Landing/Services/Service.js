@@ -1,12 +1,12 @@
 import FadeIn from "components/animation/animation";
-import services from "./Services.module.css";
+import styles from "./Services.module.css";
 export default function Service({ image, name }) {
   return (
     <>
-      <div className={services.service}>
+      <div className={styles.service}>
         <FadeIn direction="up">
-          <img src={image} alt="NA" className={services.image} />
-          <div className={services.name}>{name}</div>
+          <img src={image} alt="NA" className={styles.image} />
+          <div className={styles.name}>{name}</div>
         </FadeIn>
       </div>
     </>
