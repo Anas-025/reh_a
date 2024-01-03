@@ -48,20 +48,19 @@ export default function App({ Component, pageProps }: AppProps) {
       <GPCProvider>
         <Component {...pageProps} />
       </GPCProvider>
-    )
-  }
-  else if (router.pathname === "/trial") {
-    return (
-        <Component {...pageProps} />
-    )
+    );
+  } else if (router.pathname === "/trial") {
+    return <Component {...pageProps} />;
   }
 
   return (
     <Suspense fallback={<Loading />}>
       <UserProvider>
-        <MeetingProvider>
-          <Component {...pageProps} />
-        </MeetingProvider>
+        <GPCProvider>
+          <MeetingProvider>
+            <Component {...pageProps} />
+          </MeetingProvider>
+        </GPCProvider>
       </UserProvider>
     </Suspense>
   );

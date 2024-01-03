@@ -8,8 +8,9 @@
 .text{
     font-family: 'Montserrat', sans-serif;
     font-size: 17px;
+    text-align: justify;
     line-height: 2rem;
-    color : #12181d
+    color : #12181d;
 }
 .block{
     margin-bottom: 3rem;

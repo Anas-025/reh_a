@@ -35,6 +35,7 @@ export default function HeroImage(props: HeroImageProps) {
   const [shade, setShade] = useState(false);
   const [open, setOpen] = useState(false);
 
+
   const handleBlogCoverImageChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
