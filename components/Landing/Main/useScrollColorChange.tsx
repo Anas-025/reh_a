@@ -1,15 +1,15 @@
-import { RefObject, useEffect } from 'react';
+import { useEffect } from 'react';
 
-const useScrollColorChange = (mainContainerRef: RefObject<HTMLDivElement>) => {
+const useScrollColorChange = (mainContainerRef: any) => {
   const changeBackgroundColor = () => {
     const scrollPosition = window.scrollY;
-    const sections = [...mainContainerRef.current.children];
+    const sections = Array.from(mainContainerRef!.current!.children);
     const viewportHeight = window.innerHeight;
     const triggerPoint = viewportHeight * (3 / 4);
 
-    const mainContainer = mainContainerRef.current;
+    const mainContainer = mainContainerRef?.current;
 
-    sections.forEach((section, index) => {
+    sections.forEach((section: any, index: number) => {
       const offsetTop = section.offsetTop;
       const offsetBottom = offsetTop + section.clientHeight;
 
@@ -21,7 +21,7 @@ const useScrollColorChange = (mainContainerRef: RefObject<HTMLDivElement>) => {
     });
   };
 
-  const interpolateColor = (section) => {
+  const interpolateColor = (section: any) => {
     //rgb color
     const colorStops = [
       { position: 1, color: [248, 255, 80] },       // Yellow rgb(248 255 80)
