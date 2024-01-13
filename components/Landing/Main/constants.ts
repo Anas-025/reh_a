@@ -1,7 +1,6 @@
 import bigStar from "public/testimonial/bigStar.svg";
 import bleed from "public/testimonial/bleed.svg";
 import flower2 from "public/testimonial/flower-2.svg";
-import flower from "public/testimonial/flower.svg";
 import stars from "public/testimonial/stars.svg";
 import video from "public/testimonial/video.svg";
 
@@ -48,17 +47,6 @@ export const testimonials = [
           right: "-50px",
         },
       },
-      {
-        name: "flower",
-        animation: "pulse",
-        src: flower,
-        styles: {
-          top: "unset",
-          bottom: "-350px",
-          left: "-100px",
-          right: "unset",
-        },
-      },
     ],
   },
 
@@ -69,7 +57,7 @@ export const testimonials = [
       "I'm impressed with the effectiveness of the online physiotherapy provided here. The knowledgeable physiotherapists tailored a customized plan that addressed my specific needs, making my rehabilitation journey both efficient and enjoyable.",
     decorations: [
       {
-        name: "bleed",
+        name: "bleedSecond",
         animation: "",
         src: bleed,
         styles: {
@@ -82,7 +70,7 @@ export const testimonials = [
         },
       },
       {
-        name: "stars",
+        name: "flower",
         animation: "wobble",
         src: flower2,
         styles: {

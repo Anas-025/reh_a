@@ -3,6 +3,7 @@ import css from "./animation.module.css";
 
 export default function FadeIn(props: any) {
   const style = props.style;
+  const className = props.className;
   const direction =
     props.direction == "left"
       ? props.direction == "up"
@@ -29,7 +30,7 @@ export default function FadeIn(props: any) {
 
   return (
     <div
-      className={`${direction} ${isVisible ? css.isVisible : ""}`}
+      className={`${direction} ${isVisible ? css.isVisible : ""} ${className}`}
       style={style}
       ref={domRef} // Assign the ref with the correct type
     >

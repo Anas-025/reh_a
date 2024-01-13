@@ -36,11 +36,14 @@ function Testimonial({ data }: { data: data }) {
 
         {data.decorations?.map((decoration) => {
           return (
-            <FadeIn direction={decoration.fadeInFrom} style={{...decoration.styles, position: "absolute"}}>
+            <FadeIn
+              key={decoration.name}
+              className={`${styles[decoration.name]}`}
+              direction={decoration.fadeInFrom}
+              style={{ ...decoration.styles, position: "absolute" }}
+            >
               <Image
-                className={`${styles.decorations} ${
-                  styles[decoration.animation]
-                }`}
+                className={`${styles[decoration.animation]}`}
                 src={decoration.src}
                 alt=""
               />

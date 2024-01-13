@@ -1,136 +1,109 @@
 import FadeIn from "components/animation/animation";
-import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-import useDevice from "utils/useDevice";
-import { useVisibility } from "../../../utils/isVisible";
+import { useRef } from "react";
 import Testimonial from "../../general/Testimonial/Testimonial";
-import consultancyGIF from "./../../../public/consultancy.gif";
-import trustGIF from "./../../../public/trust.gif";
-import videoGIF from "./../../../public/video.gif";
+// import trustGIF from "./../../../public/trust.gif";
+import style from "./Main.module.css";
 import { testimonials } from "./constants";
+import useScrollColorChange from "./useScrollColorChange";
 
 export default function Main() {
-  var offset: number = 1040;
-  const isMobile = useDevice();
-  const [specialIsVisible, setSpecialIsVisible] = useState(false);
-  const firstSlice = useRef<HTMLDivElement>(null);
-
-  const onScroll = () => {
-    const width = window.innerWidth;
-    const elementTop = firstSlice.current?.getBoundingClientRect().top!;
-    let targetElementSpan = firstSlice.current?.parentElement!.children[0]
-      .children[0] as HTMLDivElement;
-
-    if (width < 768) {
-      elementTop > 750 ? setSpecialIsVisible(false) : setSpecialIsVisible(true);
-      targetElementSpan.style.transition = "opacity 250ms ease-in-out";
-    } else {
-      elementTop < 167 && elementTop > -1200
-        ? setSpecialIsVisible(true)
-        : setSpecialIsVisible(false);
-      targetElementSpan.style.transition = "none";
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("scroll", onScroll, true);
-    return () => document.removeEventListener("scroll", onScroll, true);
-  }, []);
-
-  const [isSecondSliceVisible, secondSlice] = useVisibility<HTMLDivElement>(
-    offset,
-    0
-  );
-  const [isThirdSliceVisible, thirdSlice] = useVisibility<HTMLDivElement>(
-    710,
-    0
-  );
+  const mainContainerRef = useRef<HTMLDivElement>(null);
+  useScrollColorChange(mainContainerRef);
 
   return (
     <>
-      <main id="about">
-        <section className="slice-container">
-          <div className="slice slice--image text-c">
-            <span style={{ opacity: specialIsVisible != true ? "0" : "1" }}>
-              <Image src={trustGIF} alt="gif of trust and worthyness" />
-            </span>
+      <main className={style.container} ref={mainContainerRef}>
+        <div className={style.main}>
+          <div className={style.imageSide}>
+            <div className={style.screen}>
+              <FadeIn direction="right">
+                <img
+                  className={style.image}
+                  src="/home/trust.png"
+                  alt="gif of trust and worthyness"
+                />
+              </FadeIn>
+            </div>
           </div>
-
-          <div className="slice slice--content" ref={firstSlice}>
-            <div className="content-container">
-              <div className="content-text">
-                  <div className="content-hero-text">Quality and Trust!</div>
-                  <div className="content-info-text">
-                    Quality and trust are the foundation of our online
-                    physiotherapy services, and we are dedicated to helping you
-                    achieve your health and wellness goals with confidence.
-                  </div>
+          <div className={style.textSide}>
+            <div className={style.texts}>
+              <div className={style.hero_text}>Quality and Trust!</div>
+              <div className={style.info_text}>
+                Quality and trust are the foundation of our online physiotherapy
+                services, and we are dedicated to helping you achieve your
+                health and wellness goals with confidence.
               </div>
+            </div>
 
+            <div>
               <FadeIn direction="left">
                 <Testimonial data={testimonials[0]} />
               </FadeIn>
-
-              <div className="spacer"></div>
             </div>
+
+            <div className={style.spacer}></div>
           </div>
-        </section>
+        </div>
 
-        <section className="slice-container slice--inverted">
-          <div className="slice slice--image slice--inverted-image text-c">
-            <span style={{ opacity: isSecondSliceVisible != true ? "0" : "1" }}>
-              <Image src={consultancyGIF} alt="gif of trust and worthyness" />
-            </span>
-          </div>
-
-          <div className="slice" ref={secondSlice}>
-            <div className="content-container">
-              <div className="content-text">
-                  <div className="content-hero-text">
-                    Virtual Physiotherapy!
-                  </div>
-                  <div className="content-info-text">
-                    With secure video consultations and messaging, our online
-                    physiotherapy consultancy lets you connect with experienced
-                    physiotherapists from home, saving you time and hassle.
-                  </div>
-              </div>
-
-              <FadeIn direction="right">
-                <Testimonial data={testimonials[1]} />
-              </FadeIn>
-
-              <div className="spacer"></div>
-            </div>
-          </div>
-        </section>
-
-        <section className="slice-container">
-          <div className="slice slice--image text-c">
-            <span style={{ opacity: isThirdSliceVisible != true ? "0" : "1" }}>
-              <Image src={videoGIF} alt="gif of trust and worthyness" />
-            </span>
-          </div>
-
-          <div className="slice slice--content" ref={thirdSlice}>
-            <div className="content-container">
-              <div className="content-text">
-                <div className="content-hero-text">
-                  Clear and Concise Videos!
-                </div>
-                <div className="content-info-text content-info-text--right">
-                  From injury prevention to post-operative rehabilitation, our
-                  video illustrations provide the guidance you need to achieve
-                  your physiotherapy goals.
-                </div>
-              </div>
-
+        <div className={style.main}>
+        <div className={style.imageSide}>
+            <div className={style.screen}>
               <FadeIn direction="left">
-                <Testimonial data={testimonials[2]} />
+                <img
+                  className={style.image}
+                  src="/home/virtual.png"
+                  alt="gif of trust and worthyness"
+                />
               </FadeIn>
             </div>
           </div>
-        </section>
+          <div className={style.textSide}>
+            <div className={style.texts}>
+              <div className={style.hero_text}>Virtual Physiotherapy!</div>
+              <div className={style.info_text}>
+                With secure video consultations and messaging, our online
+                physiotherapy consultancy lets you connect with experienced
+                physiotherapists from home, saving you time and hassle.
+              </div>
+            </div>
+
+            <FadeIn direction="left">
+              <Testimonial data={testimonials[1]} />
+            </FadeIn>
+
+            <div className={style.spacer}></div>
+          </div>
+        </div>
+
+        <div className={style.main}>
+          <div className={style.imageSide}>
+            <div className={style.screen}>
+              <FadeIn direction="right">
+                <img
+                  className={style.image}
+                  src="/home/clear.png"
+                  alt="gif of trust and worthyness"
+                />
+              </FadeIn>
+            </div>
+          </div>
+          <div className={style.textSide}>
+            <div className={style.texts}>
+              <div className={style.hero_text}>Clear and Concise Videos!</div>
+              <div className={style.info_text}>
+                From injury prevention to post-operative rehabilitation, our
+                video illustrations provide the guidance you need to achieve
+                your physiotherapy goals.
+              </div>
+            </div>
+
+            <FadeIn direction="left">
+              <Testimonial data={testimonials[2]} />
+            </FadeIn>
+
+            <div className={style.spacer}></div>
+          </div>
+        </div>
       </main>
     </>
   );

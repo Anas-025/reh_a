@@ -13,7 +13,7 @@ export default function Home() {
       <Services />
       <div style={{ marginTop: "8rem" }}>
         <FadeIn direction="up">
-          <SignIn />
+          <SignIn />  
         </FadeIn>
       </div>
       <Footer />
