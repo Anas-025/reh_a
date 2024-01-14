@@ -28,13 +28,14 @@ export default function SideDrawer(props: any) {
   const router = useRouter();
   const id = router.query.id;
   const { window } = props;
-  const { mobileOpen, setMobileOpen, handleDrawerToggle, drawerList } = props;
+  const { mobileOpen, setMobileOpen, handleDrawerToggle, drawerList, logout } =
+    props;
 
   const drawerWidth = 240;
 
   const handleLogOutClick = async () => {
     try {
-      console.log("logging out")
+      console.log("logging out");
       await auth.signOut();
       if (window) {
         // @ts-ignore
@@ -100,17 +101,19 @@ export default function SideDrawer(props: any) {
               </Link>
             ))}
 
-            <ListItem key="logout" disablePadding>
-              <ListItemButton
-                sx={{ paddingBlock: "1rem" }}
-                onClick={handleLogOutClick}
-              >
-                <ListItemIcon sx={{ color: "black!important" }}>
-                  <LogoutIcon />
-                </ListItemIcon>
-                <ListItemText primary="Logout" />
-              </ListItemButton>
-            </ListItem>
+            {logout && (
+              <ListItem key="logout" disablePadding>
+                <ListItemButton
+                  sx={{ paddingBlock: "1rem" }}
+                  onClick={handleLogOutClick}
+                >
+                  <ListItemIcon sx={{ color: "black!important" }}>
+                    <LogoutIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Logout" />
+                </ListItemButton>
+              </ListItem>
+            )}
           </List>
         </Drawer>
       </Box>

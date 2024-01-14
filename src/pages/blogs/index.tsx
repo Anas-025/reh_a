@@ -1,5 +1,5 @@
-import Blogs from "components/general/Blogs/Blogs";
 import { db } from "components/firebase/firebase-config";
+import Blogs from "components/general/Blogs/Blogs";
 import { collection, getDocs, query, where } from "firebase/firestore";
 
 interface MetaBlog {
@@ -10,6 +10,7 @@ interface MetaBlog {
   heroImageSrc: string;
   published: boolean;
   uid: string;
+  heroVideoId: string;
 }
 
 const index = ({ metaBlogsString }: { metaBlogsString: string }) => {

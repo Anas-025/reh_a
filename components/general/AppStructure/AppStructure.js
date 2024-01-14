@@ -239,6 +239,7 @@ export default function MiniDrawer({ isAdmin }) {
         handleDrawerToggle={handleDrawerToggle}
         setMobileOpen={setMobileOpen}
         mobileOpen={mobileOpen}
+        logout={true}
       />
     </>
   );

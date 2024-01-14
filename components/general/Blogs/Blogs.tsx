@@ -1,3 +1,4 @@
+import Link from "next/link";
 import BlogCard from "./BlogsCard/BlogsCard";
 
 interface MetaBlog {
@@ -8,6 +9,7 @@ interface MetaBlog {
   heroImageSrc: string;
   published: boolean;
   uid: string;
+  heroVideoId: string;
 }
 
 const Blogs = ({ metaBlogs }: { metaBlogs: MetaBlog[] }) => {
@@ -38,34 +40,47 @@ const Blogs = ({ metaBlogs }: { metaBlogs: MetaBlog[] }) => {
                 firstThreeMetaBlogs[1] ? "sm:col-span-2" : "sm:col-span-3"
               }`}
             >
-              <div className={`w-full h-full overflow-hidden`}>
-                <div className="rounded-[4px] overflow-hidden mb-4 border-2 border-black h-[210px] sm:min-h-[400px] sm:h-[80%]">
-                  <img
-                    src={firstThreeMetaBlogs[0].heroImageSrc}
-                    className="w-full h-full object-cover hover:scale-[1.015] transition-all duration-300"
-                  />
+              <Link href={`/blogs/read/${firstThreeMetaBlogs[0].id}`}>
+                <div className={`w-full h-full overflow-hidden`}>
+                  <div className="rounded-[4px] overflow-hidden mb-4 border-2 border-black h-[210px] sm:min-h-[400px] sm:h-[80%]">
+                    <img
+                      src={
+                        firstThreeMetaBlogs[0].heroVideoId
+                          ? `https://drive.google.com/thumbnail?id=${firstThreeMetaBlogs[0].heroVideoId}`
+                          : firstThreeMetaBlogs[0].heroImageSrc
+                      }
+                      className="w-full h-full object-cover hover:scale-[1.015] transition-all duration-300"
+                    />
+                  </div>
+                  <h4 className="text-[20px] font-semibold">
+                    {firstThreeMetaBlogs[0].headTitle}
+                  </h4>
                 </div>
-                <h4 className="text-[20px] font-semibold">
-                  {firstThreeMetaBlogs[0].headTitle}
-                </h4>
-              </div>
+              </Link>
             </div>
             {firstThreeMetaBlogs[1] && firstThreeMetaBlogs[2] ? (
               <>
-                <BlogCard
-                  imgUrl={firstThreeMetaBlogs[1].heroImageSrc}
-                  mainTitle="Customer Service"
-                  title={firstThreeMetaBlogs[1].headTitle}
-                />
-                <BlogCard
-                  imgUrl={firstThreeMetaBlogs[2].heroImageSrc}
-                  mainTitle="Customer Service"
-                  title={firstThreeMetaBlogs[2].headTitle}
-                />
+                <Link href={`/blogs/read/${firstThreeMetaBlogs[1].id}`}>
+                  <BlogCard
+                    heroVideoId={firstThreeMetaBlogs[1].heroVideoId}
+                    imgUrl={firstThreeMetaBlogs[1].heroImageSrc}
+                    mainTitle="Customer Service"
+                    title={firstThreeMetaBlogs[1].headTitle}
+                  />
+                </Link>
+                <Link href={`/blogs/read/${firstThreeMetaBlogs[2].id}`}>
+                  <BlogCard
+                    heroVideoId={firstThreeMetaBlogs[2].heroVideoId}
+                    imgUrl={firstThreeMetaBlogs[2].heroImageSrc}
+                    mainTitle="Customer Service"
+                    title={firstThreeMetaBlogs[2].headTitle}
+                  />
+                </Link>
               </>
             ) : (
               firstThreeMetaBlogs[1] && (
                 <BlogCard
+                  heroVideoId={firstThreeMetaBlogs[1].heroVideoId}
                   imgUrl={firstThreeMetaBlogs[1].heroImageSrc}
                   mainTitle="Customer Service"
                   title={firstThreeMetaBlogs[1].headTitle}
@@ -78,13 +93,17 @@ const Blogs = ({ metaBlogs }: { metaBlogs: MetaBlog[] }) => {
         <div className="h-[1px] bg-[#ccc] w-full mb-10" />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12 justify-center sm:justify-start">
           {metaBlogs.map((metaBlog: MetaBlog) => {
+            console.log(metaBlog);
             return (
-              <BlogCard
-                key={metaBlog.id}
-                imgUrl={metaBlog.heroImageSrc}
-                mainTitle="Customer Service"
-                title={metaBlog.headTitle}
-              />
+              <Link href={`/blogs/read/${metaBlog.id}`}>
+                <BlogCard
+                  key={metaBlog.id}
+                  heroVideoId={metaBlog.heroVideoId}
+                  imgUrl={metaBlog.heroImageSrc}
+                  mainTitle="Customer Service"
+                  title={metaBlog.headTitle}
+                />
+              </Link>
             );
           })}
         </div>

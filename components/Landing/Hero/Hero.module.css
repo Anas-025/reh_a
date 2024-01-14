@@ -5,7 +5,7 @@
   line-height: clamp(2.4rem, 5.4vw, 3.5rem) !important;
   color: black;
 
-  margin-top: 9rem;
+  margin-top: 2rem;
   padding-left: clamp(1rem, 5.4vw, 5rem) !important;
 
   margin-bottom: 5rem;
@@ -70,6 +70,8 @@
 }
 
 .heroImage::after {
+  --dot-margin: -25px;
+
   content: "";
   position: absolute;
   top: 10px;
@@ -78,8 +80,8 @@
   height: 20px;
   background-color: white;
   border-radius: 50%;
-  box-shadow: -25px 0px white, -50px 0px white;
-  z-index: 999;
+  box-shadow: var(--dot-margin) 0px white, calc(var(--dot-margin) * 2) 0px white;
+  z-index: 20;
 }
 
 @media screen and (max-width: 768px) {
@@ -101,5 +103,15 @@
   .heroImage {
     width: 95%;
     border-radius: 10px;
+  }
+  .heroImage:before {
+    height: 32px;
+  }
+  .heroImage::after {
+    --dot-margin: -20px;
+    top: 8px;
+    right: 5px;
+    width: 15px;
+    height: 15px;
   }
 }
