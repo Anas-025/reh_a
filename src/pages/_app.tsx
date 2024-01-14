@@ -35,11 +35,9 @@ export default function App({ Component, pageProps }: AppProps) {
     return (
       <Suspense fallback={<Loading />}>
         <UserProvider>
-          <MeetingProvider>
             <BlogsLayout>
               <Component {...pageProps} />
             </BlogsLayout>
-          </MeetingProvider>
         </UserProvider>
       </Suspense>
     );

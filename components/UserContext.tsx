@@ -46,7 +46,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   if(router.pathname === "/" && user.loggedIn === true){
     router.push("/app");
   }
-  else if(router.pathname !== "/" && user.loggedIn === false){
+  else if((router.pathname !== "/" && !router.pathname.startsWith("/blogs")) && user.loggedIn === false){4
     router.push("/signin");
   }
 
