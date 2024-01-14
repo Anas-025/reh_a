@@ -51,7 +51,14 @@ export default function App({ Component, pageProps }: AppProps) {
     );
   } else if (router.pathname === "/trial") {
     return <Component {...pageProps} />;
+  }else if (router.pathname === "/") {
+    return(
+      <Suspense fallback={<Loading />}>
+            <Component {...pageProps} />
+      </Suspense>
+    )
   }
+
 
   return (
     <Suspense fallback={<Loading />}>
