@@ -13,7 +13,7 @@ const Navbar = () => {
 
         <ul className="flex flex-row gap-8 items-center">
           <li>
-            <Link href="#about" scroll={false}>
+            <Link href="/about" scroll={false}>
               About
             </Link>
           </li>

@@ -5,9 +5,11 @@ const FooterList = ({ title, links }) => {
     <div className="flex flex-col gap-3 text-[#FFF] md:py-6 ml-10 md:ml-0">
       <h4 className="font-bold">{title}</h4>
       {links?.map((link) => (
-        <p key={link.name} className="hover:text-[#aaa] cursor-pointer">
-          {link.name}
-        </p>
+        <a href={link.link}>
+          <p key={link.name} className="hover:text-[#aaa] cursor-pointer">
+            {link.name}
+          </p>
+        </a>
       ))}
     </div>
   );
@@ -27,34 +29,25 @@ const Footer = () => {
       <div className="flex flex-col gap-10 w-full md:w-[95%] lg:w-[85%] m-auto">
         <div className="flex flex-col-reverse md:flex-row justify-between gap-8 md:gap-4">
           <FooterList
-            title="Product"
+            title="Menu"
             links={[
-              { name: "Employee Database", link: "" },
-              { name: "Payroll", link: "" },
-              { name: "Absences", link: "" },
-              { name: "Time tracking", link: "" },
-              { name: "Shift planner", link: "" },
-              { name: "Recruiting", link: "" },
+              { name: "App", link: "/app" },
+              { name: "About us", link: "/about" },
+              { name: "Services", link: "#services" },
+              { name: "Sign in", link: "/sigin" },
             ]}
           />
           <FooterList
             title="Information"
             links={[
-              { name: "FAQ", link: "" },
-              { name: "Blog", link: "" },
+              { name: "Blog", link: "/blogs" },
               { name: "Support", link: "" },
             ]}
           />
           <FooterList
-            title="Company"
-            links={[
-              { name: "About us", link: "" },
-              { name: "Careers", link: "" },
-              { name: "Contact us", link: "" },
-              { name: "Lift Media", link: "" },
-            ]}
+            title="Reh a"
+            links={[{ name: "Contact us", link: "/contact" }]}
           />
-          
         </div>
         <div className="h-[1px] bg-[#eee] border-none"></div>
         <div className="text-[#FFF] flex flex-col md:flex-row items-center justify-between gap-10">
