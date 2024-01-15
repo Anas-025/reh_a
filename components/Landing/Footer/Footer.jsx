@@ -25,7 +25,7 @@ const FooterIcon = ({ Icon }) => {
 
 const Footer = () => {
   return (
-    <div className="mt-24 pt-14 pb-8 md:py-24 px-4 md:px-8 bg-gradient-to-b from-[#1F1F1F] to-[#262626] absolute w-full">
+    <div className="mt-24 pt-14 pb-8 md:py-24 px-4 md:px-8 bg-[black] absolute w-full">
       <div className="flex flex-col gap-10 w-full md:w-[95%] lg:w-[85%] m-auto">
         <div className="flex flex-col-reverse md:flex-row justify-between gap-8 md:gap-4">
           <FooterList
