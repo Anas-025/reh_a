@@ -2,33 +2,21 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Button, IconButton, Modal, Popover, Typography } from "@mui/material";
 import { GPCContext } from "Providers/GPC_Provider";
-import { deleteDoc, doc } from "firebase/firestore";
+import { doc, writeBatch } from "firebase/firestore";
 import Image from "next/image";
-import React, { Dispatch, FC, SetStateAction, useContext } from "react";
-import { db } from "../../firebase/firebase-config";
-import CurrentCaseContent from "./CurrentCaseContent/CurrentCaseContent";
-import SlotBooking from "./SlotBooking/SlotBooking";
+import React, { FC, useContext, useState } from "react";
+import { db } from "../../../firebase/firebase-config";
+import SlotBooking from "../SlotBooking/SlotBooking";
+import CaseModal from "./CaseModal/CaseModal";
 
-interface AppointmentCardProps {
-  number: number;
-  id: string;
-  name: string;
-  time?: string;
-  date?: string;
-  user: any;
-  getAppointmentData: () => void;
-  setSessionCount: Dispatch<SetStateAction<number>>;
+interface CaseCardProps {
+  serial: number;
+  caseData: any;
+  getAppointmentData: any;
+  userId: string;
 }
 
-const AppointmentCard: FC<AppointmentCardProps> = ({
-  number,
-  id,
-  name,
-  date,
-  user,
-  getAppointmentData,
-  setSessionCount
-}) => {
+const Card: FC<CaseCardProps> = ({ serial, caseData, getAppointmentData, userId }) => {
   const [open, setOpen] = React.useState(false);
   const [slot, setSlot] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -36,13 +24,28 @@ const AppointmentCard: FC<AppointmentCardProps> = ({
   const toggleSlot = () => setSlot((prev) => !prev);
   const { showSnackbar, showBackdrop, closeBackdrop, showDialog, showError } =
     useContext(GPCContext);
-
+  const [meeting, setMeeting] = useState<any>(caseData.meeting);
+  const [meetingId, setMeetingId] = useState<string>(caseData.meetingId);
+  //date format: weekday, dd mm yyyy hour:minute AM/PM
+  const date = new Date(meeting?.seconds * 1000).toLocaleString(
+    "en-US",
+    {
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      year: "numeric",
+      minute: "numeric",
+      hour12: true,
+      timeZone: "Asia/Kolkata",
+    }
+  );
+  
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
-  );
-
-  const handlePopoverClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
+    );
+    
+    const handlePopoverClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl(event.currentTarget);
   };
 
   const handlePopoverClose = () => {
@@ -52,11 +55,18 @@ const AppointmentCard: FC<AppointmentCardProps> = ({
   const popoverOpen = Boolean(anchorEl);
   const popoverId = open ? "simple-popover" : undefined;
 
+
   const handleCaseDelete = async () => {
     setAnchorEl(null);
     showBackdrop("Deleting...");
+    const batch = writeBatch(db);
     try {
-      await deleteDoc(doc(db, `Userdata/${user.uid}/cases`, id));
+      const caseRef = doc(db, `Userdata/${userId}/cases`, caseData.id);
+      const meetingRef = doc(db, "Meetings", meetingId);
+
+      batch.delete(caseRef);
+      batch.delete(meetingRef);
+      await batch.commit();
       await getAppointmentData();
     } catch (err: any) {
       showError("Something went wrong... Try again later");
@@ -76,7 +86,7 @@ const AppointmentCard: FC<AppointmentCardProps> = ({
 
   return (
     <>
-      <div className="hover:outline hover:outline-[1px] transition ease-in-out flex flex-col w-[240px] border-[1px] border-[#000] rounded-[15px] cursor-pointer px-5 py-5 relative justify">
+      <div className="hover:outline hover:outline-[1px] transition ease-in-out flex flex-col w-[240px] h-[260px] border-[1px] border-[#000] rounded-[15px] cursor-pointer px-5 py-5 relative justify">
         <IconButton
           onClick={handlePopoverClick}
           className="!absolute top-4 right-1 z-50"
@@ -106,7 +116,7 @@ const AppointmentCard: FC<AppointmentCardProps> = ({
           </Button>
         </Popover>
 
-        <div onClick={handleOpen} style={{ position: "relative" }}>
+        <div  onClick={handleOpen} style={{ position: "relative", height: "100%" }}>
           <div
             style={{
               marginBottom: "15px",
@@ -114,30 +124,54 @@ const AppointmentCard: FC<AppointmentCardProps> = ({
               textOverflow: "ellipsis",
             }}
           >
-            <span className="text-[20px] mr-2">{number}.</span>
-            <span className="text-[26px] mr-2">{name}</span>
+            <span className="text-[20px] mr-2">{serial}.</span>
+            <span className="text-[26px] mr-2">{caseData.caseName}</span>
           </div>
 
-          <div className="font-light mb-2">
-            Created at:
-            <span className="font-light">{date || "2nd of January, 2023"}</span>
-          </div>
+          {meeting === null ? (
+            <div className="flex flex-col gap-2 mt-2">
+              <div className="flex flex-row gap-2">
+                <div className="font-light">No meeting scheduled</div>
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-2 mt-2">
+              <div className="flex flex-row gap-2">
+                <div className="font-light">Meeting&nbsp;at:</div>
+                <div className="font-bold">{` ${date}`}</div>
+              </div>
+            </div>
+          )}
+
           <Image
             src="/appointmentCardBg.svg"
             alt="Three rows of three dots"
             width={60}
             height={60}
-            className="absolute bottom-5 right-5"
+            className="absolute bottom-32 right-5"
           />
         </div>
 
-        <Button
-          variant="contained"
-          style={{ backgroundColor: "#e9ab02", marginTop: "50px" }}
-          onClick={toggleSlot}
-        >
-          Book Slots
-        </Button>
+        <div className="absolute bottom-4 w-full left-0 text-center px-6">
+          {meeting === null ? (
+            <Button
+              fullWidth
+              variant="contained"
+              style={{ backgroundColor: "#e9ab02" }}
+            >
+              Book Meeting
+            </Button>
+          ) : (
+            <Button
+              fullWidth
+              disabled
+              variant="contained"
+              style={{ backgroundColor: "#e9ab02" }}
+            >
+              Join Meeting
+            </Button>
+          )}
+        </div>
       </div>
 
       <Modal
@@ -147,11 +181,13 @@ const AppointmentCard: FC<AppointmentCardProps> = ({
         aria-describedby="modal-modal-description"
       >
         <div className="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] rounded-[15px] justify-center items-center h-[80vh] w-[95%] bg-[#fff] m-auto md:w-[80%]">
-          <CurrentCaseContent
+          <CaseModal
+            caseData={caseData}
             toggleSlot={toggleSlot}
             handleClose={handleClose}
-            id={id}
-            setSessionCount={setSessionCount}
+            setMeeting={setMeeting}
+            meeting={meeting}
+            meetingId={meetingId}
           />
         </div>
       </Modal>
@@ -163,11 +199,17 @@ const AppointmentCard: FC<AppointmentCardProps> = ({
         aria-describedby="modal-modal-description"
       >
         <div className="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] rounded-[15px] justify-center items-center h-[80vh] w-[97%] bg-[#fff] m-auto sm:w-[80%]">
-          <SlotBooking id={id} setSlot={setSlot} setSessionCount={setSessionCount}/>
+          <SlotBooking
+            id={caseData.id}
+            meeting={meeting}
+            setMeeting={setMeeting}
+            setMeetingId={setMeetingId}
+            toggleSlot={toggleSlot}
+          />
         </div>
       </Modal>
     </>
   );
 };
 
-export default AppointmentCard;
+export default Card;

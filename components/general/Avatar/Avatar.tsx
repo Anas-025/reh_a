@@ -3,7 +3,7 @@ import AvatarMui from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Popover from "@mui/material/Popover";
 import { useUser } from "components/UserContext";
-import { removeCookies } from "cookies-next";
+import { deleteCookie } from "cookies-next";
 import { doc, getDoc } from "firebase/firestore";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -36,7 +36,7 @@ function Avatar({ withPopOver = true }: { withPopOver?: boolean }) {
       if (window) {
         window.localStorage.setItem("loggedIn", "false");
       }
-      removeCookies("uid");
+      deleteCookie("uid");
       router.push("/");
     } catch (e) {
       console.log(e);

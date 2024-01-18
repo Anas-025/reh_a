@@ -1,6 +1,6 @@
-import AppointmentHeroImage from "components/general/Appointments/AppointmentHeroImage/AppointmentHeroImage";
-import Appointments from "components/general/Appointments/Appointments";
 import { db } from "components/firebase/firebase-config";
+import AppointmentHeroImage from "components/general/Appointments/AppointmentHeroImage/AppointmentHeroImage";
+import CaseCards from "components/general/Appointments/CaseCards";
 import { doc, getDoc } from "firebase/firestore";
 import { GetServerSidePropsContext } from "next";
 
@@ -11,7 +11,7 @@ const app = (props: any) => {
   return (
     <>
       <AppointmentHeroImage />
-      <Appointments sessionCount={sessionCount} />
+      <CaseCards sessionCount={sessionCount} />
     </>
   );
 };

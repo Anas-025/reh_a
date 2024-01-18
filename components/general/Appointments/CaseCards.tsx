@@ -5,14 +5,14 @@ import { collection, getDocs } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase/firebase-config";
-import AppointmentCard from "./AppointmentCard";
+import Card from "./Card/Card";
 import NewAppointmentCard from "./NewAppointmentCard";
 
 interface Props {
   sessionCount: number;
 }
 
-const Appointments = (props: Props) => {
+const CaseCards = (props: Props) => {
   const { user, userLoading } = useUser();
   const [appointmentsData, setAppointmentsData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -61,19 +61,8 @@ const Appointments = (props: Props) => {
       <div
         className={`flex flex-row flex-wrap justify-center md:justify-start gap-8 text-[#000] px-8 py-8`}
       >
-        {appointmentsData?.map((appointment, index) => {
-          return (
-            <AppointmentCard
-              key={index + 1}
-              id={appointment.id}
-              user={user}
-              number={index + 1}
-              name={appointment.caseName}
-              date={appointment.createdAt.toDate().toDateString()}
-              getAppointmentData={getAppointmentData}
-              setSessionCount={setSessionCount}
-            />
-          );
+        {appointmentsData?.map((caseData, index) => {
+          return <Card userId={user.uid} caseData={caseData} serial={index+1} getAppointmentData={getAppointmentData}/>;
         })}
         <NewAppointmentCard getAppointmentData={getAppointmentData} />
       </div>
@@ -81,4 +70,4 @@ const Appointments = (props: Props) => {
   );
 };
 
-export default Appointments;
+export default CaseCards;
