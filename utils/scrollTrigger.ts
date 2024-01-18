@@ -8,7 +8,7 @@ export function scrollTrigger(): boolean {
   
   const onScroll = () => {
     const navTrigger = document.querySelector(".navTrigger")!;
-    const triggerTop = navTrigger.getBoundingClientRect().top;
+    const triggerTop = navTrigger?.getBoundingClientRect().top;
     
     if (triggerTop <= 0) setTriggered(true);
     else setTriggered(false)

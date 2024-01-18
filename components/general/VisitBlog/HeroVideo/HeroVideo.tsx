@@ -4,7 +4,7 @@ export default function HeroVideo({ heroVideoId }: { heroVideoId: string }) {
   const embedUrl = `https://drive.google.com/file/d/${heroVideoId}/preview`;
   return (
     <div className={style.image1} id="heroImage">
-      <div>
+      <div> 
         {/* <video
           controls
         >
@@ -15,14 +15,8 @@ export default function HeroVideo({ heroVideoId }: { heroVideoId: string }) {
           width="640"
           height="480"
           allowFullScreen
-          allow="autoplay"
-        >
-          <style>{`
-            .ndfHFb-c4YZDc-Wrql6b {
-              display: none !important;
-            }
-          `}</style>
-        </iframe>
+
+        ></iframe>
       </div>
     </div>
   );
