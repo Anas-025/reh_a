@@ -9,6 +9,7 @@ import HeroVideo from "./HeroVideo/HeroVideo";
 import visblog from "./VisitBlog.module.css";
 
 export default function VisitBlog({ data }: { data: Data }) {
+  console.log(data)
   return (
     <>
       <HeadTitle

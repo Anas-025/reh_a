@@ -75,6 +75,7 @@ const Card: FC<CaseCardProps> = ({ serial, caseData, getAppointmentData, userId 
       showError("Something went wrong... Try again later");
     }
     closeBackdrop();
+    showSnackbar("Case deleted successfully");
   };
 
   const handleDeleteButton = () => {
@@ -160,6 +161,7 @@ const Card: FC<CaseCardProps> = ({ serial, caseData, getAppointmentData, userId 
             <Button
               fullWidth
               variant="contained"
+              onClick={toggleSlot}
               style={{ backgroundColor: "#e9ab02" }}
             >
               Book Meeting
