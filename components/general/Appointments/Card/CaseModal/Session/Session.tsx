@@ -13,7 +13,11 @@ import {
   writeBatch,
 } from "firebase/firestore";
 import { useRouter } from "next/router";
-import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
+import {
+  useContext,
+  useEffect,
+  useState
+} from "react";
 
 const Container = styled("div")(({ theme }) => ({
   border: "1px solid #B4B4B4",
@@ -25,15 +29,15 @@ const Container = styled("div")(({ theme }) => ({
 }));
 
 interface Props {
-  slot: string;
+  meeting: any;
   caseId: string;
-  setSlot: any;
-  setSessionCount: Dispatch<SetStateAction<number>>;
+  setMeeting: any;
+  meetingId: string;
 }
 
 function Session(props: Props) {
-  const { slot, caseId, setSlot, setSessionCount } = props;
-  const [date, time] = slot.split(" ");
+  const { caseId, meeting, setMeeting, meetingId } = props;
+  // const [date, time] = slot.split(" ");
   const { updateToken, updateMeetingId } = useMeeting();
   const router = useRouter();
   const { user } = useUser();
@@ -41,6 +45,17 @@ function Session(props: Props) {
     useContext(GPCContext);
   const [meetId, setMeetId] = useState<string>("");
   const batch = writeBatch(db);
+  const date = new Date(meeting?.seconds * 1000).toLocaleString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+  const time = new Date(meeting?.seconds * 1000).toLocaleString("en-US", {
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
+    timeZone: "Asia/Kolkata",
+  });
 
   useEffect(() => {
     if (meetId) {
@@ -93,49 +108,19 @@ function Session(props: Props) {
     }
   };
 
-  function dateDiffInDays(a: Date, b: Date, c: number, d: number) {
-    const _MS_PER_DAY = 1000 * 60 * 60 * 24;
-    // Discard the time and time-zone information.
-    const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
-    const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
-    const timeDiff = d - c;
-    const dayDiff = Math.abs(Math.floor((utc2 - utc1) / _MS_PER_DAY));
-    return { dayDiff, timeDiff };
-  }
-
   const handleDelete = async () => {
+    console.log(meetingId)
     try {
       showBackdrop("Cancelling meeting");
       const date = new Date();
-      const currentDate =
-        date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
-      const currentTime = date.getHours() + date.getMinutes() / 60;
-      const slotTime =
-        parseInt(slot.split(" ")[1].split(":")[0]) +
-        parseInt(slot.split(" ")[1].split(":")[1]) / 60;
-      const slotDate = slot.split(" ")[0].split("-").reverse().join("-");
-
-      const { dayDiff, timeDiff } = dateDiffInDays(
-        new Date(slotDate),
-        new Date(currentDate),
-        currentTime,
-        slotTime
-      );
-      const diff = dayDiff * 24 + Math.abs(timeDiff);
-      const userRef = doc(db, `Userdata`, user.uid);
+      const meetingDate = new Date(meeting.seconds * 1000)
+      // @ts-ignore
+      const diff = (Math.abs(date - meetingDate)) / (1000 * 60 * 60);
       const caseRef = doc(db, `Userdata/${user.uid}/cases`, caseId);
-      const slotsRef = doc(db, `Slots`, slot.split(" ")[0]);
-      const slotsDoc = await getDoc(slotsRef);
-      const userDoc = await getDoc(userRef);
+      const meetingRef = doc(db, "Meetings", meetingId);
 
-      if (dayDiff === 0 && timeDiff < 0) {
-        batch.update(caseRef, { slot: "" });
-        await batch.commit();
-        setSlot("");
-        showSnackbar("Meeting cancelled");
-        return;
-      }
-      if (diff < 24) {
+
+      if (diff <= 24) {
         showError(
           "A meeting can not be cancelled within 24 hours of the scheduled time."
         );
@@ -143,22 +128,11 @@ function Session(props: Props) {
       }
 
       batch.update(caseRef, {
-        slot: "",
+        meeting: null
       });
-      batch.update(userRef, {
-        sessionCount: userDoc.data()?.sessionCount + 1,
-      });
-      batch.update(slotsRef, {
-        slots: slotsDoc.data()?.slots.map((s: any) => {
-          if (s.split(" ")[0] === slot.split(" ")[1]) {
-            return `${s.split(" ")[0]} ${parseInt(s.split(" ")[1]) + 1}`;
-          }
-          return s;
-        }),
-      });
+      batch.delete(meetingRef);
       await batch.commit();
-      setSessionCount(userDoc.data()?.sessionCount + 1);
-      setSlot("");
+      setMeeting(null);
       showSnackbar("Meeting cancelled");
     } catch (err) {
       showError("Something went wrong");
@@ -177,6 +151,7 @@ function Session(props: Props) {
       handleDelete
     );
   };
+
 
   return (
     <>

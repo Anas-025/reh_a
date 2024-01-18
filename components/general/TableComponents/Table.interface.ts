@@ -13,6 +13,7 @@ export interface HeadCell {
   disablePadding: boolean;
   label: string;
   numeric: boolean;
+  align?: "right" | "left" | "center";
 }
 
 export interface EnhancedTableProps {
@@ -40,7 +41,6 @@ export interface Data {
   slot: string,
   userId?: string,
   caseId?: string,
-  meetingId?: string,
   displayName?: string,
   caseName?: string,
   createdAt?: string,
@@ -49,4 +49,8 @@ export interface Data {
   painType?: string[],
   whenBad?: string,
   whenBetter?: string,
+  meeting: {seconds: number, nanoseconds: number};
+  meetingId?: string;
+  patientName?: string;
+  status: string;
 }

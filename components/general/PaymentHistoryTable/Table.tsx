@@ -97,7 +97,7 @@ export default function UsersTable({ rows }: { rows: Data[] }) {
   return (
     <Box sx={{ width: "100%"}}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar message="Payment History" />
+        <EnhancedTableToolbar title="Payment History" />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}

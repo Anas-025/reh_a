@@ -1,23 +1,20 @@
 import CloseIcon from "@mui/icons-material/Close";
 import {
-  Box,
   Button,
-  CircularProgress,
   Container,
-  IconButton,
+  IconButton
 } from "@mui/material";
 import { useUser } from "components/UserContext";
 import FormCheckbox from "components/app/profile/FormCheckbox";
 import FormTextarea from "components/app/profile/FormTextarea";
-import {
-  diurnalOptions,
-  painOptions,
-} from "components/app/profile/constants";
+import { diurnalOptions, painOptions } from "components/app/profile/constants";
 import { db } from "components/firebase/firebase-config";
+import Loading from "components/general/Loading/Loading";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import Image from "next/image";
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import EmptyHere from "../../../../public/emptyHere.jpg";
+import EmptyHere from "public/emptyHere.jpg";
+import React, { useEffect, useState } from "react";
+import { CaseModalProps } from "../../Cases.interface";
 import style from "./CurrentCaseContent.module.css";
 import Session from "./Session/Session";
 
@@ -44,24 +41,20 @@ interface Profile {
   caseName?: string;
 }
 
-function CurrentCaseContent({
+function CaseModel({
   handleClose,
   toggleSlot,
-  id,
-  setSessionCount,
-}: {
-  handleClose: () => void;
-  toggleSlot: () => void;
-  id: string;
-  setSessionCount: Dispatch<SetStateAction<number>>;
-}) {
+  caseData,
+  meeting,
+  setMeeting,
+  meetingId
+}: CaseModalProps) {
   const [formData, setFormData] = useState<Profile | null>({});
   const [profileData, setProfileData] = useState<Profile | null>({});
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { user, userLoading } = useUser();
+  const { user } = useUser();
   const [slot, setSlot] = useState<string | undefined>("");
-
 
   const onChangePainOptions = (newCheckedValues: string[]) => {
     setFormData((prev) => ({
@@ -96,21 +89,18 @@ function CurrentCaseContent({
   };
 
   const getProfileData = async () => {
-    setLoading(true);
-    if (userLoading === "loaded") {
-      const docRef = doc(db, `Userdata/${user.uid}/cases`, id);
-      const docSnap = await getDoc(docRef);
-      setLoading(false);
-      if (docSnap.exists()) {
-        setProfileData(docSnap.data());
-        setSlot(docSnap.data()?.slot);
-        setFormData(docSnap.data());
-      } else {
-        console.log("No such document!");
-      }
+    // setLoading(true);
+    const docRef = doc(db, `Userdata/${user.uid}/cases`, caseData.id);
+    const docSnap = await getDoc(docRef);
+    setLoading(false);
+    if (docSnap.exists()) {
+      setProfileData(docSnap.data());
+      setSlot(docSnap.data()?.slot);
+      setFormData(docSnap.data());
+    } else {
+      console.log("No such document!");
     }
   };
-
 
   const handleBookSlot = () => {
     toggleSlot();
@@ -123,7 +113,9 @@ function CurrentCaseContent({
   }, []);
 
   const handleProfileSave = async () => {
-    await setDoc(doc(db, `Userdata/${user.uid}/cases`, id), formData, { merge: true });
+    await setDoc(doc(db, `Userdata/${user.uid}/cases`, caseData.id), formData, {
+      merge: true,
+    });
     setIsEditing(false);
 
     // get the latest data
@@ -131,19 +123,13 @@ function CurrentCaseContent({
     // setIsSnackbarOpen(true);
   };
 
+  console.log(caseData)
+
+
   return (
     <>
       {loading ? (
-        <Box
-          sx={{
-            width: "100%",
-            height: "100%",
-            display: "grid",
-            placeItems: "center",
-          }}
-        >
-          <CircularProgress />
-        </Box>
+        <Loading message="Loading data..." />
       ) : (
         <div className={style.container}>
           <IconButton onClick={handleClose} className={style.cancelButton}>
@@ -153,40 +139,47 @@ function CurrentCaseContent({
           <div className={style.left}>
             <h3 className={style.mainHeading}>Case: {profileData?.caseName}</h3>
             <div className={style.leftContent}>
-              <h4 className={style.sessionMainHeading}>Session Details:</h4>
+              <h4 className={style.sessionMainHeading}>Meeting Details:</h4>
 
               <div>
-                {slot === undefined || slot === "" ? (
+                {meeting === null ? (
                   <>
-                  <Container
-                    sx={{
-                      opacity: "0.8",
-                      borderRadius: "4px",
-                      marginTop: "2rem",
-                    }}
-                  >
-                    {" "}
-                    <Image
-                      src={EmptyHere}
-                      alt={"No Slots Booked yet"}
-                      width={150}
-                    />{" "}
-                  </Container>
-                  <Container sx={{textAlign: 'center', marginTop: '1.5rem'}}>
-                    <Button sx={{backgroundColor: '#fab700!important', color: 'white', paddingInline: '1rem'}} onClick={handleBookSlot}>Book Slot</Button>
-
-                  </Container>
-
+                    <Container
+                      sx={{
+                        opacity: "0.8",
+                        borderRadius: "4px",
+                        marginTop: "2rem",
+                      }}
+                    >
+                      {" "}
+                      <Image
+                        src={EmptyHere}
+                        alt={"No Slots Booked yet"}
+                        width={150}
+                      />{" "}
+                    </Container>
+                    <Container
+                      sx={{ textAlign: "center", marginTop: "1.5rem" }}
+                    >
+                      <Button
+                        sx={{
+                          backgroundColor: "#fab700!important",
+                          color: "white",
+                          paddingInline: "1rem",
+                        }}
+                        onClick={handleBookSlot}
+                      >
+                        Book Meeting
+                      </Button>
+                    </Container>
                   </>
-
-                  
                 ) : (
-                    <Session
-                      slot={slot}
-                      caseId={id}
-                      setSlot={setSlot}
-                      setSessionCount={setSessionCount}
-                    />
+                  <Session
+                    meeting={meeting}
+                    setMeeting={setMeeting}
+                    meetingId={meetingId}
+                    caseId={caseData.id}
+                  />
                 )}
               </div>
             </div>
@@ -255,4 +248,4 @@ function CurrentCaseContent({
   );
 }
 
-export default CurrentCaseContent;
+export default CaseModel;

@@ -98,7 +98,7 @@ export default function NewAppointmentForm({
         setLoading(true);
         await addDoc(
           collection(db, `Userdata/${user.uid}/cases`),
-          { ...formData, createdAt: Timestamp.now(), numberOfSessions: 0 }
+          { ...formData, createdAt: Timestamp.now(), numberOfSessions: 1, meeting: null }
         );
         setSnackbarOpen(true);
         setLoading(false);

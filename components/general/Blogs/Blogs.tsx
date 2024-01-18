@@ -23,9 +23,9 @@ const Blogs = ({ metaBlogs }: { metaBlogs: MetaBlog[] }) => {
             The R-A Blog
           </h2>
           <p className="text-[24px] font-extralight">
-            Get tips and advice on delivering exceptional customer service,
-            engaging and delighting your customers, and building a
-            customer-centric company.
+            Explore our physiotherapy blog for expert insights and enjoy
+            expert video content, guiding you toward a stronger, pain-free
+            life.
           </p>
         </div>
       </div>
