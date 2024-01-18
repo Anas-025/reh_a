@@ -10,12 +10,13 @@ import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { withAdmin } from "ProtectedRoutes/AdminRoute";
+import { GPCContext } from "Providers/GPC_Provider";
 import { useMeeting } from "components/MeetingContext";
 import { endMeeting, getToken } from "controllers/meeting";
-import { Timestamp, deleteDoc, doc, getDoc, setDoc } from "firebase/firestore";
+import { arrayUnion, doc, increment, writeBatch } from "firebase/firestore";
 import { useRouter } from "next/router";
 import * as React from "react";
-import { useMemo, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import { db } from "../../firebase/firebase-config";
 import DetailsDialog from "../TableComponents/DetailsDialog";
 import EnhancedTableHead from "../TableComponents/EnhancedTableHead";
@@ -29,6 +30,7 @@ const headCells: readonly HeadCell[] = [
     numeric: false,
     disablePadding: false,
     label: "Patient Name",
+    align: "left",
   },
   {
     // @ts-ignore
@@ -36,18 +38,29 @@ const headCells: readonly HeadCell[] = [
     numeric: true,
     disablePadding: false,
     label: "Patient Details",
+    align: "right",
+  },
+  {
+    // @ts-ignore
+    id: "meeting status",
+    numeric: true,
+    disablePadding: false,
+    label: "Meeting Status",
+    align: "right",
   },
   {
     id: "slot",
     numeric: true,
     disablePadding: false,
     label: "Meeting Time",
+    align: "right",
   },
   {
     id: "meetingId",
     numeric: true,
     disablePadding: false,
     label: "Meeting ID",
+    align: "right",
   },
   {
     // @ts-ignore
@@ -55,6 +68,7 @@ const headCells: readonly HeadCell[] = [
     numeric: true,
     disablePadding: false,
     label: "Actions",
+    align: "center",
   },
 ];
 
@@ -69,46 +83,35 @@ function MeetingsTable(props: { rows: Data[] }) {
   const [detialsCase, setDetailsCase] = useState<Data | null>(null);
   const router = useRouter();
   const { updateToken } = useMeeting();
-  const [triggerRowChange, setTriggerRowChange] = useState(false);
+  const [filter, setFilter] = useState<"all" | "success" | "scheduled">("all"); // ["all", "success", "failed"]
+  const { showDialog } = useContext(GPCContext);
 
   const handleMeetingSuccess = async (
     userId: string,
     meetingId: string,
-    createdAt: string
+    createdAt: string,
+    caseId: string
   ) => {
-    const data = {
-      createdAt: createdAt,
-      successAt: Timestamp.now(),
-      meetingId: meetingId,
-    };
-    const docRef = doc(db, "Userdata", userId);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      const docData = docSnap.data();
-      // if meetings field exists in docData append the cuurent timestamp in it if not create and append
-      await setDoc(
-        docRef,
-        {
-          meetings: docData.meetings ? [...docData.meetings, data] : [data],
-          activeMeetingId: null,
-        },
-        { merge: true }
-      );
+    const meetingRef = doc(db, "Meetings", meetingId);
+    const userRef = doc(db, "Userdata", userId);
+    const caseRef = doc(db, "Userdata", userId, "cases", caseId);
 
-      // await setDoc(docRef, { activeMeetingId: null }, { merge: true });
-      await deleteDoc(doc(db, "Meetings", meetingId));
-      rows.splice(
-        rows.findIndex((row) => row.meetingId === meetingId),
-        1
-      );
-      setRows([...rows]);
+    try {
+      const batch = writeBatch(db);
+      batch.update(meetingRef, { status: "success" });
+      batch.update(caseRef, { meeting: null, meetingId: "" });
+      batch.update(userRef, {
+        meetings: arrayUnion(meetingId),
+        sessionCount: increment(-1),
+      });
 
+      await batch.commit();
       // end the meeting
       const token = await getToken();
       const res = await endMeeting({ roomId: meetingId, token });
       updateToken(token);
-    } else {
-      console.log("No such document!");
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -162,9 +165,13 @@ function MeetingsTable(props: { rows: Data[] }) {
   };
 
   return (
-    <Box sx={{ width: "100%", marginInline: "1rem" }}>
+    <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar message="Meetings" />
+        <EnhancedTableToolbar
+          title="Meetings"
+          filter={filter}
+          setFilter={setFilter}
+        />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -180,6 +187,11 @@ function MeetingsTable(props: { rows: Data[] }) {
             />
             <TableBody>
               {visibleRows.map((row, index) => {
+                if (filter === "success" && row.status !== "success")
+                  return null;
+                if (filter === "scheduled" && row.status !== "scheduled")
+                  return null;
+
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
@@ -191,7 +203,7 @@ function MeetingsTable(props: { rows: Data[] }) {
                     sx={{ cursor: "pointer" }}
                   >
                     <TableCell component="th" id={labelId} scope="row">
-                      {row.displayName}
+                      {row.patientName}
                     </TableCell>
                     <TableCell align="right">
                       {/* @ts-ignore */}
@@ -205,37 +217,99 @@ function MeetingsTable(props: { rows: Data[] }) {
                         Details
                       </Button>
                     </TableCell>
-                    <TableCell align="right">{row.slot}</TableCell>
-                    <TableCell align="right">{row.meetingId}</TableCell>
                     <TableCell align="right">
-                      <Button
-                        sx={{
-                          backgroundColor: "rgb(250 184 0)!important",
-                          color: "white",
-                          marginRight: "1rem",
-                        }}
-                        onClick={() =>
-                          router.push(`/meeting?meetId=${row.meetingId}`)
-                        }
-                      >
-                        Join Meet
-                      </Button>
-                      {/* @ts-ignore */}
-                      <Button
-                        onClick={() =>
-                          handleMeetingSuccess(
-                            row.userId,
-                            row.meetingId,
-                            row.createdAt
-                          )
-                        }
-                        sx={{
-                          backgroundColor: "rgb(250 184 0)!important",
-                          color: "white",
-                        }}
-                      >
-                        Success
-                      </Button>
+                      {row.status === "success" ? (
+                        <span style={{ color: "green" }}>Success</span>
+                      ) : row.status === "failed" ? (
+                        <span style={{ color: "red" }}>Failed</span>
+                      ) : (
+                        <span style={{ color: "orange" }}>Scheduled</span>
+                      )}
+                    </TableCell>
+                    <TableCell align="right">
+                      {row.meeting === null ? (
+                        <span style={{ color: "red" }}>null</span>
+                      ) : (
+                        /* @ts-ignore */
+                        new Date(row.meeting.seconds * 1000).toLocaleDateString(
+                          "en-US",
+                          {
+                            month: "short",
+                            day: "numeric",
+                            hour: "numeric",
+                            year: "numeric",
+                            minute: "numeric",
+                            hour12: true,
+                            timeZone: "Asia/Kolkata",
+                          }
+                        )
+                      )}
+                    </TableCell>
+                    <TableCell align="right">
+                      {row.meetingId === "" ? (
+                        <span style={{ color: "red" }}>null</span>
+                      ) : (
+                        row.meetingId
+                      )}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={
+                        row.status === "success"
+                          ? {}
+                          : {
+                              display: "flex",
+                              gap: "1rem",
+                              flexWrap: "wrap",
+                              width: "100%",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }
+                      }
+                    >
+                      {row.status === "success" ? (
+                        <span>none</span>
+                      ) : (
+                        <>
+                          <Button
+                            sx={{
+                              backgroundColor: "rgb(250 184 0)!important",
+                              color: "white",
+                              minWidth: "40%",
+                            }}
+                            onClick={() =>
+                              router.push(`/meeting?meetId=${row.meetingId}`)
+                            }
+                          >
+                            Join&nbsp;Meet
+                          </Button>
+                          {/* @ts-ignore */}
+                          <Button
+                            onClick={() =>
+                              showDialog(
+                                "Are you sure you want to mark this meeting as successfull?",
+                                "This will change the status of the meeting to successfull and will deduct one meeting from the user's account.",
+                                "No",
+                                "Yes",
+                                () =>
+                                  handleMeetingSuccess(
+                                    row.userId,
+                                    row.meetingId,
+                                    row.createdAt,
+                                    row.caseId
+                                  )
+                              )
+                            }
+                            sx={{
+                              backgroundColor: "rgb(250 184 0)!important",
+                              color: "white",
+                              minWidth: "40%",
+                            }}
+                          >
+                            Success
+                          </Button>
+                        </>
+                      )}
                     </TableCell>
                   </TableRow>
                 );

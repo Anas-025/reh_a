@@ -46,6 +46,8 @@ export default function Layout(props: LayoutProps) {
             flexGrow: 1,
             paddingBottom: "3rem",
             paddingTop: "2rem",
+            overflow: "hidden",
+            paddingInline: "1rem",
           }}
         >
           <DrawerHeader />

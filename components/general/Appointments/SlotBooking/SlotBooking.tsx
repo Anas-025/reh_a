@@ -114,7 +114,7 @@ export default function SlotBooking(props: SlotBookingProps) {
       patientName: user.displayName,
       caseId: id,
       dateOfBooking: new Date(),
-      date: `${date} ${selectedSlot}`,
+      meeting: meeting,
       status: "scheduled",
       userId: user.uid,
     });
