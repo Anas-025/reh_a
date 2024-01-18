@@ -59,16 +59,19 @@ const Card: FC<CaseCardProps> = ({ serial, caseData, getAppointmentData, userId 
   const handleCaseDelete = async () => {
     setAnchorEl(null);
     showBackdrop("Deleting...");
-    const batch = writeBatch(db);
     try {
+      console.log(userId, caseData.id);
+      const batch = writeBatch(db);
       const caseRef = doc(db, `Userdata/${userId}/cases`, caseData.id);
-      const meetingRef = doc(db, "Meetings", meetingId);
-
+      if(meetingId !== "") {
+        const meetingRef = doc(db, "Meetings", meetingId);
+        batch.delete(meetingRef);
+      }
       batch.delete(caseRef);
-      batch.delete(meetingRef);
       await batch.commit();
       await getAppointmentData();
     } catch (err: any) {
+      console.log(err);
       showError("Something went wrong... Try again later");
     }
     closeBackdrop();
@@ -77,7 +80,7 @@ const Card: FC<CaseCardProps> = ({ serial, caseData, getAppointmentData, userId 
   const handleDeleteButton = () => {
     showDialog(
       "Are you sure you want to delete this case?",
-      `Delete case name, ${name}?`,
+      `Delete case name, ${caseData.caseName}?`,
       "Cancel",
       "Delete",
       handleCaseDelete

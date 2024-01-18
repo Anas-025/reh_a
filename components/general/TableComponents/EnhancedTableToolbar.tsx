@@ -63,8 +63,8 @@ export default function EnhancedTableToolbar({
             badgeContent={filter}
             invisible={filter === "all"}
             anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'left',
+              vertical: "top",
+              horizontal: "left",
             }}
             color={filter === "success" ? "success" : "error"}
           >
