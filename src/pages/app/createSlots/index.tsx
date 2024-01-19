@@ -25,8 +25,7 @@ export async function getStaticProps() {
   const dateArray = getDateArray(date);
   const daysOfWeek = getDaysofWeek(day);
   const daysOfWeekString = JSON.stringify(daysOfWeek)
-
-
+  
   async function getSlots(dateArray: string[]) {
     try {
       const promises = dateArray.map(async (date) => {
