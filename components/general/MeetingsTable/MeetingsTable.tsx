@@ -112,6 +112,14 @@ function MeetingsTable(props: { rows: Data[] }) {
       const token = await getToken();
       const res = await endMeeting({ roomId: meetingId, token });
       updateToken(token);
+      setRows((prev) =>
+        prev.map((row) => {
+          if (row.meetingId === meetingId) {
+            return { ...row, status: "success" };
+          }
+          return row;
+        })
+      );
     } catch (err) {
       console.log(err);
     }
@@ -183,11 +191,11 @@ function MeetingsTable(props: { rows: Data[] }) {
       const meetingDate = new Date(meetingData.meeting.seconds * 1000);
       // @ts-ignore
       const diff = Math.abs(date - meetingDate) / (1000 * 60 * 60);
-      // if (diff > 3) {
-      //   throw new Error(
-      //     "You can only join a meeting 3 hours before it starts"
-      //   );
-      // }
+      if (diff > 3) {
+        throw new Error(
+          "You can only join a meeting 3 hours before it starts"
+        );
+      }
 
       const activeMeetingId = meetingData?.activeMeetingId;
       if (activeMeetingId) {
