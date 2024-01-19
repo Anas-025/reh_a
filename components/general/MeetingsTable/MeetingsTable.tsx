@@ -12,8 +12,8 @@ import TableRow from "@mui/material/TableRow";
 import { withAdmin } from "ProtectedRoutes/AdminRoute";
 import { GPCContext } from "Providers/GPC_Provider";
 import { useMeeting } from "components/MeetingContext";
-import { endMeeting, getToken } from "controllers/meeting";
-import { arrayUnion, doc, increment, writeBatch } from "firebase/firestore";
+import { createMeeting, endMeeting, getToken } from "controllers/meeting";
+import { arrayUnion, doc, getDoc, increment, updateDoc, writeBatch } from "firebase/firestore";
 import { useRouter } from "next/router";
 import * as React from "react";
 import { useContext, useMemo, useState } from "react";
@@ -23,6 +23,7 @@ import EnhancedTableHead from "../TableComponents/EnhancedTableHead";
 import EnhancedTableToolbar from "../TableComponents/EnhancedTableToolbar";
 import { Data, HeadCell, Order } from "../TableComponents/Table.interface";
 import { getComparator, stableSort } from "../TableComponents/Table.utils";
+
 
 const headCells: readonly HeadCell[] = [
   {
@@ -82,9 +83,9 @@ function MeetingsTable(props: { rows: Data[] }) {
   const [open, setOpen] = useState(false);
   const [detialsCase, setDetailsCase] = useState<Data | null>(null);
   const router = useRouter();
-  const { updateToken } = useMeeting();
+  const { updateToken, updateMeetingId } = useMeeting();
   const [filter, setFilter] = useState<"all" | "success" | "scheduled">("all"); // ["all", "success", "failed"]
-  const { showDialog } = useContext(GPCContext);
+  const { showDialog, showBackdrop, showError, closeBackdrop } = useContext(GPCContext);
 
   const handleMeetingSuccess = async (
     userId: string,
@@ -95,6 +96,7 @@ function MeetingsTable(props: { rows: Data[] }) {
     const meetingRef = doc(db, "Meetings", meetingId);
     const userRef = doc(db, "Userdata", userId);
     const caseRef = doc(db, "Userdata", userId, "cases", caseId);
+    
 
     try {
       const batch = writeBatch(db);
@@ -110,6 +112,14 @@ function MeetingsTable(props: { rows: Data[] }) {
       const token = await getToken();
       const res = await endMeeting({ roomId: meetingId, token });
       updateToken(token);
+      setRows((prev) =>
+        prev.map((row) => {
+          if (row.meetingId === meetingId) {
+            return { ...row, status: "success" };
+          }
+          return row;
+        })
+      );
     } catch (err) {
       console.log(err);
     }
@@ -162,6 +172,51 @@ function MeetingsTable(props: { rows: Data[] }) {
   const handleDetailsClick = (event: React.MouseEvent<unknown>, row: any) => {
     setDetailsCase(row);
     handleToggleDialog();
+  };
+
+  const handleJoinMeetClick = async (meetingId: string) => {
+    try {
+      showBackdrop("Joining meeting");
+      const meetingSnap = await getDoc(doc(db, "Meetings", meetingId));
+
+      if (!meetingSnap.exists()) {
+        throw new Error("Meeting does not exist");
+      }
+      const meetingData = meetingSnap.data();
+      if (meetingData.status === "success") {
+        throw new Error("Meeting has already ended");
+      }
+
+      const date = new Date();
+      const meetingDate = new Date(meetingData.meeting.seconds * 1000);
+      // @ts-ignore
+      const diff = Math.abs(date - meetingDate) / (1000 * 60 * 60);
+      if (diff > 3) {
+        throw new Error(
+          "You can only join a meeting 3 hours before it starts"
+        );
+      }
+
+      const activeMeetingId = meetingData?.activeMeetingId;
+      if (activeMeetingId) {
+        router.push(`/meeting?meetId=${activeMeetingId}`);
+      } else {
+        const token = await getToken();
+        const _meetingId = await createMeeting({ token });
+        updateToken(token);
+        updateMeetingId(_meetingId);
+        const meetingRef = doc(db, "Meetings", meetingId);
+        console.log(meetingId, _meetingId)
+        await updateDoc(meetingRef, {
+          activeMeetingId: _meetingId,
+        });
+        router.push(`/meeting?meetId=${_meetingId}`);
+      }
+    } catch (err: any) {
+      showError(err.message);
+      closeBackdrop();
+      console.log(err);
+    }
   };
 
   return (
@@ -277,9 +332,7 @@ function MeetingsTable(props: { rows: Data[] }) {
                               color: "white",
                               minWidth: "40%",
                             }}
-                            onClick={() =>
-                              router.push(`/meeting?meetId=${row.meetingId}`)
-                            }
+                            onClick={()=>handleJoinMeetClick(row.meetingId)}
                           >
                             Join&nbsp;Meet
                           </Button>

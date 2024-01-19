@@ -15,11 +15,14 @@ export function returnFileSize(number: number) {
 
 const fileTypes = ["image/jpeg", "image/png"];
 
-export function validFileType(file: File): boolean{
+export function validFileType(file: File): boolean {
   return fileTypes.includes(file.type);
 }
 
-export const uploadFileToFirebaseAndGetUrl = async (file: File | null, path: string) => {
+export const uploadFileToFirebaseAndGetUrl = async (
+  file: File | null,
+  path: string
+) => {
   if (!file) {
     return { uploadedToUrl: "", path: "" };
   }
@@ -31,7 +34,9 @@ export const uploadFileToFirebaseAndGetUrl = async (file: File | null, path: str
   if (!type) {
     type = "other";
   }
-  const storagePath = path ? `${path}/${type}/${newFile.name}` : `${type}/${newFile.name}`;
+  const storagePath = path
+    ? `${path}/${type}/${newFile.name}`
+    : `${type}/${newFile.name}`;
   const storageRef = ref(fbStorage, storagePath);
 
   const uploadedToUrl = await uploadBytes(storageRef, newFile).then(
@@ -53,7 +58,6 @@ export const chartMaker = (
   title: string | _DeepPartialArray<string>,
   label: string
 ) => {
-
   new Chart(document.getElementById(id) as HTMLCanvasElement, {
     type: type,
     data: {
@@ -62,7 +66,6 @@ export const chartMaker = (
           label: label,
           data: data[1],
           backgroundColor: data[2] ? data[2] : null,
-          
         },
       ],
       labels: data[0],
@@ -70,8 +73,8 @@ export const chartMaker = (
     options: {
       plugins: {
         title: {
-          font:{
-            size: 20
+          font: {
+            size: 20,
           },
           display: true,
           text: title,
@@ -90,51 +93,53 @@ export const timeMiner = (time: string) => {
   else return "at evening";
 };
 
+export const getDateArray = (date: Date) => {
+  let dateArray: string[] = [...Array(7)];
+  const tempDate =
+    date.toLocaleDateString().split("/").splice(0, 2).reverse().join("-") +
+    "-" +
+    date.toLocaleDateString().split("/")[2];
+  dateArray[0] = tempDate;
+  date.setDate(date.getDate() + 1);
 
-export const getDateArray = (date: Date)=>{
-  let dateArray:  string[] = [...Array(7)];
-  const tempDate = date.toJSON().slice(0,10).split('-').reverse();
-  tempDate[1][0] === '0' ? tempDate[1] = tempDate[1][1] : tempDate[1] = tempDate[1];
-  dateArray[0] = tempDate.join('-');
-  
-  for(let i=1; i<7; i++){
-      date.setDate(date.getDate() + 1)
-      const tempDate = date.toJSON().slice(0,10).split('-').reverse();
-      tempDate[1][0] === '0' ? tempDate[1] = tempDate[1][1] : tempDate[1] = tempDate[1];
-      dateArray[i] = tempDate.join('-');
-    }
-    
+  for (let i = 1; i < 7; i++) {
+    date.setDate(date.getDate() + 1);
+    const tempDate = date.toJSON().slice(0, 10).split("-").reverse();
+    tempDate[1][0] === "0"
+      ? (tempDate[1] = tempDate[1][1])
+      : (tempDate[1] = tempDate[1]);
+    dateArray[i] = tempDate.join("-");
+  }
+
   return dateArray;
-}
+};
 
-export const getDaysofWeek = (day: number)=>{
+export const getDaysofWeek = (day: number) => {
   // get the name of the day of the week as a string array with respect to date
   const days = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday'
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
   ];
-  let dateArray:  string[] = [...Array(7)];
+  let dateArray: string[] = [...Array(7)];
   dateArray[0] = days[day];
-  for(let i=1; i<7; i++){
-    if(day === 6){
+  for (let i = 1; i < 7; i++) {
+    if (day === 6) {
       day = 0;
-    }
-    else{
+    } else {
       day++;
     }
     dateArray[i] = days[day];
   }
 
-  
   return dateArray;
-}
+};
 
-export const getTimings = ()=>{
+export const getTimings = () => {
   return [
     "8:00",
     "8:30",
@@ -161,23 +166,26 @@ export const getTimings = ()=>{
     "19:00",
     "19:30",
     "20:00",
-  ]
-}
+  ];
+};
 
-
-export const getSlotMatrix = (slot: {date: string, slots: string[]}[], timings: string[])=>{
-  const slotMatrix: number[][] = [...Array(7)].map((e, index) => Array(timings.length - 1).fill(0));
-  slot.map((slot, index)=>{
-    slot.slots.map((slot)=>{
-      const time = slot.split(' ')[0].split('-');
+export const getSlotMatrix = (
+  slot: { date: string; slots: string[] }[],
+  timings: string[]
+) => {
+  const slotMatrix: number[][] = [...Array(7)].map((e, index) =>
+    Array(timings.length - 1).fill(0)
+  );
+  slot.map((slot, index) => {
+    slot.slots.map((slot) => {
+      const time = slot.split(" ")[0].split("-");
       const slotIndex1 = timings.indexOf(time[0]);
       const slotIndex2 = timings.indexOf(time[1]) - 1;
       // make slot = 1 from slotIndex1 to slotIndex2
-      for(let i=slotIndex1; i<=slotIndex2; i++){
+      for (let i = slotIndex1; i <= slotIndex2; i++) {
         slotMatrix[index][i] = 1;
       }
-    }
-    )
-  })
+    });
+  });
   return slotMatrix;
-}
+};

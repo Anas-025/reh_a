@@ -12,7 +12,7 @@ function index({ meetingsDataString }: { meetingsDataString: string }) {
 
 export default withAdmin(index);
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const querySnapshot = await getDocs(collection(db, "Meetings"));
   const meetingsData = querySnapshot.docs.map(
     (doc) => ({ ...doc.data(), meetingId: doc.id } as MeetingType)

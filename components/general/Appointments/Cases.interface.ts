@@ -28,4 +28,5 @@ export interface CaseModalProps {
   setMeeting: any;
   meeting: any;
   meetingId: string;
+  handleJoinMeetClick: () => void;
 }

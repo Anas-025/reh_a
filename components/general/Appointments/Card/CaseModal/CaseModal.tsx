@@ -47,7 +47,8 @@ function CaseModel({
   caseData,
   meeting,
   setMeeting,
-  meetingId
+  meetingId,
+  handleJoinMeetClick
 }: CaseModalProps) {
   const [formData, setFormData] = useState<Profile | null>({});
   const [profileData, setProfileData] = useState<Profile | null>({});
@@ -123,8 +124,6 @@ function CaseModel({
     // setIsSnackbarOpen(true);
   };
 
-  console.log(caseData)
-
 
   return (
     <>
@@ -179,6 +178,7 @@ function CaseModel({
                     setMeeting={setMeeting}
                     meetingId={meetingId}
                     caseId={caseData.id}
+                    handleJoinMeetClick={handleJoinMeetClick}
                   />
                 )}
               </div>
