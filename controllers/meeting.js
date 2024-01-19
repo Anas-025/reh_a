@@ -1,8 +1,9 @@
 const API_BASE_URL = "https://api.videosdk.live";
-const VIDEOSDK_TOKEN = process.env.NEXT_PUBLIC_VIDEOSDK_TOKEN;
+const VIDEOSDK_TOKEN = process.env.VIDEOSDK_TOKEN || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlrZXkiOiJkN2IyNWU5NC04NDhmLTQ4M2ItOThkNi01YTcwMDc1N2NlZjEiLCJwZXJtaXNzaW9ucyI6WyJhbGxvd19qb2luIl0sImlhdCI6MTcwNTY2MTM3MywiZXhwIjoxODYzNDQ5MzczfQ.mg0WeIxgMFIeqtaV-uoncTfvyvcx0TOhA4pzn88Nrn0";
 const API_AUTH_URL = undefined;
 
 export const getToken = async () => {
+
   if (VIDEOSDK_TOKEN && API_AUTH_URL) {
     console.error(
       "Error: Provide only ONE PARAMETER - either Token or Auth API"
@@ -25,7 +26,7 @@ export const createMeeting = async ({ token }) => {
 
   const options = {
     method: "POST",
-    headers: { Authorization: token, "Content-Type": "application/json" },
+    headers: { Authorization: `${token}`, "Content-Type": "application/json" },
   };
 
   const { roomId } = await fetch(url, options)

@@ -2,8 +2,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Button, IconButton, Modal, Popover, Typography } from "@mui/material";
 import { GPCContext } from "Providers/GPC_Provider";
-import { doc, writeBatch } from "firebase/firestore";
+import { useMeeting } from "components/MeetingContext";
+import { createMeeting, getToken } from "controllers/meeting";
+import { doc, getDoc, updateDoc, writeBatch } from "firebase/firestore";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import React, { FC, useContext, useState } from "react";
 import { db } from "../../../firebase/firebase-config";
 import SlotBooking from "../SlotBooking/SlotBooking";
@@ -16,7 +19,12 @@ interface CaseCardProps {
   userId: string;
 }
 
-const Card: FC<CaseCardProps> = ({ serial, caseData, getAppointmentData, userId }) => {
+const Card: FC<CaseCardProps> = ({
+  serial,
+  caseData,
+  getAppointmentData,
+  userId,
+}) => {
   const [open, setOpen] = React.useState(false);
   const [slot, setSlot] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -26,26 +34,26 @@ const Card: FC<CaseCardProps> = ({ serial, caseData, getAppointmentData, userId 
     useContext(GPCContext);
   const [meeting, setMeeting] = useState<any>(caseData.meeting);
   const [meetingId, setMeetingId] = useState<string>(caseData.meetingId);
+  const router = useRouter();
+  const { updateToken, updateMeetingId } = useMeeting();
+
   //date format: weekday, dd mm yyyy hour:minute AM/PM
-  const date = new Date(meeting?.seconds * 1000).toLocaleString(
-    "en-US",
-    {
-      month: "short",
-      day: "numeric",
-      hour: "numeric",
-      year: "numeric",
-      minute: "numeric",
-      hour12: true,
-      timeZone: "Asia/Kolkata",
-    }
-  );
-  
+  const date = new Date(meeting?.seconds * 1000).toLocaleString("en-US", {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    year: "numeric",
+    minute: "numeric",
+    hour12: true,
+    timeZone: "Asia/Kolkata",
+  });
+
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
-    );
-    
-    const handlePopoverClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-      setAnchorEl(event.currentTarget);
+  );
+
+  const handlePopoverClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
   };
 
   const handlePopoverClose = () => {
@@ -55,16 +63,26 @@ const Card: FC<CaseCardProps> = ({ serial, caseData, getAppointmentData, userId 
   const popoverOpen = Boolean(anchorEl);
   const popoverId = open ? "simple-popover" : undefined;
 
-
   const handleCaseDelete = async () => {
     setAnchorEl(null);
     showBackdrop("Deleting...");
     try {
-      console.log(userId, caseData.id);
       const batch = writeBatch(db);
       const caseRef = doc(db, `Userdata/${userId}/cases`, caseData.id);
-      if(meetingId !== "") {
+      if (meetingId !== "") {
         const meetingRef = doc(db, "Meetings", meetingId);
+        const date = new Date();
+        const meetingDate = new Date(meeting.seconds * 1000);
+        // @ts-ignore
+        const diff = Math.abs(date - meetingDate) / (1000 * 60 * 60);
+
+        if (diff <= 24) {
+          showError(
+            "Cannot delete a case with a meeting scheduled within 24 hours"
+          );
+          closeBackdrop();
+          return;
+        }
         batch.delete(meetingRef);
       }
       batch.delete(caseRef);
@@ -86,6 +104,50 @@ const Card: FC<CaseCardProps> = ({ serial, caseData, getAppointmentData, userId 
       "Delete",
       handleCaseDelete
     );
+  };
+
+  const handleJoinMeetClick = async () => {
+    try {
+      showBackdrop("Joining meeting");
+      const meetingSnap = await getDoc(doc(db, "Meetings", meetingId));
+
+      if (!meetingSnap.exists()) {
+        throw new Error("Meeting does not exist");
+      }
+      const meetingData = meetingSnap.data();
+      if (meetingData.status === "success") {
+        throw new Error("Meeting has already ended");
+      }
+
+      const date = new Date();
+      const meetingDate = new Date(meetingData.meeting.seconds * 1000);
+      // @ts-ignore
+      const diff = Math.abs(date - meetingDate) / (1000 * 60);
+      if (diff > 15) {
+        throw new Error(
+          "You can only join a meeting 15 minutes before it starts"
+        );
+      }
+
+      const activeMeetingId = meetingData.activeMeetingId;
+      if (activeMeetingId) {
+        router.push(`/meeting?meetId=${activeMeetingId}`);
+      } else {
+        const token = await getToken();
+        const _meetingId = await createMeeting({ token });
+        updateToken(token);
+        updateMeetingId(_meetingId);
+        const meetingRef = doc(db, "Meetings", meetingId);
+        await updateDoc(meetingRef, {
+          activeMeetingId: _meetingId,
+        });
+        router.push(`/meeting?meetId=${_meetingId}`);
+      }
+    } catch (err: any) {
+      showError(err.message);
+      closeBackdrop();
+      console.log(err);
+    }
   };
 
   return (
@@ -120,7 +182,10 @@ const Card: FC<CaseCardProps> = ({ serial, caseData, getAppointmentData, userId 
           </Button>
         </Popover>
 
-        <div  onClick={handleOpen} style={{ position: "relative", height: "100%" }}>
+        <div
+          onClick={handleOpen}
+          style={{ position: "relative", height: "100%" }}
+        >
           <div
             style={{
               marginBottom: "15px",
@@ -169,9 +234,9 @@ const Card: FC<CaseCardProps> = ({ serial, caseData, getAppointmentData, userId 
           ) : (
             <Button
               fullWidth
-              disabled
               variant="contained"
               style={{ backgroundColor: "#e9ab02" }}
+              onClick={handleJoinMeetClick}
             >
               Join Meeting
             </Button>
@@ -193,6 +258,7 @@ const Card: FC<CaseCardProps> = ({ serial, caseData, getAppointmentData, userId 
             setMeeting={setMeeting}
             meeting={meeting}
             meetingId={meetingId}
+            handleJoinMeetClick={handleJoinMeetClick}
           />
         </div>
       </Modal>

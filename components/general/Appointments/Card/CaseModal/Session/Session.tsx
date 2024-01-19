@@ -1,23 +1,10 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Button, IconButton, styled } from "@mui/material";
 import { GPCContext } from "Providers/GPC_Provider";
-import { useMeeting } from "components/MeetingContext";
 import { useUser } from "components/UserContext";
 import { db } from "components/firebase/firebase-config";
-import { createMeeting, getToken } from "controllers/meeting";
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  writeBatch,
-} from "firebase/firestore";
-import { useRouter } from "next/router";
-import {
-  useContext,
-  useEffect,
-  useState
-} from "react";
+import { doc, writeBatch } from "firebase/firestore";
+import { useContext } from "react";
 
 const Container = styled("div")(({ theme }) => ({
   border: "1px solid #B4B4B4",
@@ -33,17 +20,15 @@ interface Props {
   caseId: string;
   setMeeting: any;
   meetingId: string;
+  handleJoinMeetClick: () => void;
 }
 
 function Session(props: Props) {
-  const { caseId, meeting, setMeeting, meetingId } = props;
+  const { caseId, meeting, setMeeting, meetingId, handleJoinMeetClick } = props;
   // const [date, time] = slot.split(" ");
-  const { updateToken, updateMeetingId } = useMeeting();
-  const router = useRouter();
   const { user } = useUser();
   const { showDialog, showBackdrop, closeBackdrop, showSnackbar, showError } =
     useContext(GPCContext);
-  const [meetId, setMeetId] = useState<string>("");
   const batch = writeBatch(db);
   const date = new Date(meeting?.seconds * 1000).toLocaleString("en-US", {
     month: "short",
@@ -57,68 +42,16 @@ function Session(props: Props) {
     timeZone: "Asia/Kolkata",
   });
 
-  useEffect(() => {
-    if (meetId) {
-      updateMeetingsData(meetId);
-    }
-  }, [meetId]);
-
-  const handleJoinMeetClick = async () => {
-    const meetingDocSnap = await getDocs(collection(db, "Meetings"));
-    const meetingAlreayExists = meetingDocSnap.docs.some(
-      (doc) => doc.data().caseId === caseId
-    );
-
-    if (!meetingAlreayExists) {
-      const token = await getToken();
-      const _meetingId = await createMeeting({ token });
-      updateToken(token);
-      updateMeetingId(_meetingId);
-      setMeetId(_meetingId);
-    } else {
-      const meetingId = meetingDocSnap.docs.filter(
-        (doc) => doc.data().caseId === caseId
-      )[0].id;
-      updateMeetingId(meetingId);
-      router.push(`/meeting?meetId=${meetingId}`);
-    }
-  };
-
-  const updateMeetingsData = async (meetingId: any) => {
-    const userRef = doc(db, "Userdata", user?.uid);
-    const docSnap = await getDoc(userRef);
-    if (docSnap.exists()) {
-      const userData = docSnap.data();
-
-      const batch = writeBatch(db);
-
-      const meetingRef = doc(db, "Meetings", meetingId);
-
-      batch.set(meetingRef, {
-        userId: user?.uid,
-        caseId: caseId,
-        displayName: userData?.fname + " " + userData?.lname,
-      });
-      batch.set(userRef, { activeMeetingId: meetingId }, { merge: true });
-      batch.commit();
-
-      router.push(`/meeting?meetId=${meetingId}`);
-    } else {
-      console.log("No such document!");
-    }
-  };
-
   const handleDelete = async () => {
-    console.log(meetingId)
+    console.log(meetingId);
     try {
       showBackdrop("Cancelling meeting");
       const date = new Date();
-      const meetingDate = new Date(meeting.seconds * 1000)
+      const meetingDate = new Date(meeting.seconds * 1000);
       // @ts-ignore
-      const diff = (Math.abs(date - meetingDate)) / (1000 * 60 * 60);
+      const diff = Math.abs(date - meetingDate) / (1000 * 60 * 60);
       const caseRef = doc(db, `Userdata/${user.uid}/cases`, caseId);
       const meetingRef = doc(db, "Meetings", meetingId);
-
 
       if (diff <= 24) {
         showError(
@@ -128,7 +61,7 @@ function Session(props: Props) {
       }
 
       batch.update(caseRef, {
-        meeting: null
+        meeting: null,
       });
       batch.delete(meetingRef);
       await batch.commit();
@@ -141,17 +74,6 @@ function Session(props: Props) {
       closeBackdrop();
     }
   };
-
-  const handleClick = () => {
-    showDialog(
-      "Are you sure you want to cancel this meeting?",
-      `A meeting can not be cancelled within 24 hours of the scheduled time.`,
-      "Back",
-      "Proceed",
-      handleDelete
-    );
-  };
-
 
   return (
     <>
@@ -166,7 +88,15 @@ function Session(props: Props) {
             top: "0.5rem",
             right: "0.5rem",
           }}
-          onClick={handleClick}
+          onClick={() => {
+            showDialog(
+              "Are you sure you want to cancel this meeting?",
+              "A meeting can not be cancelled within 24 hours of the scheduled time.",
+              "Back",
+              "Proceed",
+              handleDelete
+            );
+          }}
         >
           <DeleteIcon color="error" />
         </IconButton>
