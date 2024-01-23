@@ -8,7 +8,7 @@ import drawerList from "./constants";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 
 const Navbar = () => {
-  const [mobileOpen, setMobileOpen] = useState(true);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);

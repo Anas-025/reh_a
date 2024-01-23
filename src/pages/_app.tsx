@@ -73,5 +73,5 @@ export default function App({ Component, pageProps }: AppProps) {
 }
 
 const TopLoader = () => {
-  return <NextTopLoader color="#fab800" height={4} />;
+  return <NextTopLoader color="#fab800" height={4} showSpinner={false} />;
 }
