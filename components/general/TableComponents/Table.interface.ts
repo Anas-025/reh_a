@@ -52,4 +52,5 @@ export interface Data {
   meetingId?: string;
   patientName?: string;
   status: string;
+  meetingsLeft?: number;
 }
