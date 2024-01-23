@@ -9,14 +9,17 @@ import {
   query,
   where,
 } from "firebase/firestore";
+import { Suspense } from "react";
 
 const app = ({ metaBlogsDataString }: { metaBlogsDataString: string }) => {
   const data: MetaBlog[] = JSON.parse(metaBlogsDataString);
-  console.log(data)
+  console.log(data);
 
   return (
     <>
-      <BlogsGrid data={data} />
+      <Suspense fallback={<div>Loading...</div>}>
+        <BlogsGrid data={data} />
+      </Suspense>
     </>
   );
 };
