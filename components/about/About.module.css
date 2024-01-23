@@ -1,0 +1,117 @@
+.heroContainer {
+  font-size: clamp(2rem, 5.4vw, 3.5rem) !important;
+  font-weight: 500;
+  letter-spacing: -1px;
+  line-height: clamp(2.4rem, 5.4vw, 3.5rem) !important;
+  color: black;
+
+  margin-top: 2rem;
+  padding-left: clamp(1rem, 5.4vw, 5rem) !important;
+
+  margin-bottom: 5rem;
+}
+
+.hlText {
+  font-weight: 600;
+  color: #fab800;
+}
+
+.boldText {
+  font-weight: 600;
+}
+.boldText > svg {
+  font-size: clamp(40px, 8vw, 60px) !important;
+}
+.actionButton {
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: normal;
+  color: white;
+
+  background-color: hsl(44, 100%, 49%);
+  border-radius: 10px;
+
+  padding: 1.4rem 4rem;
+  margin-top: 2rem;
+
+  transition: all 0.2s ease-in-out;
+}
+
+.actionButton:hover {
+  transform: translateY(-2px);
+  background-color: hsl(44, 100%, 47%);
+}
+
+.heroImageContainer {
+  margin-top: 3rem;
+}
+
+.heroImage {
+  position: relative;
+  width: 75%;
+
+  padding-top: 30px;
+
+  box-shadow: 15px 15px 0px 0px black;
+  /* box-shadow: 15px 15px 0px 0px white, 15px 15px 0px 2px black; */
+  border: 2px solid black;
+  border-radius: 15px 15px 0 0;
+
+  overflow: hidden;
+}
+.heroImage:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  background-color: black;
+}
+
+.heroImage::after {
+  --dot-margin: -25px;
+
+  content: "";
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: var(--dot-margin) 0px white, calc(var(--dot-margin) * 2) 0px white;
+  z-index: 20;
+}
+
+@media screen and (max-width: 768px) {
+  .heroContainer {
+    margin-top: 1.5rem;
+    padding-right: 1rem;
+  }
+
+  .actionButton {
+    font-size: 1.2rem;
+    padding: 1rem 2.5rem;
+  }
+
+  .heroImageContainer {
+    margin-top: 2rem;
+    margin-right: 0rem;
+  }
+
+  .heroImage {
+    width: 95%;
+    border-radius: 10px;
+  }
+  .heroImage:before {
+    height: 32px;
+  }
+  .heroImage::after {
+    --dot-margin: -20px;
+    top: 8px;
+    right: 5px;
+    width: 15px;
+    height: 15px;
+  }
+}

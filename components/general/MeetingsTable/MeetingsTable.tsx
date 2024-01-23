@@ -13,7 +13,14 @@ import { withAdmin } from "ProtectedRoutes/AdminRoute";
 import { GPCContext } from "Providers/GPC_Provider";
 import { useMeeting } from "components/MeetingContext";
 import { createMeeting, endMeeting, getToken } from "controllers/meeting";
-import { arrayUnion, doc, getDoc, increment, updateDoc, writeBatch } from "firebase/firestore";
+import {
+  arrayUnion,
+  doc,
+  getDoc,
+  increment,
+  updateDoc,
+  writeBatch,
+} from "firebase/firestore";
 import { useRouter } from "next/router";
 import * as React from "react";
 import { useContext, useMemo, useState } from "react";
@@ -23,7 +30,6 @@ import EnhancedTableHead from "../TableComponents/EnhancedTableHead";
 import EnhancedTableToolbar from "../TableComponents/EnhancedTableToolbar";
 import { Data, HeadCell, Order } from "../TableComponents/Table.interface";
 import { getComparator, stableSort } from "../TableComponents/Table.utils";
-
 
 const headCells: readonly HeadCell[] = [
   {
@@ -85,7 +91,8 @@ function MeetingsTable(props: { rows: Data[] }) {
   const router = useRouter();
   const { updateToken, updateMeetingId } = useMeeting();
   const [filter, setFilter] = useState<"all" | "success" | "scheduled">("all"); // ["all", "success", "failed"]
-  const { showDialog, showBackdrop, showError, closeBackdrop } = useContext(GPCContext);
+  const { showDialog, showBackdrop, showError, closeBackdrop } =
+    useContext(GPCContext);
 
   const handleMeetingSuccess = async (
     userId: string,
@@ -96,7 +103,6 @@ function MeetingsTable(props: { rows: Data[] }) {
     const meetingRef = doc(db, "Meetings", meetingId);
     const userRef = doc(db, "Userdata", userId);
     const caseRef = doc(db, "Userdata", userId, "cases", caseId);
-    
 
     try {
       const batch = writeBatch(db);
@@ -192,9 +198,7 @@ function MeetingsTable(props: { rows: Data[] }) {
       // @ts-ignore
       const diff = Math.abs(date - meetingDate) / (1000 * 60 * 60);
       if (diff > 3) {
-        throw new Error(
-          "You can only join a meeting 3 hours before it starts"
-        );
+        throw new Error("You can only join a meeting 3 hours before it starts");
       }
 
       const activeMeetingId = meetingData?.activeMeetingId;
@@ -206,7 +210,7 @@ function MeetingsTable(props: { rows: Data[] }) {
         updateToken(token);
         updateMeetingId(_meetingId);
         const meetingRef = doc(db, "Meetings", meetingId);
-        console.log(meetingId, _meetingId)
+        console.log(meetingId, _meetingId);
         await updateDoc(meetingRef, {
           activeMeetingId: _meetingId,
         });
@@ -332,7 +336,7 @@ function MeetingsTable(props: { rows: Data[] }) {
                               color: "white",
                               minWidth: "40%",
                             }}
-                            onClick={()=>handleJoinMeetClick(row.meetingId)}
+                            onClick={() => handleJoinMeetClick(row.meetingId)}
                           >
                             Join&nbsp;Meet
                           </Button>

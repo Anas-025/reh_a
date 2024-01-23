@@ -7,6 +7,7 @@ import { NewUserProvider } from "components/context/userContext";
 import BlogsLayout from "components/general/Blogs/BlogsLayout";
 import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
+import NextTopLoader from "nextjs-toploader";
 import { Suspense } from "react";
 import Layout from "./Layout";
 
@@ -23,6 +24,7 @@ export default function App({ Component, pageProps }: AppProps) {
             <UserProvider>
               <MeetingProvider>
                 <Layout>
+                  <TopLoader />
                   <Component {...pageProps} />
                 </Layout>
               </MeetingProvider>
@@ -35,9 +37,10 @@ export default function App({ Component, pageProps }: AppProps) {
     return (
       <Suspense fallback={<Loading />}>
         <UserProvider>
-            <BlogsLayout>
-              <Component {...pageProps} />
-            </BlogsLayout>
+          <BlogsLayout>
+            <TopLoader />
+            <Component {...pageProps} />
+          </BlogsLayout>
         </UserProvider>
       </Suspense>
     );
@@ -47,16 +50,14 @@ export default function App({ Component, pageProps }: AppProps) {
         <Component {...pageProps} />
       </GPCProvider>
     );
-  } else if (router.pathname === "/trial") {
-    return <Component {...pageProps} />;
-  }else if (router.pathname === "/") {
-    return(
+  } else if (router.pathname === "/") {
+    return (
       <Suspense fallback={<Loading />}>
-            <Component {...pageProps} />
+        <TopLoader />
+        <Component {...pageProps} />
       </Suspense>
-    )
+    );
   }
-
 
   return (
     <Suspense fallback={<Loading />}>
@@ -69,4 +70,8 @@ export default function App({ Component, pageProps }: AppProps) {
       </UserProvider>
     </Suspense>
   );
+}
+
+const TopLoader = () => {
+  return <NextTopLoader color="#fab800" height={4} />;
 }
