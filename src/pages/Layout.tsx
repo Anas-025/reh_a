@@ -42,9 +42,10 @@ export default function Layout(props: LayoutProps) {
 
         <Box
           component="main"
-          sx={{
+          sx={
+            {
             flexGrow: 1,
-            paddingBottom: "3rem",
+            paddingBottom: { xs: "5rem", sm: "5rem", md: "0" },
             paddingTop: "2rem",
             overflow: "hidden",
             paddingInline: "1rem",

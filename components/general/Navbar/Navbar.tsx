@@ -8,7 +8,7 @@ import drawerList from "./constants";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 
 const Navbar = () => {
-  const [mobileOpen, setMobileOpen] = useState(true);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -34,7 +34,7 @@ const Navbar = () => {
               </Link>
             </li>
             <li>
-              <Link href="#services" scroll={false}>
+              <Link href="/#services" scroll={false}>
                 Services
               </Link>
             </li>

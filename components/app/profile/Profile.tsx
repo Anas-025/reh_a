@@ -190,7 +190,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="px-4 py-8 md:p-0">
+    <div className="px-0 py-8 md:p-4">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-[42px] font-bold">Profile Details</h2>
       </div>

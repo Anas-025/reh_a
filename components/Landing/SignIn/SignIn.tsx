@@ -208,6 +208,7 @@ function SignIn() {
           fname: createAccData.fname,
           lname: createAccData.lname,
           email: createAccData.email,
+          meetingsLeft: 1,
         });
         setCreateAccData(initialCreateAccData);
         if (window) {

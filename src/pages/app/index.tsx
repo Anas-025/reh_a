@@ -6,7 +6,7 @@ import { GetServerSidePropsContext } from "next";
 
 const app = (props: any) => {
   const user = JSON.parse(props.userString);
-  const sessionCount = user.sessionCount || 0;
+  const sessionCount = user.meetingsLeft || "error";
 
   return (
     <>

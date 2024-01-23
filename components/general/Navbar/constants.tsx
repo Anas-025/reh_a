@@ -1,40 +1,40 @@
 import BookIcon from "@mui/icons-material/Book";
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import CallIcon from '@mui/icons-material/Call';
+import HomeIcon from '@mui/icons-material/Home';
 import InfoIcon from '@mui/icons-material/Info';
 import LoginIcon from '@mui/icons-material/Login';
-import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 
 const drawerList = [
   {
-    name: "Book a slot",
-    icon: <BookmarksIcon />,
-    link: "/app/myBlogs",
+    name: "Home",
+    icon: <HomeIcon />,
+    link: "/",
   },
   {
-    name: "Services",
-    icon: <MedicalServicesIcon />,
-    link: "/app/profile",
+    name: "Book a slot",
+    icon: <BookmarksIcon />,
+    link: "/app",
   },
   {
     name: "Blogs",
     icon: <BookIcon />,
-    link: "/app/myBlogs",
+    link: "/blogs",
   },
   {
     name: "About us",
     icon: <InfoIcon />,
-    link: "/app/logout",
+    link: "/about",
   },
   {
     name: "Contact us",
     icon: <CallIcon />,
-    link: "/app/logout",
+    link: "/contact",
   },
   {
-    name: "Signin",
+    name: "Login / Create Account",
     icon: <LoginIcon />,
-    link: "/app/logout",
+    link: "/signin",
   },
 ];
 

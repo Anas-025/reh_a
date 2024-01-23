@@ -14,10 +14,9 @@ function BlogsGrid({ data }: { data: MetaBlog[] }) {
 
   const firstMetaBlog = data[0];
   console.log(firstMetaBlog);
-  const firstBlogThumbnail =
-    firstMetaBlog.heroVideoId 
-      ? `https://drive.google.com/thumbnail?id=${firstMetaBlog.heroVideoId}`
-      : firstMetaBlog.heroImageSrc;
+  const firstBlogThumbnail = firstMetaBlog.heroVideoId
+    ? `https://drive.google.com/thumbnail?id=${firstMetaBlog.heroVideoId}`
+    : firstMetaBlog.heroImageSrc;
 
   // only show 6 blogs in the grid
   const remainingMetaBlogs = data.slice(1, 7);

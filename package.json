@@ -33,6 +33,7 @@
     "firebase": "^9.17.2",
     "i": "^0.3.7",
     "next": "13.1.6",
+    "nextjs-toploader": "^1.6.4",
     "notistack": "^1.0.10",
     "npm": "^9.5.0",
     "react": "18.2.0",
