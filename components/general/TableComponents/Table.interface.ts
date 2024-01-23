@@ -45,7 +45,6 @@ export interface Data {
   caseName?: string,
   createdAt?: string,
   diurnal?: string[],
-  numberOfSessions?: number,
   painType?: string[],
   whenBad?: string,
   whenBetter?: string,

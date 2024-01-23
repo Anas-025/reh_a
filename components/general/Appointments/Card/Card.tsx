@@ -29,7 +29,6 @@ const Card: FC<CaseCardProps> = ({
   const [slot, setSlot] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const toggleSlot = () => setSlot((prev) => !prev);
   const { showSnackbar, showBackdrop, closeBackdrop, showDialog, showError } =
     useContext(GPCContext);
   const [meeting, setMeeting] = useState<any>(caseData.meeting);
@@ -47,6 +46,32 @@ const Card: FC<CaseCardProps> = ({
     hour12: true,
     timeZone: "Asia/Kolkata",
   });
+
+  const toggleSlot = async () => {
+    try {
+      const userD = await getDoc(
+        doc(db, `Userdata/`, userId)
+      );
+      const data = userD.data();
+
+      if (data?.meetingsLeft <= 0 ) {
+        showDialog(
+          "You have 0 meetings left",
+          `Buy more meetings to continue`,
+          "Cancel",
+          "Buy",
+          () => {
+            router.push("/app/buyMore");
+          }
+        );
+        return;
+      }
+    } catch (err) {
+      showError("Something went wrong... Try again later");
+      console.log(err);
+    }
+    setSlot((prev) => !prev);
+  };
 
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null

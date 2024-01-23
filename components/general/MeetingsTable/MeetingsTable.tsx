@@ -110,7 +110,7 @@ function MeetingsTable(props: { rows: Data[] }) {
       batch.update(caseRef, { meeting: null, meetingId: "" });
       batch.update(userRef, {
         meetings: arrayUnion(meetingId),
-        sessionCount: increment(-1),
+        meetingsLeft: increment(-1),
       });
 
       await batch.commit();
