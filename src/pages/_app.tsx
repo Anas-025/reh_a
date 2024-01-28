@@ -50,7 +50,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <Component {...pageProps} />
       </GPCProvider>
     );
-  } else if (router.pathname === "/") {
+  } else if (router.pathname === "/" || router.pathname === "/about" || router.pathname === "/contact") {
     return (
       <Suspense fallback={<Loading />}>
         <TopLoader />

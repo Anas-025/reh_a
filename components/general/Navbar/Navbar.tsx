@@ -42,6 +42,9 @@ const Navbar = () => {
               <Link href="/blogs">Blog</Link>
             </li>
             <li>
+              <Link href="/contact">Contact&nbsp;us</Link>
+            </li>
+            <li>
               <Link href="/signin">Sign in</Link>
             </li>
             <Link href="/app">
