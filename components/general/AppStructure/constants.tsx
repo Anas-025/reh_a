@@ -74,11 +74,11 @@ export const adminList = [
 
 
 export const normalDrawerList = [
-  {
-    name: "Payment History",
-    icon: <AccountBalanceWalletOutlinedIcon />,
-    link: "/app/paymentHistory",
-  }
+  // {
+  //   name: "Payment History",
+  //   icon: <AccountBalanceWalletOutlinedIcon />,
+  //   link: "/app/paymentHistory",
+  // }
 ];
 
 export const adminDrawerList = [
@@ -137,7 +137,7 @@ export const drawerList = [
   {
     name: "All Payment History",
     icon: <AccountBalanceWalletOutlinedIcon />,
-    link: "/app/paymentHistory",
+    link: "/app/allPaymentHistory",
   }
 ];
 

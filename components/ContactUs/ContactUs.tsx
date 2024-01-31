@@ -6,7 +6,7 @@ export default function ContactUS() {
           className="container flex flex-col md:flex-row lg:max-w-6xl md:my-24 my-16 w-full mx-auto section border-2 border-black rounded-lg overflow-hidden"
           id="contact-form"
         >
-          <div className="md:w-1/2 w-full bg-[#f8ff50] p-12 md:border-r-2 md:border-b-0 border-b-2 border-black">
+          <div className="md:w-1/2 w-full bg-[#f8ff50] p-4 py-8 md:p-12 md:border-r-2 md:border-b-0 border-b-2 border-black">
             <h1 className="text-4xl text-gray-800 sm:text-4xl font-bold title-font mb-4">
               Contact Us
             </h1>
@@ -16,15 +16,15 @@ export default function ContactUS() {
             </p>
           </div>
 
-          <div className="md:w-1/2 w-full bg-[#72b1ff] p-12">
+          <div className="md:w-1/2 w-full bg-[#72b1ff] p-4 py-8 md:p-12">
             <h1 className="text-4xl text-gray-800 sm:text-4xl font-bold title-font mb-4">
               Contact Info
             </h1>
             <div className="p-2 w-full leading-7 py-4 text-lg">
-              Mobile Number: +91 999999
+              Mobile Number: +91 9979743483
             </div>
             <div className="p-2 w-full leading-7 py-4 text-lg">
-              Email: manthan@reh-a.com
+              Email: rehaa.2024@gmail.com
             </div>
           </div>
         </div>
