@@ -150,13 +150,13 @@ const Card: FC<CaseCardProps> = ({
       const diff = Math.abs(date - meetingDate) / (1000 * 60);
       if (diff > 15) {
         throw new Error(
-          "You can only join a meeting 15 minutes before it starts"
+          "Cant join now, meeting time has passed. You can only join a meeting 15 minutes before it starts."
         );
       }
 
       const activeMeetingId = meetingData.activeMeetingId;
       if (activeMeetingId) {
-        router.push(`/meeting?meetId=${activeMeetingId}`);
+        router.push(`/meeting?meetId=${activeMeetingId}&MID=${meetingId}`);
       } else {
         const token = await getToken();
         const _meetingId = await createMeeting({ token });
@@ -166,7 +166,7 @@ const Card: FC<CaseCardProps> = ({
         await updateDoc(meetingRef, {
           activeMeetingId: _meetingId,
         });
-        router.push(`/meeting?meetId=${_meetingId}`);
+        router.push(`/meeting?meetId=${_meetingId}&MID=${meetingId}`);
       }
     } catch (err: any) {
       showError(err.message);
