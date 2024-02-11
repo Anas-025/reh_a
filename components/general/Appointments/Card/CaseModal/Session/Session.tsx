@@ -43,19 +43,23 @@ function Session(props: Props) {
   });
 
   const handleDelete = async () => {
-    console.log(meetingId);
     try {
       showBackdrop("Cancelling meeting");
       const date = new Date();
       const meetingDate = new Date(meeting.seconds * 1000);
-      // @ts-ignore
-      const diff = Math.abs(date - meetingDate) / (1000 * 60 * 60);
       const caseRef = doc(db, `Userdata/${user.uid}/cases`, caseId);
       const meetingRef = doc(db, "Meetings", meetingId);
+      // @ts-ignore
+      const diff = (meetingDate - date) / (1000 * 60 * 60);
 
-      if (diff <= 24) {
+      if (diff >= -0.5 && diff <= 0) {
+        showError("Cannot delete a case within 30 minutes of the meeting");
+        return;
+      }
+
+      if (diff > 0 && diff <= 24) {
         showError(
-          "A meeting can not be cancelled within 24 hours of the scheduled time."
+          "Cannot delete a case with a meeting scheduled within 24 hours"
         );
         return;
       }

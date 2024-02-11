@@ -8,7 +8,7 @@ import Rating from "@mui/material/Rating";
 import TextField from "@mui/material/TextField";
 import { GPCContext } from "Providers/GPC_Provider";
 import { db } from "components/firebase/firebase-config";
-import { collection, doc, writeBatch } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 
@@ -43,7 +43,10 @@ export function LeaveScreen({ setIsMeetingLeft }) {
         >
           Exit
         </button>
-        <div onClick={handleClickOpen} className="text-primary-500 mt-8 cursor-pointer underline hover:no-underline">
+        <div
+          onClick={handleClickOpen}
+          className="text-primary-500 mt-8 cursor-pointer underline hover:no-underline"
+        >
           give rating
         </div>
       </div>
@@ -51,7 +54,7 @@ export function LeaveScreen({ setIsMeetingLeft }) {
   );
 }
 
-function FormDialog({open, setOpen}) {
+function FormDialog({ open, setOpen }) {
   const [value, setValue] = useState(0);
   const router = useRouter();
   const { showBackdrop, closeBackdrop, showSnackbar, showEror } =
@@ -64,29 +67,18 @@ function FormDialog({open, setOpen}) {
   const handleSubmit = async (reviewData) => {
     try {
       showBackdrop("Submitting review...");
-      const batch = writeBatch(db);
-      const meetingId = router.query.meetId;
       const MID = router.query.MID;
-      console.log("MID", MID);
-      console.log("meetingId", meetingId);
-      const reviewRef = doc(collection(db, "Reviews"));
       const meetingRef = doc(db, "Meetings", MID);
 
-      batch.set(reviewRef, {
-        rating: reviewData.rating,
-        review: reviewData.review,
-        meetingId: MID,
-      });
-      console.log("reviewRef", reviewRef.id);
-      batch.update(
+      await updateDoc(
         meetingRef,
         {
-          reiviewId: reviewRef.id,
+          rating: reviewData.rating,
+          review: reviewData.review,
         },
         { merge: true }
       );
 
-      await batch.commit();
       showSnackbar("Review submitted successfully");
     } catch (error) {
       showEror("Error submitting review");

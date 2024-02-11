@@ -8,11 +8,7 @@ import { GPCContext } from "Providers/GPC_Provider";
 import { db } from "components/firebase/firebase-config.js";
 import { collection, doc, getDoc, writeBatch } from "firebase/firestore";
 import Image from "next/image";
-import {
-  useContext,
-  useEffect,
-  useState
-} from "react";
+import { useContext, useEffect, useState } from "react";
 import { timeMiner } from "utils/ExtendedUtils";
 import calander from "../../../../public/calander.png";
 import { useUser } from "../../../UserContext";
@@ -70,6 +66,7 @@ export default function SlotBooking(props: SlotBookingProps) {
     const meetingRef = doc(collection(db, "Meetings"));
     const slotsDoc = await getDoc(slotRef);
     const caseData = await getDoc(caseRef);
+    const currDate = new Date();
 
     if (!slotsDoc.exists()) {
       handleClose();
@@ -93,6 +90,13 @@ export default function SlotBooking(props: SlotBookingProps) {
       handleClose();
       showError(
         "Sorry, you have already booked a slot for this case. Please cancel the previous slot to book a new one"
+      );
+      return;
+    }
+    if (currDate > new Date(`${selectedDate} ${selectedSlot.split("-")[0]}`)) {
+      handleClose();
+      showError(
+        "Sorry, you can't book a slot in the past. Please select a valid slot"
       );
       return;
     }
@@ -120,10 +124,17 @@ export default function SlotBooking(props: SlotBookingProps) {
     });
     try {
       batch.update(slotRef, { slots });
-      batch.set(caseRef, { meeting: meeting, meetingId: meetingRef.id }, { merge: true });
+      batch.set(
+        caseRef,
+        { meeting: meeting, meetingId: meetingRef.id },
+        { merge: true }
+      );
       await batch.commit();
       setMeetingId(meetingRef.id);
-      setMeeting({seconds: meeting.getTime()/1000, nanoseconds: meeting.getMilliseconds()*1000000});
+      setMeeting({
+        seconds: meeting.getTime() / 1000,
+        nanoseconds: meeting.getMilliseconds() * 1000000,
+      });
       showSnackbar("Slot booked successfully");
     } catch (err) {
       console.log(err);
