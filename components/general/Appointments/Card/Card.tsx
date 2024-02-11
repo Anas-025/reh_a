@@ -99,9 +99,15 @@ const Card: FC<CaseCardProps> = ({
         const date = new Date();
         const meetingDate = new Date(meeting.seconds * 1000);
         // @ts-ignore
-        const diff = Math.abs(date - meetingDate) / (1000 * 60 * 60);
+        const diff = (meetingDate - date) / (1000 * 60 * 60);
 
-        if (diff <= 24) {
+        if(diff >= -0.5 && diff <= 0){
+          showError("Cannot delete a case within 30 minutes of the meeting");
+          closeBackdrop();
+          return;
+        }
+
+        if (diff > 0 && diff <= 24) {
           showError(
             "Cannot delete a case with a meeting scheduled within 24 hours"
           );
@@ -150,13 +156,13 @@ const Card: FC<CaseCardProps> = ({
       const diff = Math.abs(date - meetingDate) / (1000 * 60);
       if (diff > 15) {
         throw new Error(
-          "You can only join a meeting 15 minutes before it starts"
+          "Cant join now, meeting time has passed. You can only join a meeting 15 minutes before it starts."
         );
       }
 
       const activeMeetingId = meetingData.activeMeetingId;
       if (activeMeetingId) {
-        router.push(`/meeting?meetId=${activeMeetingId}`);
+        router.push(`/meeting?meetId=${activeMeetingId}&MID=${meetingId}`);
       } else {
         const token = await getToken();
         const _meetingId = await createMeeting({ token });
@@ -166,7 +172,7 @@ const Card: FC<CaseCardProps> = ({
         await updateDoc(meetingRef, {
           activeMeetingId: _meetingId,
         });
-        router.push(`/meeting?meetId=${_meetingId}`);
+        router.push(`/meeting?meetId=${_meetingId}&MID=${meetingId}`);
       }
     } catch (err: any) {
       showError(err.message);
