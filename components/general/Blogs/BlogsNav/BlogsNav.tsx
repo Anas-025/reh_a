@@ -1,9 +1,9 @@
-
 import EditIcon from "@mui/icons-material/Edit";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Button, IconButton } from "@mui/material";
+import { Box, Button, IconButton, Typography } from "@mui/material";
 import Avatar from "components/general/Avatar/Avatar";
 import { getCookie } from "cookies-next";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -44,7 +44,12 @@ export default function BlogsNav({
         }}
       >
         <Link href="/blogs" className={styles.logo}>
-          R-A
+          <Box sx={{display: "flex", alignItems: "center", gap: "1rem"}}>
+            <Image src="/logo.jpeg" alt="logo" width={50} height={50} />
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              Rehaa- A Virtual Clinic
+            </Typography>
+          </Box>
         </Link>
 
         <div className={styles.btnContainer}>

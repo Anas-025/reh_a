@@ -156,7 +156,7 @@ const Card: FC<CaseCardProps> = ({
       const diff = Math.abs(date - meetingDate) / (1000 * 60);
       if (diff > 15) {
         throw new Error(
-          "Cant join now, meeting time has passed. You can only join a meeting 15 minutes before it starts."
+          "Cant join now. You can only join a meeting 15 minutes before it starts."
         );
       }
 
